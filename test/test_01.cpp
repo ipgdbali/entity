@@ -1,5 +1,7 @@
-#include <iostream>
+#include "IAttrInfo.hpp"
+#include "IEntityInfo.hpp"
 #include "IEntity.hpp"
+#include <iostream>
 
 int main(int argc,char * argv[])
 {

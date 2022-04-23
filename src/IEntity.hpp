@@ -5,47 +5,6 @@ namespace ipgdlib::entity
 {
 
 template <
-    typename TAttrSize,
-    typename TAttrName>
-class IEntityAttrInfo
-{
-public:
-    using type_attr_size = TAttrSize;
-    using type_attr_name = TAttrName;
-    virtual TAttrSize const &getSize() const noexcept = 0;
-    virtual TAttrName const &getName() const noexcept = 0;
-};
-
-template <
-    typename TAttrIndex,		
-    typename TAttrName,
-    typename TAttrSize,
-    typename TAttrSizeTotal,
-    typename TEntityAttrInfo
->
-class IEntityInfo
-{
-public:
-
-	using type_attr_index	    = TAttrIndex;
-	using type_attr_string	    = TAttrName;
-	using type_attr_size	    = TAttrSize;
-	using type_attr_size_total  = TAttrSizeTotal;
-	using type_entity_attr_info = TEntityAttrInfo;
-
-	virtual TAttrIndex const &getAttrCount() const noexcept = 0;
-	virtual TEntityAttrInfo getAttrInfo(TAttrIndex const &index) const = 0;
-
-	virtual TAttrSizeTotal const &getRunningSum(TAttrIndex const &index) const = 0;
-	virtual TAttrSizeTotal const &getEntitySize() const noexcept = 0;
-
-	virtual bool hasName(TAttrName const &attrName) const noexcept = 0;
-	virtual TAttrIndex const &getIndex(TAttrName const &attrName) const = 0;
-
-	virtual TAttrName const &getName(TAttrIndex const &index) const = 0;
-};
-
-template <
 	typename TAttrIndex,			
 	typename TAttrName,		
 	typename TAttrSize,
@@ -56,7 +15,7 @@ class IEntity
 {
 public:
     using type_attr_index = TAttrIndex;
-    using type_attr_string = TAttrName;
+    using type_attr_name = TAttrName;
     using type_attr_size = TAttrSize;
     using type_attr_size_total = TAttrSizeTotal;
     using type_entity_info = TEntityInfo;
@@ -103,7 +62,6 @@ public:
     virtual bool shareTo(IEntity<TAttrIndex,TAttrName,TAttrSize,TAttrSizeTotal,TEntityInfo> const *pEntity) = 0;
 };
 
-
 template <
     typename TEntityIndex,
     typename TAttrIndex,			
@@ -131,7 +89,7 @@ class IEntities
 	virtual bool copyEntityTo(TEntityIndex const &idx,void *pDest) const = 0;
 	virtual bool copyEntityFrom(TEntityIndex const &idx,void *pSource) = 0;
 
-	virtual bool shareEntityTo(TEntityIndex const &idx,\
+	virtual bool shareEntityTo(TEntityIndex const &idx,
 		IEntity<TAttrIndex,TAttrName,TAttrSize,TAttrSizeTotal,TEntityInfo> *pDest) const = 0;
 	virtual bool shareEntityTo(TEntityIndex const &idx,void *pDest) const = 0;
 
