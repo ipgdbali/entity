@@ -1,7 +1,9 @@
-all : bin/test/test_01 bin/test/CAttrInfo
+all : bin/CAttrInfo bin/CEntityInfo
 
-bin/test/test_01 : test/test_01.cpp
-	g++ -Isrc -o bin/test_01 test/test_01.cpp
+bin/CAttrInfo : test/CAttrInfo.cpp
+	g++ -Isrc -Iinterface -o bin/CAttrInfo test/CAttrInfo.cpp
+	bin/CAttrInfo
 
-bin/test/CAttrInfo : test/CAttrInfo.cpp
-	g++ -Isrc -o bin/CAttrInfo test/CAttrInfo.cpp
+bin/CEntityInfo : test/CEntityInfo.cpp
+	g++ -Isrc -Iinterface -g -o bin/CEntityInfo test/CEntityInfo.cpp
+	bin/CEntityInfo

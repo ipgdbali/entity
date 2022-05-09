@@ -2,20 +2,62 @@
 #define CATTR_INFO_HPP
 
 #include "IAttrInfo.hpp"
+#include <utility>
 
 namespace ipgdlib::entity
 {
 
 template <
-    typename TAttrSize,
-    typename TAttrName
+    typename TAttrName,
+    typename TAttrSize
 >
 class CAttrInfo :
-    public IAttrInfo<TAttrSize,TAttrName>
+    public IAttrInfo<TAttrName,TAttrSize>
 {
 public:
-    CAttrInfo(TAttrSize const &size,TAttrName const &name) :
-	m_Size(size),m_Name(name)
+
+    template <typename T>
+    static CAttrInfo<TAttrName,TAttrSize> create(TAttrName const &name)
+    {
+	return {name,sizeof(T)};
+    }
+
+    template <typename T>
+    static CAttrInfo<TAttrName,TAttrSize> *alloc(TAttrName const &name)
+    {
+	return new CAttrInfo(name,sizeof(T));
+    }
+
+    CAttrInfo() = delete;
+
+    CAttrInfo(const CAttrInfo &ref) :
+	m_Name(ref.m_Name),m_Size(ref.m_Size)
+    {
+    }
+
+    CAttrInfo<TAttrName,TAttrSize> &operator = (const CAttrInfo &ref)
+    {
+	this->m_Name = ref.m_Name;
+	this->m_Size = ref.m_Size;
+	return *this;
+    }
+
+    CAttrInfo(CAttrInfo &&ref) :
+	m_Name(std::move(ref.m_Name)),m_Size(ref.m_Size)
+    {
+	ref.m_Size = 0;
+    }
+
+    CAttrInfo &operator = (CAttrInfo &&ref)
+    {
+	this->m_Name = std::move(ref.m_Name);
+	this->m_Size = ref.m_Size;
+	ref.m_Size = 0;
+	return *this;
+    }
+
+    CAttrInfo(TAttrName const &name,TAttrSize const &size) :
+	m_Name(name),m_Size(size)
     {
     }
 
@@ -30,10 +72,11 @@ public:
     }
 
 private:
-    TAttrSize const m_Size;
-    TAttrName const m_Name;
+    TAttrSize m_Size;
+    TAttrName m_Name;
 
 };
+
 
 };
 
