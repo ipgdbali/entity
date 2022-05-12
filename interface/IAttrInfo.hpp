@@ -10,6 +10,9 @@ template <
 >
 class IAttrInfo
 {
+
+static_assert(std::is_integral<TAttrSize>::value && !std::is_same<bool,TAttrSize>::value);
+
 public:
 
     virtual ~IAttrInfo() {};

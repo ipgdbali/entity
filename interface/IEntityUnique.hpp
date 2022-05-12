@@ -7,19 +7,15 @@ namespace ipgdlib::entity
 {
 
 template <
-    typename TAttrIndex,			
-    typename TAttrName,		
-    typename TAttrSize,
-    typename TAttrSizeTotal,
     typename TEntityInfo,
-    typename TEntityInfoWrapper
+    typename TEntityInfoWrapper // pointer, reference, shared or what
 >
 class IEntityUnique :
-	public virtual IEntity<TAttrName,TAttrIndex,TAttrSize,TAttrSizeTotal,TEntityInfoWrapper>
+	public virtual IEntity<TEntityInfo,TEntityInfoWrapper>
 {
 public:
     virtual bool createFrom(TEntityInfo const &entityInfo) = 0;
-    virtual bool createFrom(IEntity<TAttrIndex,TAttrName,TAttrSize,TAttrSizeTotal,TEntityInfoWrapper> const &entity) = 0;
+    virtual bool createFrom(IEntity<TEntityInfo,TEntityInfoWrapper> const &entity) = 0;
 };
 
 };

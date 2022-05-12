@@ -1,0 +1,1 @@
+:set path+=interface,src

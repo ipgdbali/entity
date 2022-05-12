@@ -2,40 +2,43 @@
 #define CENTITY_HPP
 
 #include "IEntity.hpp"
+#include "CAttrInfo.hpp"
+#include "CEntityInfo.hpp"
+#include "ICustomType.hpp"
+#include <cstring>
 
 namespace ipgdlib::entity
 {
 
-template <
-	typename TAttrName,		
-	typename TAttrIndex,			
-	typename TAttrSize,
-	typename TAttrSizeTotal,
-	typename TEntityInfo = CEntityInfo<TAttrName,TAttrIndex,TAttrSize,TAttrSizeTotal,
-	    CAttrInfo<TAttrName,TAttrSize>;
->
+template <typename TEntityInfo>
 class CEntity :
-    public virtual IEntity<TAttrName,TAttrIndex,TAttrSize,TAttrSizeTotal,TEntityInfo const *>
+    public virtual IEntity<TEntityInfo,TEntityInfo const *>
 {
-public:
-    using type_attr_index = TAttrIndex;
-    using type_attr_name = TAttrName;
-    using type_attr_size = TAttrSize;
-    using type_attr_size_total = TAttrSizeTotal;
-    using type_entity_info = TEntityInfo;
+using TAttrName		    = typename TEntityInfo::type_attr_name;
+using TAttrIndex	    = typename TEntityInfo::type_attr_index;
+using TAttrSize		    = typename TEntityInfo::type_attr_size;
+using TAttrSizeTotal	    = typename TEntityInfo::type_attr_size_total;
+using TAttrInfo		    = typename TEntityInfo::type_attr_info;
+using TAttrInfoWrapper	    = typename TEntityInfo::type_attr_info_wrapper;
+using TEntityInfoWrapper    = TEntityInfo const*;
 
-    using TEntityInfoWrapper = TEntityInfo const *;
+public:
+    using iface = IEntity<TEntityInfo,TEntityInfoWrapper>;
+    using type_entity_info = TEntityInfo;
+    using type_entity_info_wrapper = TEntityInfoWrapper;
+
+public:
 
     TEntityInfoWrapper getEntityInfo() const noexcept override
     {
-	this->m_EntityInfo;
+	return this->m_EntityInfo;
     }
 
     bool copyAttrTo(TAttrIndex const &attrIndex,void *pDst) const override
     {
-	memcpy(
+	std::memcpy(
 		pDst,
-		&this->m_pEntityData[this->getEntityInfo().getAttrOffset(attrIndex)],
+		&this->m_pEntityData[this->getEntityInfo()->getAttrOffset(attrIndex)],
 		this->m_EntityInfo->getAttrInfo(attrIndex)->getSize()
 	);
 	return true;
@@ -51,10 +54,10 @@ public:
 
     bool copyAttrFrom(TAttrIndex const &attrIndex,void *pSrc) override
     {
-	memcpy(
-	    &this->m_pEntityData[this->getEntityInfo().getAttrOffset(attrIndex)],
+	std::memcpy(
+	    &this->m_pEntityData[this->getEntityInfo()->getAttrOffset(attrIndex)],
 	    pSrc,
-	    this->m_EntityInfo->getAttrInfo(attrIdx)->getSize()
+	    this->m_EntityInfo->getAttrInfo(attrIndex)->getSize()
 	);
 	return true;
     }
@@ -65,6 +68,35 @@ public:
 		this->m_EntityInfo->getIndex(attrName),
 		pSrc
 	);
+    }
+
+    bool copyTo(void *pDest) const override
+    {
+	std::memcpy(pDest,this->m_pEntityData,this->getEntityInfo()->getEntitySize());
+	return true;
+    }
+
+    bool copyFrom(void *pSrc) const override
+    {
+	std::memcpy(this->m_pEntityData,pSrc,this->getEntityInfo()->getEntitySize());
+	return true;
+    }
+
+    bool isNull() const noexcept override
+    {
+	return this->m_pEntityData == nullptr;
+    }
+
+    template <typename T>
+    T &getAs(TAttrIndex const &attrIndex)
+    {
+	return *reinterpret_cast<T*>(&this->m_pEntityData[this->m_EntityInfo->getAttrOffset(attrIndex)]);
+    }
+
+    template <typename T>
+    T &getAs(TAttrName const &attrName)
+    {
+	return getAs<T>(this->m_EntityInfo->getIndex(attrName));
     }
 
     template<typename T>
@@ -84,23 +116,6 @@ public:
 	);
     }
 
-    template <typename T>
-    T &getAs(TAttrIndex const &attrIndex)
-    {
-	return *reinterpret_cast<T*>(&this->m_pEntityData[this->m_EntityInfo->getAttrOffset(attrIndex)]);
-    }
-
-    template <typename T>
-    T &getAs(TAttrName const &attrName)
-    {
-	return getAs<T>(this->m_EntityInfo->getIndex(attrName));
-    }
-
-    bool isNull() const noexcept override
-    {
-	return this->m_pEntityData == nullptr;
-    }
-
 protected:
 
     char *getEntityPtr() const override
@@ -108,22 +123,24 @@ protected:
 	return this->m_pEntityData;
     }
 
-    void setEntityPtr(char *pEntity) override
+    bool setEntityPtr(char *pEntity) override
     {
 	this->m_pEntityData = pEntity;
+	return true;
     }
 
-    void setEntityInfo(TEntityInfoWrapper entityInfo)
+    bool setEntityInfo(TEntityInfoWrapper entityInfo) override
     {
 	this->m_EntityInfo = entityInfo;
+	return true;
     }
-
     // This is abstract class
-    // Concrete class is in Unique or Shared
+    /*
     void clear()
     {
 	this->m_EntityInfo = nullptr;
     }
+    */
 
 private:
     TEntityInfoWrapper m_EntityInfo;

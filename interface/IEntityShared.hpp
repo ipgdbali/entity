@@ -17,8 +17,12 @@ class IEntityShared :
 	public virtual IEntity<TAttrName,TAttrIndex,TAttrSize,TAttrSizeTotal,TEntityInfo>
 {
 public:
-    virtual bool shareFrom(IEntity<TAttrIndex,TAttrName,TAttrSize,TAttrSizeTotal,TEntityInfo> const &pEntity) = 0;
-    virtual bool shareTo(IEntity<TAttrIndex,TAttrName,TAttrSize,TAttrSizeTotal,TEntityInfo> const &pEntity) = 0;
+
+    virtual bool assignFrom(void *pSrc) = 0;
+    virtual bool shareFrom(IEntity<TAttrIndex,TAttrName,TAttrSize,TAttrSizeTotal,TEntityInfo> const &entity) = 0;
+
+    virtual bool assignTo(void *pDest) const = 0;
+    virtual bool shareTo(IEntityShared<TAttrIndex,TAttrName,TAttrSize,TAttrSizeTotal,TEntityInfo> const &entity) const = 0;
 };
 
 };

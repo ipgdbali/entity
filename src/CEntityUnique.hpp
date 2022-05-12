@@ -3,23 +3,19 @@
 
 #include "IEntityUnique.hpp"
 #include "CEntity.hpp"
+#include "CEntityInfo.hpp"
 
 namespace ipgdlib::entity
 {
 
-template <
-	typename TAttrIndex,			
-	typename TAttrName,		
-	typename TAttrSize,
-	typename TAttrSizeTotal,
-	typename TEntityInfo = CEntityInfo<TAttrName,TAttrIndex,TAttrSize,TAttrSizeTotal,
-	    CAttrInfo<TAttrName,TAttrSize>;
->
+template <typename TEntityInfo>
 class CEntityUnique :
-    public CEntity<TAttrName,TAttrIndex,TAttrSize,TAttrSizeTotal,TEntityInfo>,
-    public virtual IEntityUnique<TAttrIndex,TAttrName,TAttrSize,TAttrSizeTotal,TEntityInfo,TEntityInfo const *>
+    public CEntity<TEntityInfo>,
+    public virtual IEntityUnique<TEntityInfo,TEntityInfo const *>
 {
+using TEntityInfoWrapper = TEntityInfo const *;
 public:
+
     virtual ~CEntityUnique()
     {
 	this->clear();
@@ -29,16 +25,17 @@ public:
     {
 	this->clear();
 
-	this->setEntityInfo(&EntityInfo);
+	this->setEntityInfo(&entityInfo);
 	this->setEntityPtr(new char [this->getEntityInfo()->getEntitySize()]);
 	return true;
     }
 
-    bool createFrom(IEntity<TAttrIndex,TAttrName,TAttrSize,TAttrSizeTotal,TEntityInfo> const &entity) override
+    bool createFrom(IEntity<TEntityInfo,TEntityInfoWrapper> const &entity) override
     {
 	this->clear();
 	this->setEntityInfo(entity.getEntityInfo());
 	this->setEntityPtr(new char [this->getEntityInfo()->getEntitySize()]);
+	entity.copyTo(this->getEntityPtr());
 	return true;
     }
 
@@ -48,14 +45,10 @@ public:
 	{
 	    delete []this->getEntityPtr();
 	    this->setEntityPtr(nullptr);
-
-	    // clear entity info
-	    CEntity<TAttrName,TAttrIndex,TAttrSize,TAttrSizeTotal,TEntityInfo *>::clear();
+	    this->setEntityInfo(nullptr);
 	}
     }
 
-    protected:
-    private:
 };
 
 };

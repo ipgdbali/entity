@@ -11,31 +11,37 @@ namespace ipgdlib::entity
 {
 
 template <
-	typename TAttrName,
 	typename TAttrIndex,
-	typename TAttrSize,
 	typename TAttrSizeTotal,
 	typename TAttrInfo
 >
 class CEntityInfo :
-    public IEntityInfo<TAttrName,TAttrIndex,TAttrSize,TAttrSizeTotal,TAttrInfo,TAttrInfo const *>
+    public IEntityInfo<TAttrIndex,TAttrSizeTotal,TAttrInfo,TAttrInfo const *>
 {
+
+using TAttrInfoWrapper = TAttrInfo const *;
+using TAttrName = typename TAttrInfo::iface::type_attr_name;
+using TAttrSize = typename TAttrInfo::iface::type_attr_size;
+
 public:
+    using iface = IEntityInfo<TAttrIndex,TAttrSizeTotal,TAttrInfo,TAttrInfo const *>;
     using type_attr_name = TAttrName;
     using type_attr_index = TAttrIndex;
     using type_attr_size = TAttrSize;
     using type_attr_size_total = TAttrSizeTotal;
     using type_attr_info = TAttrInfo;
+    using type_attr_info_wrapper = TAttrInfoWrapper;
 
+    CEntityInfo() = delete;
     CEntityInfo(const CEntityInfo &ref) = delete;
     CEntityInfo &operator = (const CEntityInfo &ref) = delete;
     CEntityInfo(CEntityInfo && ref) = delete;
     CEntityInfo &operator = (CEntityInfo && ref) = delete;
 
-    CEntityInfo(std::initializer_list<TAttrInfo const *> ltpAttrInfo)
+    CEntityInfo(std::initializer_list<TAttrInfoWrapper> ltpAttrInfo)
     {
 	this->m_AttrCount = ltpAttrInfo.size();
-	this->m_arrAttrInfos = new TAttrInfo const*[this->m_AttrCount];
+	this->m_arrAttrInfos = new TAttrInfoWrapper[this->m_AttrCount];
 	this->m_RunningSum = new TAttrSizeTotal[this->m_AttrCount];
 
 	TAttrIndex idx = 0;
@@ -68,7 +74,7 @@ public:
 	return this->m_AttrCount;
     }
 
-    TAttrInfo const* getAttrInfo(TAttrIndex index) const override
+    TAttrInfoWrapper getAttrInfo(TAttrIndex index) const override
     {
 	return this->m_arrAttrInfos[index];
     }
@@ -108,7 +114,7 @@ public:
 
 private:
     TAttrIndex m_AttrCount;
-    TAttrInfo const* *m_arrAttrInfos;
+    TAttrInfoWrapper *m_arrAttrInfos;
     TAttrSizeTotal *m_RunningSum;
     std::map<TAttrName,TAttrIndex> m_Mapper;
 };

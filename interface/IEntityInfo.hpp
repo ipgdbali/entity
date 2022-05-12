@@ -8,9 +8,7 @@ namespace ipgdlib::entity
 {
 
 template <
-    typename TAttrName,
     typename TAttrIndex,		
-    typename TAttrSize,
     typename TAttrSizeTotal,
     typename TAttrInfo,
     typename TAttrInfoWrapper
@@ -18,21 +16,25 @@ template <
 class IEntityInfo
 {
 
+using TAttrName = typename TAttrInfo::iface::type_attr_name;
+using TAttrSize = typename TAttrInfo::iface::type_attr_size;
+
+static_assert(std::is_integral<TAttrIndex>::value && !std::is_same<bool,TAttrIndex>::value);
+static_assert(std::is_integral<TAttrSize>::value && !std::is_same<bool,TAttrSize>::value);
+static_assert(std::is_integral<TAttrSizeTotal>::value && !std::is_same<bool,TAttrSizeTotal>::value);
+
+static_assert(std::is_base_of<IAttrInfo<TAttrName,TAttrSize>,TAttrInfo>::value);
+
 public:
-
-    static_assert(std::is_integral<TAttrIndex>::value && !std::is_same<bool,TAttrIndex>::value);
-    static_assert(std::is_integral<TAttrSize>::value && !std::is_same<bool,TAttrSize>::value);
-    static_assert(std::is_integral<TAttrSizeTotal>::value && !std::is_same<bool,TAttrSizeTotal>::value);
-
-    static_assert(std::is_base_of<IAttrInfo<TAttrName,TAttrSize>,TAttrInfo>::value);
 
     virtual ~IEntityInfo() {};
 
-    using type_attr_index	    = TAttrIndex;
-    using type_attr_name	    = TAttrName;
-    using type_attr_size	    = TAttrSize;
-    using type_attr_size_total	    = TAttrSizeTotal;
-    using type_attr_info_wrapper    = TAttrInfoWrapper;
+    using type_attr_name		= TAttrName;
+    using type_attr_index		= TAttrIndex;
+    using type_attr_size		= TAttrSize;
+    using type_attr_size_total		= TAttrSizeTotal;
+    using type_attr_info		= TAttrInfo;
+    using type_attr_info_wrapper	= TAttrInfoWrapper;
 
     virtual TAttrIndex getAttrCount() const noexcept = 0;
     virtual TAttrInfoWrapper getAttrInfo(TAttrIndex index) const = 0;

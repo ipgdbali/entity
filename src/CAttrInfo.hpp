@@ -16,6 +16,8 @@ class CAttrInfo :
 {
 public:
 
+    using iface = IAttrInfo<TAttrName,TAttrSize>;
+
     template <typename T>
     static CAttrInfo<TAttrName,TAttrSize> create(TAttrName const &name)
     {
