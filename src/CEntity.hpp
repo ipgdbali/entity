@@ -95,7 +95,12 @@ public:
     template <typename T>
     T &getAs(TAttrIndex const &attrIndex)
     {
-	return *(T*)(&this->m_pEntityData[this->m_EntityInfo->getAttrOffset(attrIndex)]);
+	return *reinterpret_cast<T*>(&this->m_pEntityData[this->m_EntityInfo->getAttrOffset(attrIndex)]);
+    }
+
+    const char *getAs(TAttrIndex const &attrIndex)
+    {
+	return const_cast<const char*>(&this->m_pEntityData[this->m_EntityInfo->getAttrOffset(attrIndex)]);
     }
 
     template <typename T>
