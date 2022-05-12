@@ -1,6 +1,7 @@
 #include "CEntityInfo.hpp"
 #include "CAttrInfo.hpp"
 #include "CEntityUnique.hpp"
+#include "CEntityShared.hpp"
 #include <string>
 #include <cassert>
 #include <iostream>
@@ -10,6 +11,7 @@
 using CAttrInfo = ipgdlib::entity::CAttrInfo<std::string,unsigned char>;
 using CEntityInfo = ipgdlib::entity::CEntityInfo<size_t,size_t,CAttrInfo>;
 using CEntityUnique = ipgdlib::entity::CEntityUnique<CEntityInfo>;
+using CEntityShared = ipgdlib::entity::CEntityShared<CEntityInfo>;
 
 int main(int argc,char * argv[])
 {
@@ -34,8 +36,16 @@ int main(int argc,char * argv[])
     eProduct.createFrom(eInfo);
     eProduct.getAs<unsigned int>("id") = 10;
     assert(eProduct.getAs<unsigned int>("id") == 10);
+    eProduct.getAs<char const*>(1) = "Arduino UNO R3";
     eProduct.getAs<unsigned char>("pcs_per_unit") = 20;
     assert(eProduct.getAs<unsigned char>("pcs_per_unit") == 20);
+
+    CEntityShared eSharedProduct;
+    eProduct.shareTo(eSharedProduct);
+
+    assert(eSharedProduct.getAs<unsigned int>("id") == 10);
+    eSharedProduct.getAs<unsigned int>("id") = 20;
+    assert(eProduct.getAs<unsigned int>("id") == 20);
 
     return 0;
 }

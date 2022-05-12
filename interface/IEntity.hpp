@@ -6,6 +6,9 @@
 
 namespace ipgdlib::entity
 {
+template <typename TEntityInfo,typename TEntityInfoWrapper> 
+class IEntityShared;
+
 
 template <
 	typename TEntityInfo,
@@ -48,6 +51,8 @@ public:
 
     virtual bool copyTo(void *pDest) const = 0;
     virtual bool copyFrom(void *pSrc) const = 0;
+
+    virtual bool shareTo(IEntityShared<TEntityInfo,TEntityInfoWrapper> &eShared) const = 0;
 
     virtual bool isNull() const noexcept = 0;
     virtual void clear() = 0;

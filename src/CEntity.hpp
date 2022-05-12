@@ -82,6 +82,11 @@ public:
 	return true;
     }
 
+    bool shareTo(IEntityShared<TEntityInfo,TEntityInfoWrapper> &eShared) const override
+    {
+	return eShared.set(this->m_pEntityData,this->m_EntityInfo);
+    }
+
     bool isNull() const noexcept override
     {
 	return this->m_pEntityData == nullptr;
@@ -90,7 +95,7 @@ public:
     template <typename T>
     T &getAs(TAttrIndex const &attrIndex)
     {
-	return *reinterpret_cast<T*>(&this->m_pEntityData[this->m_EntityInfo->getAttrOffset(attrIndex)]);
+	return *(T*)(&this->m_pEntityData[this->m_EntityInfo->getAttrOffset(attrIndex)]);
     }
 
     template <typename T>
@@ -134,13 +139,6 @@ protected:
 	this->m_EntityInfo = entityInfo;
 	return true;
     }
-    // This is abstract class
-    /*
-    void clear()
-    {
-	this->m_EntityInfo = nullptr;
-    }
-    */
 
 private:
     TEntityInfoWrapper m_EntityInfo;

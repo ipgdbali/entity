@@ -7,25 +7,38 @@
 namespace ipgdlib::entity
 {
 
-template <
-    typename TAttrName,		
-    typename TAttrIndex,			
-    typename TAttrSize,
-    typename TAttrSizeTotal
->
+template <typename TEntityInfo>
 class CEntityShared :
-    public CEntity<TAttrName,TAttrIndex,TAttrSize,TAttrSizeTotal>
-    public virtual IEntityShared
+    public CEntity<TEntityInfo>,
+    public virtual IEntityShared<TEntityInfo,TEntityInfo const *>
 {
+
 public:
-    bool shareFrom(IEntity const &entity) override
+    using CEntity<TEntityInfo>::setEntityInfo;
+
+    bool assignFrom(void *pSrc) override
     {
+	this->setEntityPtr(static_cast<char*>(pSrc));
 	return true;
     }
 
-    bool shareTo(IEntity &entity) override
+    bool assignTo(void *&pDest) const override
     {
+	pDest = this->getEntityPtr();
 	return true;
+    }
+
+    bool set(void *pSrc,TEntityInfo const *pInfo) override
+    {
+	this->setEntityPtr(static_cast<char*>(pSrc));
+	this->setEntityInfo(pInfo);
+	return true;
+    }
+
+    void clear() override
+    {
+	this->setEntityPtr(nullptr);
+	this->setEntityInfo(nullptr);
     }
 
 };
