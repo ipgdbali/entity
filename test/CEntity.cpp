@@ -2,6 +2,7 @@
 #include "CAttrInfo.hpp"
 #include "CEntityUnique.hpp"
 #include "CEntityShared.hpp"
+#include "CPrimitiveType.hpp"
 #include <string>
 #include <cassert>
 #include <iostream>
@@ -53,6 +54,11 @@ int main(int argc,char * argv[])
     assert(eSharedProduct.getAs<unsigned int>(3) == 180000);
     assert(eProduct.getAs<unsigned int>(0) == 30);
     assert(strcmp(eProduct.getAs<const char*>(1),"Kucing") == 0);
+
+    ipgdlib::entity::CPrimitiveType<unsigned int,size_t> iPrice;
+    eProduct.toCustomType(3,iPrice);
+
+    iPrice = 200;
 
     return 0;
 }

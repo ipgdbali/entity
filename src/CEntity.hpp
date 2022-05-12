@@ -6,6 +6,7 @@
 #include "CEntityInfo.hpp"
 #include "ICustomType.hpp"
 #include <cstring>
+#include <iostream>
 
 namespace ipgdlib::entity
 {
@@ -28,6 +29,11 @@ public:
     using type_entity_info_wrapper = TEntityInfoWrapper;
 
 public:
+
+    CEntity() :
+	m_EntityInfo(nullptr),m_pEntityData(nullptr)
+    {
+    }
 
     TEntityInfoWrapper getEntityInfo() const noexcept override
     {
@@ -112,10 +118,13 @@ public:
     template<typename T>
     bool toCustomType(TAttrIndex const &attrIndex,ICustomType<T> &ref)
     {
-	return ref.set(
-	    this->m_EntityInfo->getAttrInfo(attrIndex)->getSize(),
-	    &this->m_pEntityData[this->m_EntityInfo->getAttrOffset(attrIndex)]
-	);
+	if(ref.getTypeSize() == this->m_EntityInfo->getAttrInfo(attrIndex)->getSize())
+	{
+	    ref.set(&this->m_pEntityData[this->m_EntityInfo->getAttrOffset(attrIndex)]);
+	    return true;
+	}
+	else
+	    return false;
     }
     template <typename T>
     bool toCustomType(TAttrName const &attrName,ICustomType<T> &ref)

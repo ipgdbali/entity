@@ -4,14 +4,14 @@
 namespace ipgdlib::entity
 {
 
-template <
-    typename TSize
->
+template <typename TSize>
 class ICustomType
 {
 public:
     virtual ~ICustomType() {};
-    virtual bool set(TSize size,void *ptr) = 0;
+
+    virtual TSize getTypeSize() const = 0;
+    virtual bool set(void *ptr) = 0;
 };
 
 };

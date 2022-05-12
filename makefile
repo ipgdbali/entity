@@ -10,4 +10,3 @@ bin/CEntityInfo : test/CEntityInfo.cpp
 
 bin/CEntity : test/CEntity.cpp
 	g++ -Isrc -Iinterface -g -o bin/CEntity test/CEntity.cpp
-	bin/CEntity

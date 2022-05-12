@@ -14,6 +14,7 @@ class CEntityShared :
 {
 
 public:
+
     using CEntity<TEntityInfo>::setEntityInfo;
 
     bool assignFrom(void *pSrc) override

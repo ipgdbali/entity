@@ -11,35 +11,48 @@ template <
     typename TSize
     >
 class CPrimitiveType :
-    public ICustomType<TSize,TPtr>
+    public ICustomType<TSize>
 {
     public:
-
-	static TSize size() const noexcept
+	CPrimitiveType() : m_pValue(nullptr)
 	{
-	    return sizeof(TSize);
 	}
 
-	bool set(TSize size,void *ptr) override
+	virtual ~CPrimitiveType()
 	{
-	    if(size == size())
+	    this->m_pValue = nullptr;
+	}
+
+	TSize getTypeSize() const override
+	{
+	    return sizeof(T);
+	}
+
+	bool set(void *ptr) override
+	{
+	    if(ptr != nullptr)
 	    {
-		this->m_pValue = ptr;
+		this->m_pValue = (T*)(ptr);
 		return true;
 	    }
 	    else
 		return false;
-
 	}
 
-	T &val()
+	CPrimitiveType<T,TSize> &operator = (const T &ref)
 	{
-	    return *m_pValue;
+	    *(this->m_pValue) = ref;
+	    return *this;
+	}
+
+	operator T()
+	{
+	    return *this->m_pValue;
 	}
 
     private:
 	T* m_pValue;
-}
+};
     
 };
 
