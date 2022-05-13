@@ -1,4 +1,4 @@
-all : bin/CAttrInfo bin/CEntityInfo bin/CEntity
+all : bin/CAttrInfo bin/CEntityInfo bin/CEntity bin/model
 
 bin/CAttrInfo : test/CAttrInfo.cpp
 	g++ -Isrc -Iinterface -o bin/CAttrInfo test/CAttrInfo.cpp
@@ -10,3 +10,6 @@ bin/CEntityInfo : test/CEntityInfo.cpp
 
 bin/CEntity : test/CEntity.cpp
 	g++ -Isrc -Iinterface -g -o bin/CEntity test/CEntity.cpp
+
+bin/model : test/model.cpp
+	g++ -Isrc -Iinterface -g -o bin/model test/model.cpp

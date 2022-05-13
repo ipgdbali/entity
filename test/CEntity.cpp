@@ -18,8 +18,8 @@ int main(int argc,char * argv[])
 {
     CEntityInfo eInfo({
 	CAttrInfo::alloc<unsigned int>("id"),
-	CAttrInfo::alloc<void*>("fullname"),
-	CAttrInfo::alloc<void*>("shortname"),
+	CAttrInfo::alloc<const char*>("fullname"),
+	CAttrInfo::alloc<const char *>("shortname"),
 	CAttrInfo::alloc<unsigned int>("price_sell_unit"),
 	CAttrInfo::alloc<unsigned int>("price_buy_pcs"),
 	CAttrInfo::alloc<unsigned char>("pcs_per_unit"),
