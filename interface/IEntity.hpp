@@ -49,8 +49,8 @@ public:
     virtual bool copyAttrFrom(TAttrIndex const &attrIndex,void *pSrc) = 0;
     virtual bool copyAttrFrom(TAttrName const &attrName,void *pSrc) = 0;
 
+    virtual bool copyFrom(void *pSrc) = 0;
     virtual bool copyTo(void *pDest) const = 0;
-    virtual bool copyFrom(void *pSrc) const = 0;
 
     virtual bool shareTo(IEntityShared<TEntityInfo,TEntityInfoWrapper> &eShared) const = 0;
 

@@ -12,28 +12,29 @@ class CEntityShared :
     public CEntity<TEntityInfo>,
     public virtual IEntityShared<TEntityInfo,TEntityInfo const *>
 {
+using TEntityInfoWrapper = TEntityInfo const *;
 
 public:
 
     using CEntity<TEntityInfo>::setEntityInfo;
 
-    bool assignFrom(void *pSrc) override
+    /**
+     *  EntityInfo must be non null
+     */
+    void assignFrom(void *pSrc) override
     {
 	this->setEntityPtr(static_cast<char*>(pSrc));
-	return true;
     }
 
-    bool assignTo(void *&pDest) const override
+    void assignTo(void *&pDest) const override
     {
 	pDest = this->getEntityPtr();
-	return true;
     }
 
-    bool set(void *pSrc,TEntityInfo const *pInfo) override
+    void set(TEntityInfoWrapper pInfo,void *pSrc) override
     {
 	this->setEntityPtr(static_cast<char*>(pSrc));
 	this->setEntityInfo(pInfo);
-	return true;
     }
 
     void clear() override

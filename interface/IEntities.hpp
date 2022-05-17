@@ -1,44 +1,40 @@
 #ifndef IENTITIES_HPP
 #define IENTITIES_HPP
 
+#include "IEntityShared.hpp"
+
 namespace ipgdlib::entity
 {
 
 template <
-    typename TEntityIndex,
-    typename TAttrIndex,			
-    typename TAttrName,		
-    typename TAttrSize,
-    typename TAttrSizeTotal,
-    typename TEntityInfo
+    typename TEntityCount,
+    typename TEntityInfo,
+    typename TEntityInfoWrapper
 >
 class IEntities
 {
 public:
+    using type_entity_count = TEntityCount;
+    using type_entity_info = TEntityInfo;
+    using type_entity_info_wrapper = TEntityInfoWrapper;
+
     virtual ~IEntities() {};
 
-    virtual TEntityInfo getEntityInfo() const = 0;
-    virtual TEntityIndex getEntityCount() const noexcept = 0;
+    virtual TEntityInfoWrapper getEntityInfo() const = 0;
+    virtual TEntityCount getEntityCount() const noexcept = 0;
 
-    virtual bool copyAttrTo(TEntityIndex const &idx,TAttrIndex const &attrIndex,void *pDest) const = 0;
-    virtual bool copyAttrFrom(TEntityIndex const &idx,TAttrIndex const &attrIndex,void *pSource) = 0;
+    virtual bool isNull() const noexcept = 0;
+    virtual bool isNull(TEntityCount rowPos) const = 0;
 
-    virtual bool copyAttrTo(TEntityIndex const &idx,TAttrName const &attrName,void *pDest) const = 0;
-    virtual bool copyAttrFrom(TEntityIndex const &idx,TAttrName const &attrName,void *pSource) = 0;
+    virtual void assignFrom(TEntityCount rowPos,void *pSrc) = 0;
+    virtual void assignTo(TEntityCount rowPos,void *&pDest) const = 0;
+    virtual void *getPData(TEntityCount rowPos) = 0;
+    
+    // must be called for non null row
+    virtual void copyFrom(TEntityCount rowPos,void *pSrc) = 0;
+    virtual void copyTo(TEntityCount rowPos,void *pDest) const = 0;
+    virtual void shareTo(TEntityCount rowPos,IEntityShared<TEntityInfo,TEntityInfoWrapper> &eShared) const = 0;
 
-    virtual bool copyEntityTo(TEntityIndex const &idx,
-	    IEntity<TAttrIndex,TAttrName,TAttrSize,TAttrSizeTotal,TEntityInfo> &pDest) const = 0;
-    virtual bool copyEntityFrom(TEntityIndex const &idx,
-	    IEntity<TAttrIndex,TAttrName,TAttrSize,TAttrSizeTotal,TEntityInfo> &pSource) = 0;
-
-    virtual bool copyEntityTo(TEntityIndex const &idx,void *pDest) const = 0;
-    virtual bool copyEntityFrom(TEntityIndex const &idx,void *pSource) = 0;
-
-    virtual bool shareEntityTo(TEntityIndex const &idx,
-	    IEntity<TAttrIndex,TAttrName,TAttrSize,TAttrSizeTotal,TEntityInfo> &pDest) const = 0;
-    virtual bool shareEntityTo(TEntityIndex const &idx,void *pDest) const = 0;
-
-	//thereis no shareEntityFrom because IEntites is Unique Entity
 };
 
 };

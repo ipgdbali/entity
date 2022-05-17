@@ -15,10 +15,10 @@ class IEntityShared :
 {
 public:
 
-    virtual bool assignFrom(void *pSrc) = 0;
-    virtual bool assignTo(void *&pDest) const = 0;
+    virtual void assignFrom(void *pSrc) = 0;
+    virtual void assignTo(void *&pDest) const = 0;
 
-    virtual bool set(void *pSrc,TEntityInfo const *pInfo) = 0;
+    virtual void set(TEntityInfo const *pInfo,void *pSrc) = 0;
 
 };
 

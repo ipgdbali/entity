@@ -1,6 +1,8 @@
 #ifndef IATTRINFO_HPP
 #define IATTRINFO_HPP
 
+#include <type_traits>
+
 namespace ipgdlib::entity
 {
 

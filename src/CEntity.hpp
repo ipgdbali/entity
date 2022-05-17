@@ -82,7 +82,7 @@ public:
 	return true;
     }
 
-    bool copyFrom(void *pSrc) const override
+    bool copyFrom(void *pSrc) override
     {
 	std::memcpy(this->m_pEntityData,pSrc,this->getEntityInfo()->getEntitySize());
 	return true;
@@ -90,7 +90,8 @@ public:
 
     bool shareTo(IEntityShared<TEntityInfo,TEntityInfoWrapper> &eShared) const override
     {
-	return eShared.set(this->m_pEntityData,this->m_EntityInfo);
+	eShared.set(this->m_EntityInfo,this->m_pEntityData);
+	return true;
     }
 
     bool isNull() const noexcept override
@@ -110,13 +111,6 @@ public:
 	return *reinterpret_cast<T*>(&this->m_pEntityData[this->m_EntityInfo->getAttrOffset(attrIndex)]);
     }
 
-    /*
-    const char *getAs(TAttrIndex const &attrIndex)
-    {
-	return const_cast<const char*>(&this->m_pEntityData[this->m_EntityInfo->getAttrOffset(attrIndex)]);
-    }
-    */
-
     template <typename T>
     T const &getAs(TAttrName const &attrName) const
     {
@@ -128,6 +122,7 @@ public:
     {
 	return getAs<T>(this->m_EntityInfo->getIndex(attrName));
     }
+
 
     template<typename T>
     bool toCustomType(TAttrIndex const &attrIndex,ICustomType<T> &ref)
