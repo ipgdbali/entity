@@ -13,7 +13,7 @@ namespace ipgdlib::entity
 
 template <typename TEntityInfo>
 class CEntity :
-    public virtual IEntity<TEntityInfo,TEntityInfo const *>
+    public virtual IEntity<TEntityInfo,ewConstPointer>
 {
 using TAttrName		    = typename TEntityInfo::type_attr_name;
 using TAttrIndex	    = typename TEntityInfo::type_attr_index;
@@ -21,10 +21,10 @@ using TAttrSize		    = typename TEntityInfo::type_attr_size;
 using TAttrSizeTotal	    = typename TEntityInfo::type_attr_size_total;
 using TAttrInfo		    = typename TEntityInfo::type_attr_info;
 using TAttrInfoWrapper	    = typename TEntityInfo::type_attr_info_wrapper;
-using TEntityInfoWrapper    = TEntityInfo const*;
+using TEntityInfoWrapper    = typename ipgdlib::wrap<TEntityInfo,ewConstPointer>::value;
 
 public:
-    using iface = IEntity<TEntityInfo,TEntityInfoWrapper>;
+    using iface = IEntity<TEntityInfo,ewConstPointer>;
     using type_entity_info = TEntityInfo;
     using type_entity_info_wrapper = TEntityInfoWrapper;
 
@@ -76,19 +76,19 @@ public:
 	);
     }
 
-    bool copyTo(void *pDest) const override
+    bool copyAttrsTo(void *pDest) const override
     {
 	std::memcpy(pDest,this->m_pEntityData,this->getEntityInfo()->getEntitySize());
 	return true;
     }
 
-    bool copyFrom(void *pSrc) override
+    bool copyAttrsFrom(void *pSrc) override
     {
 	std::memcpy(this->m_pEntityData,pSrc,this->getEntityInfo()->getEntitySize());
 	return true;
     }
 
-    bool shareTo(IEntityShared<TEntityInfo,TEntityInfoWrapper> &eShared) const override
+    bool shareTo(IEntityShared<TEntityInfo,ewConstPointer> &eShared) const override
     {
 	eShared.set(this->m_EntityInfo,this->m_pEntityData);
 	return true;

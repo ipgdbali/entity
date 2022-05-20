@@ -11,7 +11,7 @@ namespace ipgdlib::entity
 template <typename TEntityInfo>
 class CEntityUnique :
     public CEntity<TEntityInfo>,
-    public virtual IEntityUnique<TEntityInfo,TEntityInfo const *>
+    public virtual IEntityUnique<TEntityInfo,ewConstPointer>
 {
 using TEntityInfoWrapper = TEntityInfo const *;
 public:
@@ -30,12 +30,12 @@ public:
 	return true;
     }
 
-    bool createFrom(IEntity<TEntityInfo,TEntityInfoWrapper> const &entity) override
+    bool createFrom(IEntity<TEntityInfo,ewConstPointer> const &entity) override
     {
 	this->clear();
 	this->setEntityInfo(entity.getEntityInfo());
 	this->setEntityPtr(new char [this->getEntityInfo()->getEntitySize()]);
-	entity.copyTo(this->getEntityPtr());
+	entity.copyAttrsTo(this->getEntityPtr());
 	return true;
     }
 

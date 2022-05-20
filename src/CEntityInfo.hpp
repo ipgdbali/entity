@@ -1,6 +1,8 @@
 #ifndef CENTITY_INFO_HPP
 #define CENTITY_INFO_HPP
 
+#include "wrapper.hpp"
+
 #include "IEntityInfo.hpp"
 #include "IAttrInfo.hpp"
 #include "CAttrInfo.hpp"
@@ -16,15 +18,15 @@ template <
 	typename TAttrInfo
 >
 class CEntityInfo :
-    public IEntityInfo<TAttrIndex,TAttrSizeTotal,TAttrInfo,TAttrInfo const *>
+    public IEntityInfo<TAttrIndex,TAttrSizeTotal,TAttrInfo,ewConstPointer>
 {
 
-using TAttrInfoWrapper = TAttrInfo const *;
+using TAttrInfoWrapper = typename ipgdlib::wrap<TAttrInfo,ewConstPointer>::value;
 using TAttrName = typename TAttrInfo::iface::type_attr_name;
 using TAttrSize = typename TAttrInfo::iface::type_attr_size;
 
 public:
-    using iface = IEntityInfo<TAttrIndex,TAttrSizeTotal,TAttrInfo,TAttrInfo const *>;
+    using iface = IEntityInfo<TAttrIndex,TAttrSizeTotal,TAttrInfo,ewConstPointer>;
     using type_attr_name = TAttrName;
     using type_attr_index = TAttrIndex;
     using type_attr_size = TAttrSize;

@@ -9,12 +9,12 @@ namespace ipgdlib::entity
 
 template <typename TEntityCount,typename TEntityInfo>
 class CEntities :
-    public IEntities<TEntityCount,TEntityInfo,TEntityInfo const *>
+    public IEntities<TEntityCount,TEntityInfo,ewConstPointer>
 {
 using TEntityInfoWrapper = TEntityInfo const *;
 
 public:
-    using iface = IEntities<TEntityCount,TEntityInfo,TEntityInfo const *>;
+    using iface = IEntities<TEntityCount,TEntityInfo,ewConstPointer>;
 
     virtual ~CEntities()
     {
@@ -76,7 +76,7 @@ public:
 	std::memcpy(pDest,m_arrPEntityData[rowPos],m_pEntityInfo->getEntitySize());
     }
 
-    void shareTo(TEntityCount rowPos,IEntityShared<TEntityInfo,TEntityInfoWrapper> &eShared) const override
+    void shareTo(TEntityCount rowPos,IEntityShared<TEntityInfo,ewConstPointer> &eShared) const override
     {
 	eShared.set(m_pEntityInfo,m_arrPEntityData[rowPos]);
     }

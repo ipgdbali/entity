@@ -10,7 +10,7 @@ namespace ipgdlib::entity
 template <typename TEntityInfo>
 class CEntityShared :
     public CEntity<TEntityInfo>,
-    public virtual IEntityShared<TEntityInfo,TEntityInfo const *>
+    public virtual IEntityShared<TEntityInfo,ewConstPointer>
 {
 using TEntityInfoWrapper = TEntityInfo const *;
 
