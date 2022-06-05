@@ -2,7 +2,7 @@
 #include "CAttrInfo.hpp"
 #include "CEntityUnique.hpp"
 #include "CEntityShared.hpp"
-#include "CPrimitiveType.hpp"
+#include "CCTStaticPrimitive.hpp"
 #include <string>
 #include <cassert>
 #include <iostream>
@@ -13,7 +13,6 @@ using CAttrInfo = ipgdlib::entity::CAttrInfo<std::string,unsigned char>;
 using CEntityInfo = ipgdlib::entity::CEntityInfo<size_t,size_t,CAttrInfo>;
 using CEntityUnique = ipgdlib::entity::CEntityUnique<CEntityInfo>;
 using CEntityShared = ipgdlib::entity::CEntityShared<CEntityInfo>;
-
 
 class CProduct
 {
@@ -145,6 +144,6 @@ int main(int argc,char * argv[])
 {
     CProduct product(12,"Arduino UNO R3","",3000,250,10,1,23,48);
 
-    std::cout << product.profit_per_unit();
+    assert(product.profit_per_unit() == 500);
     return 0;
 }

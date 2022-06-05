@@ -58,7 +58,7 @@ public:
 	);
     }
 
-    bool copyAttrFrom(TAttrIndex const &attrIndex,void *pSrc) override
+    bool copyAttrFrom(TAttrIndex const &attrIndex,const void *pSrc) override
     {
 	std::memcpy(
 	    &this->m_pEntityData[this->getEntityInfo()->getAttrOffset(attrIndex)],
@@ -68,7 +68,7 @@ public:
 	return true;
     }
 
-    bool copyAttrFrom(TAttrName const &attrName,void *pSrc) override
+    bool copyAttrFrom(TAttrName const &attrName,const void *pSrc) override
     {
 	return copyAttrFrom(
 		this->m_EntityInfo->getIndex(attrName),
@@ -82,7 +82,7 @@ public:
 	return true;
     }
 
-    bool copyAttrsFrom(void *pSrc) override
+    bool copyAttrsFrom(const void *pSrc) override
     {
 	std::memcpy(this->m_pEntityData,pSrc,this->getEntityInfo()->getEntitySize());
 	return true;
@@ -129,7 +129,7 @@ public:
     {
 	if(ref.getTypeSize() == this->m_EntityInfo->getAttrInfo(attrIndex)->getSize())
 	{
-	    ref.set(&this->m_pEntityData[this->m_EntityInfo->getAttrOffset(attrIndex)]);
+	    ref.setPtr(&this->m_pEntityData[this->m_EntityInfo->getAttrOffset(attrIndex)]);
 	    return true;
 	}
 	else

@@ -18,9 +18,11 @@ public:
 
     virtual ~CEntities()
     {
-	for(TEntityCount li = 0;li < m_EntityCount;li++)
-	    delete []m_arrPEntityData[li];
-	delete [] m_arrPEntityData;
+	if(this->m_arrPEntityData != nullptr)
+	{
+	    delete [] m_arrPEntityData;
+	    this->m_arrPEntityData = nullptr;
+	}
     }
 
     CEntities(TEntityInfoWrapper entityInfo,TEntityCount entityCount) :
@@ -41,12 +43,12 @@ public:
 	return this->m_EntityCount;
     }
 
-    bool isNull() const noexcept override
+    bool isNullEntities() const noexcept override
     {
 	return this->m_arrPEntityData == nullptr;
     }
 
-    bool isNull(TEntityCount rowPos) const override
+    bool isNullEntity(TEntityCount rowPos) const override
     {
 	return this->m_arrPEntityData[rowPos] == nullptr;
     }
@@ -66,11 +68,17 @@ public:
 	return this->m_arrPEntityData[rowPos];
     }
 
-    void copyFrom(TEntityCount rowPos,void *pSrc) override
+    /**
+     * Should not be null
+     */
+    void copyFrom(TEntityCount rowPos,const void *pSrc) override
     {
 	std::memcpy(m_arrPEntityData[rowPos],pSrc,m_pEntityInfo->getEntitySize());
     }
 
+    /**
+     * Should not be null
+     */
     void copyTo(TEntityCount rowPos,void *pDest) const override
     {
 	std::memcpy(pDest,m_arrPEntityData[rowPos],m_pEntityInfo->getEntitySize());

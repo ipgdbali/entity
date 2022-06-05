@@ -50,10 +50,10 @@ public:
 
     virtual bool copyAttrTo(TAttrIndex const &attrIndex,void *pDst) const = 0;
     virtual bool copyAttrTo(TAttrName const &attrName,void *pDst) const = 0;
-    virtual bool copyAttrFrom(TAttrIndex const &attrIndex,void *pSrc) = 0;
-    virtual bool copyAttrFrom(TAttrName const &attrName,void *pSrc) = 0;
+    virtual bool copyAttrFrom(TAttrIndex const &attrIndex,const void *pSrc) = 0;
+    virtual bool copyAttrFrom(TAttrName const &attrName,const void *pSrc) = 0;
 
-    virtual bool copyAttrsFrom(void *pSrc) = 0;
+    virtual bool copyAttrsFrom(const void *pSrc) = 0;
     virtual bool copyAttrsTo(void *pDest) const = 0;
 
     virtual bool shareTo(IEntityShared<TEntityInfo,ewEntityInfo> &eShared) const = 0;

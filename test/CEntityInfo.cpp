@@ -25,8 +25,5 @@ int main(int argc,char * argv[])
 
     assert(eInfo.getAttrCount() == 9);
 
-    for(size_t li = 0; li< eInfo.getAttrCount();li++)
-	std::cout << std::setw(2) << eInfo.getAttrOffset(li) << ' ' << eInfo.getAttrInfo(li)->getName() << "(" << eInfo.getAttrInfo(li)->getSize() << ')' << std::endl;
-
     return 0;
 }

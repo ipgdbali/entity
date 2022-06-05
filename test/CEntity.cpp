@@ -2,12 +2,11 @@
 #include "CAttrInfo.hpp"
 #include "CEntityUnique.hpp"
 #include "CEntityShared.hpp"
-#include "CPrimitiveType.hpp"
+#include "CCTStaticPrimitive.hpp"
 #include <string>
 #include <cassert>
 #include <iostream>
 #include <iomanip>
-
 
 using CAttrInfo = ipgdlib::entity::CAttrInfo<std::string,unsigned char>;
 using CEntityInfo = ipgdlib::entity::CEntityInfo<size_t,size_t,CAttrInfo>;
@@ -29,9 +28,6 @@ int main(int argc,char * argv[])
 	});
 
     assert(eInfo.getAttrCount() == 9);
-
-    for(size_t li = 0; li< eInfo.getAttrCount();li++)
-	std::cout << std::setw(2) << eInfo.getAttrOffset(li) << ' ' << eInfo.getAttrInfo(li)->getName() << "(" << (int)eInfo.getAttrInfo(li)->getSize() << ')' << std::endl;
 
     CEntityUnique eProduct;
     eProduct.createFrom(eInfo);
@@ -55,10 +51,12 @@ int main(int argc,char * argv[])
     assert(eProduct.getAs<unsigned int>(0) == 30);
     assert(strcmp(eProduct.getAs<const char*>(1),"Kucing") == 0);
 
-    ipgdlib::entity::CPrimitiveType<unsigned int,size_t> iPrice;
+    ipgdlib::entity::CCTStaticPrimitive<unsigned int,size_t> iPrice;
     eProduct.toCustomType(3,iPrice);
 
     iPrice = 200;
+
+    assert(eProduct.getAs<unsigned int>(3) == 200);
 
     return 0;
 }
