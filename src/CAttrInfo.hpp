@@ -74,8 +74,8 @@ public:
     }
 
 private:
-    TAttrSize m_Size;
     TAttrName m_Name;
+    TAttrSize m_Size;
 
 };
 

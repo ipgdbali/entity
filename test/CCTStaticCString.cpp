@@ -1,5 +1,5 @@
 #include <iostream>
-#include "CCTStaticCString.hpp"
+#include "CustomType/CCTStaticCString.hpp"
 #include <cstring>
 #include <cassert>
 

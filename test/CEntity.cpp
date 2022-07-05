@@ -2,7 +2,7 @@
 #include "CAttrInfo.hpp"
 #include "CEntityUnique.hpp"
 #include "CEntityShared.hpp"
-#include "CCTStaticPrimitive.hpp"
+#include "CustomType/CCTStaticPrimitive.hpp"
 #include <string>
 #include <cassert>
 #include <iostream>

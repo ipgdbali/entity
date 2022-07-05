@@ -1,7 +1,7 @@
 #ifndef CCT_STATIC_CSTRING
 #define CCT_STATIC_CSTRING
 
-#include "ICustomTypeStatic.hpp"
+#include "CustomType/CAbsCTStatic.hpp"
 #include <cstring>
 
 namespace ipgdlib::entity
@@ -14,11 +14,16 @@ namespace ipgdlib::entity
  **/
 template <typename T,typename TSize,typename TIndex,TIndex len>
 class CCTStaticCString :
-    public ICustomTypeStatic<TSize>
+    public CAbsCTStatic<TSize>
 {
 public:
     constexpr static TIndex max_length = len;
     constexpr static TSize size = sizeof(T) * (len+1);
+
+    CCTStaticCString() : 
+	m_pData(nullptr),m_Length(0)
+    {
+    }
 
     TSize getTypeSize() const noexcept override
     {
@@ -60,15 +65,15 @@ public:
 	}while(true);
     }
 
-    void setPtr(void *pSrc)
-    {
-	this->m_pData = static_cast<T*>(pSrc);
-    }
-
     CCTStaticCString<T,TSize,TIndex,len> &operator = (const T* ref)
     {
-	copyFrom(ref);
+	this->copyFrom(ref);
 	return *this;
+    }
+
+    void setPtr(void *pSrc) override
+    {
+	this->m_pData = static_cast<char*>(pSrc);
     }
 
     const T &get(TIndex index) const

@@ -26,7 +26,7 @@ public:
     }
 
     CEntities(TEntityInfoWrapper entityInfo,TEntityCount entityCount) :
-	m_EntityCount(entityCount),m_pEntityInfo(entityInfo)
+	m_pEntityInfo(entityInfo),m_EntityCount(entityCount)
     {
 	this->m_arrPEntityData = new char*[m_EntityCount];
 	for(TEntityCount li = 0;li < m_EntityCount;li++)

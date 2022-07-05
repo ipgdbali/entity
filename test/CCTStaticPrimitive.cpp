@@ -1,7 +1,7 @@
 #include <iostream>
 #include <cassert>
 
-#include "CCTStaticPrimitive.hpp"
+#include "CustomType/CCTStaticPrimitive.hpp"
 
 using namespace ipgdlib::entity;
 

@@ -1,26 +1,41 @@
 .PHONY : clean
 
-all : 	bin/CAttrInfo \
-	bin/CEntityInfo \
-	bin/CEntity \
-	bin/model \
-	bin/CEntities \
-	bin/CEntitiesCursor \
-	bin/CCTStaticPrimitive \
-	bin/CCTStaticCString
+DIR_DEST = bin
+DIR_INCLUDE = src iface ../ipgdlib
 
-INCLUDE = src iface ../ipgdlib
+FILES =	CAttrInfo \
+	CEntityInfo \
+	CEntity \
+	model \
+	CEntities \
+	CEntitiesCursor \
+	CCTStaticPrimitive \
+	CCTStaticCString
 
-CPPFLAGS = $(patsubst %,-I%,$(INCLUDE)) -g
+FILES_TARGET = $(foreach FILE,$(FILES),$(addprefix $(DIR_DEST)/debug/,$(FILE)) $(addprefix $(DIR_DEST)/release/,$(FILE)))
 
-bin/% : test/%.cpp | bin
+CPPFLAGS = $(patsubst %,-I%,$(DIR_INCLUDE)) -Wall
+
+all : $(FILES_TARGET)
+
+bin/debug/% : test/%.cpp | bin/debug
+	g++ $(CPPFLAGS) -g -o $@ $<
+	@$@
+
+bin/release/% : test/%.cpp | bin/release
 	g++ $(CPPFLAGS) -o $@ $<
-	$@
+	@$@
 
-bin :
-	mkdir bin
+bin/debug :
+	@mkdir -p bin/debug
+
+bin/release :
+	@mkdir -p bin/release
 
 clean :
-	rm bin/*
-	rmdir bin
+	@rm bin/debug/* 
+	@rm bin/release/* 
+	@rmdir bin/debug 
+	@rmdir bin/release 
+	@rmdir bin
 

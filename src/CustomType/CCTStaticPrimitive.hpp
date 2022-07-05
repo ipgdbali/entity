@@ -1,7 +1,7 @@
 #ifndef CCT_STATIC_PRIMITIVE
 #define CCT_STATIC_PRIMITIVE
 
-#include "ICustomTypeStatic.hpp"
+#include "CustomType/CAbsCTStatic.hpp"
 #include <cstring>
 
 namespace ipgdlib::entity
@@ -9,7 +9,7 @@ namespace ipgdlib::entity
 
 template <typename T,typename TSize>
 class CCTStaticPrimitive :
-    public ICustomTypeStatic<TSize>
+    public CAbsCTStatic<TSize>
 {
 static_assert(std::is_arithmetic<T>::value);
 
