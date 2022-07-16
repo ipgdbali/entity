@@ -41,7 +41,7 @@ public:
     constexpr static eWrapper kind_attr_info_wrapper = w;
 
     virtual TAttrIndex count() const noexcept = 0;
-    virtual TAttrInfoWrapper getAttrInfo(TAttrIndex index) const = 0;
+    virtual TAttrInfoWrapper getField(TAttrIndex index) const = 0;
 
     virtual TAttrSizeTotal getRunningSum(TAttrIndex index) const = 0;
 

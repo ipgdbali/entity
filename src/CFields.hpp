@@ -76,7 +76,7 @@ public:
 	return this->m_AttrCount;
     }
 
-    TAttrInfoWrapper getAttrInfo(TAttrIndex index) const override
+    TAttrInfoWrapper getField(TAttrIndex index) const override
     {
 	return this->m_arrAttrInfos[index];
     }
