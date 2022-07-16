@@ -58,17 +58,17 @@ public:
 	return *this;
     }
 
-    CAttrInfo(TAttrName const &name,TAttrSize const &size) :
+    CAttrInfo(const TAttrName &name,const TAttrSize &size) :
 	m_Name(name),m_Size(size)
     {
     }
 
-    TAttrSize const &getSize() const noexcept
+    const TAttrSize &size() const noexcept
     {
 	return this->m_Size;
     }
 
-    TAttrName const &getName() const noexcept
+    const TAttrName &name() const noexcept
     {
 	return this->m_Name;
     }

@@ -45,7 +45,7 @@ public:
 	std::memcpy(
 		pDst,
 		&this->m_pEntityData[this->getEntityInfo()->getAttrOffset(attrIndex)],
-		this->m_EntityInfo->getAttrInfo(attrIndex)->getSize()
+		this->m_EntityInfo->getAttrInfo(attrIndex)->size()
 	);
 	return true;
     }
@@ -63,7 +63,7 @@ public:
 	std::memcpy(
 	    &this->m_pEntityData[this->getEntityInfo()->getAttrOffset(attrIndex)],
 	    pSrc,
-	    this->m_EntityInfo->getAttrInfo(attrIndex)->getSize()
+	    this->m_EntityInfo->getAttrInfo(attrIndex)->size()
 	);
 	return true;
     }
@@ -127,7 +127,7 @@ public:
     template<typename T>
     bool toCustomType(TAttrIndex const &attrIndex,ICustomType<T> &ref)
     {
-	if(ref.getTypeSize() == this->m_EntityInfo->getAttrInfo(attrIndex)->getSize())
+	if(ref.getTypeSize() == this->m_EntityInfo->getAttrInfo(attrIndex)->size())
 	{
 	    ref.setPtr(&this->m_pEntityData[this->m_EntityInfo->getAttrOffset(attrIndex)]);
 	    return true;

@@ -12,14 +12,14 @@ int main(int argc,char * argv[])
     CFieldInfo a("id",sizeof(unsigned int));
     CFieldInfo b("price",sizeof(unsigned int));
 
-    assert(a.getSize() == sizeof(unsigned int));
-    assert(b.getSize() == sizeof(unsigned int));
+    assert(a.size() == sizeof(unsigned int));
+    assert(b.size() == sizeof(unsigned int));
 
-    assert(a.getName() == "id");
-    assert(b.getName() == "price");
+    assert(a.name() == "id");
+    assert(b.name() == "price");
 
     b = std::move(a);
-    assert(a.getSize() == 0);
-    assert(a.getName() == "");
+    assert(a.size() == 0);
+    assert(a.name() == "");
     return 0;
 }

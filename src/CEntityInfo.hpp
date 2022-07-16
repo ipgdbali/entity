@@ -51,13 +51,13 @@ public:
 
 	for(auto it = ltpAttrInfo.begin();it != ltpAttrInfo.end();++it)
 	{
-	    if(this->hasName((*it)->getName()))
+	    if(this->hasName((*it)->name()))
 		throw "Duplicate Name";
 
 	    this->m_arrAttrInfos[idx] = *it;
-	    this->m_RunningSum[idx] = (*it)->getSize() + sum;
+	    this->m_RunningSum[idx] = (*it)->size() + sum;
 	    sum = this->m_RunningSum[idx];
-	    m_Mapper[(*it)->getName()] = idx;
+	    m_Mapper[(*it)->name()] = idx;
 	    idx++;
 	}
     }
@@ -111,7 +111,7 @@ public:
 
     TAttrName const &getName(TAttrIndex index) const override
     {
-	return this->m_arrAttrInfos[index]->getName();
+	return this->m_arrAttrInfos[index]->name();
     }
 
 private:

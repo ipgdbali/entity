@@ -22,8 +22,8 @@ public:
     using type_attr_size = TAttrSize;
     using type_attr_name = TAttrName;
 
-    virtual TAttrName const &getName() const noexcept = 0;
-    virtual TAttrSize const &getSize() const noexcept = 0;
+    virtual const TAttrName &name() const noexcept = 0;
+    virtual const TAttrSize &size() const noexcept = 0;
 };
 
 };
