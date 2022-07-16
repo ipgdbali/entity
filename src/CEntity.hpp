@@ -2,7 +2,7 @@
 #define CENTITY_HPP
 
 #include "IEntity.hpp"
-#include "CAttrInfo.hpp"
+#include "CFieldInfo.hpp"
 #include "CEntityInfo.hpp"
 #include "ICustomType.hpp"
 #include <cstring>

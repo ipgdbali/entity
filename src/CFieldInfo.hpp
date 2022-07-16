@@ -1,7 +1,7 @@
-#ifndef CATTR_INFO_HPP
-#define CATTR_INFO_HPP
+#ifndef CFIELD_INFO_HPP
+#define CFIELD_INFO_HPP
 
-#include "IAttrInfo.hpp"
+#include "IFieldInfo.hpp"
 #include <utility>
 
 namespace ipgdlib::entity
@@ -11,46 +11,46 @@ template <
     typename TAttrName,
     typename TAttrSize
 >
-class CAttrInfo :
-    public IAttrInfo<TAttrName,TAttrSize>
+class CFieldInfo :
+    public IFieldInfo<TAttrName,TAttrSize>
 {
 public:
 
-    using iface = IAttrInfo<TAttrName,TAttrSize>;
+    using iface = IFieldInfo<TAttrName,TAttrSize>;
 
     template <typename T>
-    static CAttrInfo<TAttrName,TAttrSize> create(TAttrName const &name)
+    static CFieldInfo<TAttrName,TAttrSize> create(TAttrName const &name)
     {
 	return {name,sizeof(T)};
     }
 
     template <typename T>
-    static CAttrInfo<TAttrName,TAttrSize> *alloc(TAttrName const &name)
+    static CFieldInfo<TAttrName,TAttrSize> *alloc(TAttrName const &name)
     {
-	return new CAttrInfo(name,sizeof(T));
+	return new CFieldInfo(name,sizeof(T));
     }
 
-    CAttrInfo() = delete;
+    CFieldInfo() = delete;
 
-    CAttrInfo(const CAttrInfo &ref) :
+    CFieldInfo(const CFieldInfo &ref) :
 	m_Name(ref.m_Name),m_Size(ref.m_Size)
     {
     }
 
-    CAttrInfo<TAttrName,TAttrSize> &operator = (const CAttrInfo &ref)
+    CFieldInfo<TAttrName,TAttrSize> &operator = (const CFieldInfo &ref)
     {
 	this->m_Name = ref.m_Name;
 	this->m_Size = ref.m_Size;
 	return *this;
     }
 
-    CAttrInfo(CAttrInfo &&ref) :
+    CFieldInfo(CFieldInfo &&ref) :
 	m_Name(std::move(ref.m_Name)),m_Size(ref.m_Size)
     {
 	ref.m_Size = 0;
     }
 
-    CAttrInfo &operator = (CAttrInfo &&ref)
+    CFieldInfo &operator = (CFieldInfo &&ref)
     {
 	this->m_Name = std::move(ref.m_Name);
 	this->m_Size = ref.m_Size;
@@ -58,7 +58,7 @@ public:
 	return *this;
     }
 
-    CAttrInfo(const TAttrName &name,const TAttrSize &size) :
+    CFieldInfo(const TAttrName &name,const TAttrSize &size) :
 	m_Name(name),m_Size(size)
     {
     }

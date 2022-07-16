@@ -1,11 +1,10 @@
 #include <iostream>
 #include <cassert>
-#include "CAttrInfo.hpp"
+#include "CFieldInfo.hpp"
 
 
-using namespace ipgdlib::entity;
 
-using CFieldInfo = CAttrInfo<std::string,size_t>;
+using CFieldInfo = ipgdlib::entity::CFieldInfo<std::string,size_t>;
 
 int main(int argc,char * argv[])
 {

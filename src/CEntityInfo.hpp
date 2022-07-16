@@ -4,8 +4,8 @@
 #include "wrapper.hpp"
 
 #include "IEntityInfo.hpp"
-#include "IAttrInfo.hpp"
-#include "CAttrInfo.hpp"
+#include "IFieldInfo.hpp"
+#include "CFieldInfo.hpp"
 #include <initializer_list>
 #include <map>
 

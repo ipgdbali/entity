@@ -1,4 +1,4 @@
-#include "IAttrInfo.hpp"
+#include "IFieldInfo.hpp"
 #include "IEntityInfo.hpp"
 #include "IEntity.hpp"
 #include <iostream>

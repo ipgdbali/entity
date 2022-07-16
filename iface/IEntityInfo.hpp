@@ -3,7 +3,7 @@
 
 #include "wrapper.hpp"
 #include <type_traits>
-#include "IAttrInfo.hpp"
+#include "IFieldInfo.hpp"
 
 namespace ipgdlib::entity
 {
@@ -25,7 +25,7 @@ static_assert(std::is_integral<TAttrIndex>::value && !std::is_same<bool,TAttrInd
 static_assert(std::is_integral<TAttrSize>::value && !std::is_same<bool,TAttrSize>::value);
 static_assert(std::is_integral<TAttrSizeTotal>::value && !std::is_same<bool,TAttrSizeTotal>::value);
 
-static_assert(std::is_base_of<IAttrInfo<TAttrName,TAttrSize>,TAttrInfo>::value);
+static_assert(std::is_base_of<IFieldInfo<TAttrName,TAttrSize>,TAttrInfo>::value);
 
 public:
 

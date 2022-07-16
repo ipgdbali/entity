@@ -1,5 +1,5 @@
 #include "CEntityInfo.hpp"
-#include "CAttrInfo.hpp"
+#include "CFieldInfo.hpp"
 #include "CEntityUnique.hpp"
 #include "CEntityShared.hpp"
 #include "CustomType/CCTStaticPrimitive.hpp"
@@ -9,8 +9,8 @@
 #include <iomanip>
 
 
-using CAttrInfo = ipgdlib::entity::CAttrInfo<std::string,unsigned char>;
-using CEntityInfo = ipgdlib::entity::CEntityInfo<size_t,size_t,CAttrInfo>;
+using CFieldInfo = ipgdlib::entity::CFieldInfo<std::string,unsigned char>;
+using CEntityInfo = ipgdlib::entity::CEntityInfo<size_t,size_t,CFieldInfo>;
 using CEntityUnique = ipgdlib::entity::CEntityUnique<CEntityInfo>;
 using CEntityShared = ipgdlib::entity::CEntityShared<CEntityInfo>;
 
@@ -129,15 +129,15 @@ private:
 };
 
 CEntityInfo CProduct::eInfo({
-    CAttrInfo::alloc<unsigned int>("id"),
-    CAttrInfo::alloc<void*>("fullname"),
-    CAttrInfo::alloc<void*>("shortname"),
-    CAttrInfo::alloc<unsigned int>("price_sell_unit"),
-    CAttrInfo::alloc<unsigned int>("price_buy_pcs"),
-    CAttrInfo::alloc<unsigned char>("pcs_per_unit"),
-    CAttrInfo::alloc<unsigned char>("min_sale_unit"),
-    CAttrInfo::alloc<unsigned short>("stock_outlet"),
-    CAttrInfo::alloc<unsigned short>("stock_warehouse")
+    CFieldInfo::alloc<unsigned int>("id"),
+    CFieldInfo::alloc<void*>("fullname"),
+    CFieldInfo::alloc<void*>("shortname"),
+    CFieldInfo::alloc<unsigned int>("price_sell_unit"),
+    CFieldInfo::alloc<unsigned int>("price_buy_pcs"),
+    CFieldInfo::alloc<unsigned char>("pcs_per_unit"),
+    CFieldInfo::alloc<unsigned char>("min_sale_unit"),
+    CFieldInfo::alloc<unsigned short>("stock_outlet"),
+    CFieldInfo::alloc<unsigned short>("stock_warehouse")
     });
 
 int main(int argc,char * argv[])

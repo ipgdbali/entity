@@ -1,7 +1,7 @@
-#ifndef IATTRINFONULLABLE_HPP
-#define IATTRINFONULLABLE_HPP
+#ifndef IFIELD_INFO_NULLABLE_HPP
+#define IFIELD_INFO_NULLABLE_HPP
 
-#include "IAttrInfo.hpp"
+#include "IFieldInfo.hpp"
 
 namespace ipgdlib::entity
 {
@@ -10,8 +10,8 @@ template <
     typename TAttrName,
     typename TAttrSize
 >
-class IAttrInfoNullable :
-    public IAttrInfoNullable<TAttrName,TAttrSize>
+class IFieldInfoNullable :
+    public IFieldInfoNullable<TAttrName,TAttrSize>
 {
 public:
     using type_attr_size = TAttrSize;
