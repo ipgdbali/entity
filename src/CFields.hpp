@@ -71,7 +71,7 @@ public:
 	delete [] this->m_RunningSum;
     }
 
-    TAttrIndex getAttrCount() const noexcept override
+    TAttrIndex count() const noexcept override
     {
 	return this->m_AttrCount;
     }

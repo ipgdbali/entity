@@ -27,7 +27,7 @@ int main(int argc,char * argv[])
 	CField::alloc<unsigned short>("stock_warehouse")
 	});
 
-    assert(eInfo.getAttrCount() == 9);
+    assert(eInfo.count() == 9);
 
     CEntityUnique eProduct;
     eProduct.createFrom(eInfo);

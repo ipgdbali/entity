@@ -40,7 +40,7 @@ public:
 
     constexpr static eWrapper kind_attr_info_wrapper = w;
 
-    virtual TAttrIndex getAttrCount() const noexcept = 0;
+    virtual TAttrIndex count() const noexcept = 0;
     virtual TAttrInfoWrapper getAttrInfo(TAttrIndex index) const = 0;
 
     virtual TAttrSizeTotal getRunningSum(TAttrIndex index) const = 0;
