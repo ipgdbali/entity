@@ -1,15 +1,15 @@
 #include <iostream>
 #include <cassert>
-#include "CFieldInfo.hpp"
+#include "CField.hpp"
 
 
 
-using CFieldInfo = ipgdlib::entity::CFieldInfo<std::string,size_t>;
+using CField = ipgdlib::entity::CField<std::string,size_t>;
 
 int main(int argc,char * argv[])
 {
-    CFieldInfo a("id",sizeof(unsigned int));
-    CFieldInfo b("price",sizeof(unsigned int));
+    CField a("id",sizeof(unsigned int));
+    CField b("price",sizeof(unsigned int));
 
     assert(a.size() == sizeof(unsigned int));
     assert(b.size() == sizeof(unsigned int));

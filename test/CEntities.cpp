@@ -1,28 +1,28 @@
-#include "CFieldInfo.hpp"
-#include "CEntityInfo.hpp"
+#include "CField.hpp"
+#include "CFields.hpp"
 #include "CEntityUnique.hpp"
 #include "CEntityShared.hpp"
 #include "CEntities.hpp"
 #include <cassert>
 
-using CFieldInfo = ipgdlib::entity::CFieldInfo<std::string,unsigned char>;
-using CEntityInfo = ipgdlib::entity::CEntityInfo<size_t,size_t,CFieldInfo>;
-using CEntityUnique = ipgdlib::entity::CEntityUnique<CEntityInfo>;
-using CEntityShared = ipgdlib::entity::CEntityShared<CEntityInfo>;
-using CEntities = ipgdlib::entity::CEntities<size_t,CEntityInfo>;
+using CField = ipgdlib::entity::CField<std::string,unsigned char>;
+using CFields = ipgdlib::entity::CFields<size_t,size_t,CField>;
+using CEntityUnique = ipgdlib::entity::CEntityUnique<CFields>;
+using CEntityShared = ipgdlib::entity::CEntityShared<CFields>;
+using CEntities = ipgdlib::entity::CEntities<size_t,CFields>;
 
 int main(int argc,char * argv[])
 {
-    CEntityInfo eInfo({
-	CFieldInfo::alloc<unsigned int>("id"),
-	CFieldInfo::alloc<const char*>("fullname"),
-	CFieldInfo::alloc<const char *>("shortname"),
-	CFieldInfo::alloc<unsigned int>("price_sell_unit"),
-	CFieldInfo::alloc<unsigned int>("price_buy_pcs"),
-	CFieldInfo::alloc<unsigned char>("pcs_per_unit"),
-	CFieldInfo::alloc<unsigned char>("min_sale_unit"),
-	CFieldInfo::alloc<unsigned short>("stock_outlet"),
-	CFieldInfo::alloc<unsigned short>("stock_warehouse")
+    CFields eInfo({
+	CField::alloc<unsigned int>("id"),
+	CField::alloc<const char*>("fullname"),
+	CField::alloc<const char *>("shortname"),
+	CField::alloc<unsigned int>("price_sell_unit"),
+	CField::alloc<unsigned int>("price_buy_pcs"),
+	CField::alloc<unsigned char>("pcs_per_unit"),
+	CField::alloc<unsigned char>("min_sale_unit"),
+	CField::alloc<unsigned short>("stock_outlet"),
+	CField::alloc<unsigned short>("stock_warehouse")
 	});
 
     CEntities entities(&eInfo,3);

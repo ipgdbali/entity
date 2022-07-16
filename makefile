@@ -3,8 +3,8 @@
 DIR_DEST = bin
 DIR_INCLUDE = src iface ../ipgdlib
 
-FILES =	CFieldInfo \
-	CEntityInfo \
+FILES =	CField \
+	CFields \
 	CEntity \
 	model \
 	CEntities \

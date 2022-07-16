@@ -2,8 +2,8 @@
 #define CENTITY_HPP
 
 #include "IEntity.hpp"
-#include "CFieldInfo.hpp"
-#include "CEntityInfo.hpp"
+#include "CField.hpp"
+#include "CFields.hpp"
 #include "ICustomType.hpp"
 #include <cstring>
 #include <iostream>

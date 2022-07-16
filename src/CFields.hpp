@@ -1,11 +1,11 @@
-#ifndef CENTITY_INFO_HPP
-#define CENTITY_INFO_HPP
+#ifndef CFIELDS_HPP
+#define CFIELDS_HPP
 
 #include "wrapper.hpp"
 
-#include "IEntityInfo.hpp"
-#include "IFieldInfo.hpp"
-#include "CFieldInfo.hpp"
+#include "IFields.hpp"
+#include "IField.hpp"
+#include "CField.hpp"
 #include <initializer_list>
 #include <map>
 
@@ -17,8 +17,8 @@ template <
 	typename TAttrSizeTotal,
 	typename TAttrInfo
 >
-class CEntityInfo :
-    public IEntityInfo<TAttrIndex,TAttrSizeTotal,TAttrInfo,ewConstPointer>
+class CFields :
+    public IFields<TAttrIndex,TAttrSizeTotal,TAttrInfo,ewConstPointer>
 {
 
 using TAttrInfoWrapper = typename ipgdlib::wrap<TAttrInfo,ewConstPointer>::value;
@@ -26,7 +26,7 @@ using TAttrName = typename TAttrInfo::iface::type_attr_name;
 using TAttrSize = typename TAttrInfo::iface::type_attr_size;
 
 public:
-    using iface = IEntityInfo<TAttrIndex,TAttrSizeTotal,TAttrInfo,ewConstPointer>;
+    using iface = IFields<TAttrIndex,TAttrSizeTotal,TAttrInfo,ewConstPointer>;
     using type_attr_name = TAttrName;
     using type_attr_index = TAttrIndex;
     using type_attr_size = TAttrSize;
@@ -34,13 +34,13 @@ public:
     using type_attr_info = TAttrInfo;
     using type_attr_info_wrapper = TAttrInfoWrapper;
 
-    CEntityInfo() = delete;
-    CEntityInfo(const CEntityInfo &ref) = delete;
-    CEntityInfo &operator = (const CEntityInfo &ref) = delete;
-    CEntityInfo(CEntityInfo && ref) = delete;
-    CEntityInfo &operator = (CEntityInfo && ref) = delete;
+    CFields() = delete;
+    CFields(const CFields &ref) = delete;
+    CFields &operator = (const CFields &ref) = delete;
+    CFields(CFields && ref) = delete;
+    CFields &operator = (CFields && ref) = delete;
 
-    CEntityInfo(std::initializer_list<TAttrInfoWrapper> ltpAttrInfo)
+    CFields(std::initializer_list<TAttrInfoWrapper> ltpAttrInfo)
     {
 	this->m_AttrCount = ltpAttrInfo.size();
 	this->m_arrAttrInfos = new TAttrInfoWrapper[this->m_AttrCount];
@@ -62,7 +62,7 @@ public:
 	}
     }
 
-    ~CEntityInfo()
+    ~CFields()
     {
 	for(TAttrIndex li = 0;li < this->m_AttrCount;li++)
 	    delete this->m_arrAttrInfos[li];

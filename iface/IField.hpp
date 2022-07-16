@@ -1,5 +1,5 @@
-#ifndef IFIELDINFO_HPP
-#define IFIELDINFO_HPP
+#ifndef IFIELD_HPP
+#define IFIELD_HPP
 
 #include <type_traits>
 
@@ -10,14 +10,14 @@ template <
     typename TAttrName,
     typename TAttrSize
 >
-class IFieldInfo
+class IField
 {
 
 static_assert(std::is_integral<TAttrSize>::value && !std::is_same<bool,TAttrSize>::value);
 
 public:
 
-    virtual ~IFieldInfo() {};
+    virtual ~IField() {};
 
     using type_attr_size = TAttrSize;
     using type_attr_name = TAttrName;

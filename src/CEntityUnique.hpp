@@ -3,7 +3,7 @@
 
 #include "IEntityUnique.hpp"
 #include "CEntity.hpp"
-#include "CEntityInfo.hpp"
+#include "CFields.hpp"
 
 namespace ipgdlib::entity
 {

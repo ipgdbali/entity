@@ -1,5 +1,5 @@
-#include "IFieldInfo.hpp"
-#include "IEntityInfo.hpp"
+#include "IField.hpp"
+#include "IFields.hpp"
 #include "IEntity.hpp"
 #include <iostream>
 

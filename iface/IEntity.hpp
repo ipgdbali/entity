@@ -2,8 +2,8 @@
 #define IENTITY_HPP
 
 #include "wrapper.hpp"
-#include "IFieldInfo.hpp"
-#include "IEntityInfo.hpp"
+#include "IField.hpp"
+#include "IFields.hpp"
 
 namespace ipgdlib::entity
 {
@@ -31,8 +31,8 @@ constexpr static eWrapper eAttrInfo = TEntityInfo::iface::kind_attr_info_wrapper
 static_assert(std::is_integral<TAttrIndex>::value && !std::is_same<bool,TAttrIndex>::value);
 static_assert(std::is_integral<TAttrSize>::value && !std::is_same<bool,TAttrSize>::value);
 static_assert(std::is_integral<TAttrSizeTotal>::value && !std::is_same<bool,TAttrSizeTotal>::value);
-static_assert(std::is_base_of<IFieldInfo<TAttrName,TAttrSize>,TAttrInfo>::value);
-static_assert(std::is_base_of<IEntityInfo<TAttrIndex,TAttrSizeTotal,TAttrInfo,eAttrInfo>,TEntityInfo>::value);
+static_assert(std::is_base_of<IField<TAttrName,TAttrSize>,TAttrInfo>::value);
+static_assert(std::is_base_of<IFields<TAttrIndex,TAttrSizeTotal,TAttrInfo,eAttrInfo>,TEntityInfo>::value);
 
 public:
     virtual ~IEntity() {};

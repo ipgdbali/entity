@@ -1,9 +1,9 @@
-#ifndef IENTITY_INFO_HPP
-#define IENTITY_INFO_HPP
+#ifndef IFIELDS_HPP
+#define IFIELDS_HPP
 
 #include "wrapper.hpp"
 #include <type_traits>
-#include "IFieldInfo.hpp"
+#include "IField.hpp"
 
 namespace ipgdlib::entity
 {
@@ -14,7 +14,7 @@ template <
     typename TAttrInfo,
     eWrapper w
 >
-class IEntityInfo
+class IFields
 {
 
 using TAttrName = typename TAttrInfo::iface::type_attr_name;
@@ -25,11 +25,11 @@ static_assert(std::is_integral<TAttrIndex>::value && !std::is_same<bool,TAttrInd
 static_assert(std::is_integral<TAttrSize>::value && !std::is_same<bool,TAttrSize>::value);
 static_assert(std::is_integral<TAttrSizeTotal>::value && !std::is_same<bool,TAttrSizeTotal>::value);
 
-static_assert(std::is_base_of<IFieldInfo<TAttrName,TAttrSize>,TAttrInfo>::value);
+static_assert(std::is_base_of<IField<TAttrName,TAttrSize>,TAttrInfo>::value);
 
 public:
 
-    virtual ~IEntityInfo() {};
+    virtual ~IFields() {};
 
     using type_attr_name		= TAttrName;
     using type_attr_index		= TAttrIndex;
