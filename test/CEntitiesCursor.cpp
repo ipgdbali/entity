@@ -30,7 +30,7 @@ int main(int argc,char * argv[])
     CEntities entities(&eInfo,3);
 
     for(size_t li = 0;li < entities.getEntityCount();li++)
-	entities.assignFrom(li,new char [eInfo.getEntitySize()]);
+	entities.assignFrom(li,new char [eInfo.getFieldsSize()]);
 
     CEntitiesCursor eCursor;
     eCursor.createFrom(&entities);

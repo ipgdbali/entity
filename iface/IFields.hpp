@@ -40,13 +40,13 @@ public:
 
     constexpr static eWrapper kind_attr_info_wrapper = w;
 
-    virtual TAttrIndex count() const noexcept = 0;
+    virtual TAttrIndex getFieldCount() const noexcept = 0;
     virtual TAttrInfoWrapper getField(TAttrIndex index) const = 0;
 
     virtual TAttrSizeTotal getRunningSum(TAttrIndex index) const = 0;
 
-    virtual TAttrSizeTotal getAttrOffset(TAttrIndex index) const noexcept = 0;
-    virtual TAttrSizeTotal getEntitySize() const noexcept = 0;
+    virtual TAttrSizeTotal getFieldOffset(TAttrIndex index) const noexcept = 0;
+    virtual TAttrSizeTotal getFieldsSize() const noexcept = 0;
 
     virtual bool hasName(TAttrName const &attrName) const noexcept = 0;
     virtual TAttrIndex getIndex(TAttrName const &attrName) const = 0;

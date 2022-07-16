@@ -44,7 +44,7 @@ public:
     {
 	std::memcpy(
 		pDst,
-		&this->m_pEntityData[this->getEntityInfo()->getAttrOffset(attrIndex)],
+		&this->m_pEntityData[this->getEntityInfo()->getFieldOffset(attrIndex)],
 		this->m_EntityInfo->getField(attrIndex)->size()
 	);
 	return true;
@@ -61,7 +61,7 @@ public:
     bool copyAttrFrom(TAttrIndex const &attrIndex,const void *pSrc) override
     {
 	std::memcpy(
-	    &this->m_pEntityData[this->getEntityInfo()->getAttrOffset(attrIndex)],
+	    &this->m_pEntityData[this->getEntityInfo()->getFieldOffset(attrIndex)],
 	    pSrc,
 	    this->m_EntityInfo->getField(attrIndex)->size()
 	);
@@ -78,13 +78,13 @@ public:
 
     bool copyAttrsTo(void *pDest) const override
     {
-	std::memcpy(pDest,this->m_pEntityData,this->getEntityInfo()->getEntitySize());
+	std::memcpy(pDest,this->m_pEntityData,this->getEntityInfo()->getFieldsSize());
 	return true;
     }
 
     bool copyAttrsFrom(const void *pSrc) override
     {
-	std::memcpy(this->m_pEntityData,pSrc,this->getEntityInfo()->getEntitySize());
+	std::memcpy(this->m_pEntityData,pSrc,this->getEntityInfo()->getFieldsSize());
 	return true;
     }
 
@@ -102,13 +102,13 @@ public:
     template <typename T>
     T &getAs(TAttrIndex const &attrIndex)
     {
-	return *reinterpret_cast<T*>(&this->m_pEntityData[this->m_EntityInfo->getAttrOffset(attrIndex)]);
+	return *reinterpret_cast<T*>(&this->m_pEntityData[this->m_EntityInfo->getFieldOffset(attrIndex)]);
     }
 
     template <typename T>
     T const &getAs(TAttrIndex const &attrIndex) const
     {
-	return *reinterpret_cast<T*>(&this->m_pEntityData[this->m_EntityInfo->getAttrOffset(attrIndex)]);
+	return *reinterpret_cast<T*>(&this->m_pEntityData[this->m_EntityInfo->getFieldOffset(attrIndex)]);
     }
 
     template <typename T>
@@ -129,7 +129,7 @@ public:
     {
 	if(ref.getTypeSize() == this->m_EntityInfo->getField(attrIndex)->size())
 	{
-	    ref.setPtr(&this->m_pEntityData[this->m_EntityInfo->getAttrOffset(attrIndex)]);
+	    ref.setPtr(&this->m_pEntityData[this->m_EntityInfo->getFieldOffset(attrIndex)]);
 	    return true;
 	}
 	else

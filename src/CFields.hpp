@@ -71,7 +71,7 @@ public:
 	delete [] this->m_RunningSum;
     }
 
-    TAttrIndex count() const noexcept override
+    TAttrIndex getFieldCount() const noexcept override
     {
 	return this->m_AttrCount;
     }
@@ -86,7 +86,7 @@ public:
 	return this->m_RunningSum[index];
     }
 
-    TAttrSizeTotal getAttrOffset(TAttrIndex index) const noexcept override
+    TAttrSizeTotal getFieldOffset(TAttrIndex index) const noexcept override
     {
 	if(index == 0)
 	    return 0;
@@ -94,7 +94,7 @@ public:
 	    return this->m_RunningSum[index - 1];
     }
 
-    TAttrSizeTotal getEntitySize() const noexcept override
+    TAttrSizeTotal getFieldsSize() const noexcept override
     {
 	return this->m_RunningSum[this->m_AttrCount - 1];
     }

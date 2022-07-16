@@ -73,7 +73,7 @@ public:
      */
     void copyFrom(TEntityCount rowPos,const void *pSrc) override
     {
-	std::memcpy(m_arrPEntityData[rowPos],pSrc,m_pEntityInfo->getEntitySize());
+	std::memcpy(m_arrPEntityData[rowPos],pSrc,m_pEntityInfo->getFieldsSize());
     }
 
     /**
@@ -81,7 +81,7 @@ public:
      */
     void copyTo(TEntityCount rowPos,void *pDest) const override
     {
-	std::memcpy(pDest,m_arrPEntityData[rowPos],m_pEntityInfo->getEntitySize());
+	std::memcpy(pDest,m_arrPEntityData[rowPos],m_pEntityInfo->getFieldsSize());
     }
 
     void shareTo(TEntityCount rowPos,IEntityShared<TEntityInfo,ewConstPointer> &eShared) const override
