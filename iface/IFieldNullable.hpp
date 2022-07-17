@@ -7,15 +7,15 @@ namespace ipgdlib::entity
 {
 
 template <
-    typename TAttrName,
-    typename TAttrSize
+    typename TFieldName,
+    typename TFieldSize
 >
 class IFieldInfoNullable :
-    public IFieldInfoNullable<TAttrName,TAttrSize>
+    public IFieldInfoNullable<TFieldName,TFieldSize>
 {
 public:
-    using type_attr_size = TAttrSize;
-    using type_attr_name = TAttrName;
+    using type_field_size = TFieldSize;
+    using type_field_name = TFieldName;
 
     virtual bool isNullable() const noexcept = 0;
 };

@@ -7,23 +7,23 @@ namespace ipgdlib::entity
 {
 
 template <
-    typename TAttrName,
-    typename TAttrSize
+    typename TFieldName,
+    typename TFieldSize
 >
 class IField
 {
 
-static_assert(std::is_integral<TAttrSize>::value && !std::is_same<bool,TAttrSize>::value);
+static_assert(std::is_integral<TFieldSize>::value && !std::is_same<bool,TFieldSize>::value);
 
 public:
 
     virtual ~IField() {};
 
-    using type_attr_size = TAttrSize;
-    using type_attr_name = TAttrName;
+    using type_field_size = TFieldSize;
+    using type_field_name = TFieldName;
 
-    virtual const TAttrName &name() const noexcept = 0;
-    virtual const TAttrSize &size() const noexcept = 0;
+    virtual const TFieldName &name() const noexcept = 0;
+    virtual const TFieldSize &size() const noexcept = 0;
 };
 
 };

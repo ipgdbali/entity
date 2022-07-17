@@ -35,7 +35,7 @@ public:
 	this->clear();
 	this->setEntityInfo(entity.getEntityInfo());
 	this->setEntityPtr(new char [this->getEntityInfo()->getFieldsSize()]);
-	entity.copyAttrsTo(this->getEntityPtr());
+	entity.copyFieldsTo(this->getEntityPtr());
 	return true;
     }
 

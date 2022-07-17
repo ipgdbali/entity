@@ -15,12 +15,12 @@ template <typename TEntityInfo>
 class CEntity :
     public virtual IEntity<TEntityInfo,ewConstPointer>
 {
-using TAttrName		    = typename TEntityInfo::type_attr_name;
-using TAttrIndex	    = typename TEntityInfo::type_attr_index;
-using TAttrSize		    = typename TEntityInfo::type_attr_size;
-using TAttrSizeTotal	    = typename TEntityInfo::type_attr_size_total;
-using TAttrInfo		    = typename TEntityInfo::type_attr_info;
-using TAttrInfoWrapper	    = typename TEntityInfo::type_attr_info_wrapper;
+using TFieldName		    = typename TEntityInfo::type_field_name;
+using TFieldIndex	    = typename TEntityInfo::type_field_index;
+using TFieldSize		    = typename TEntityInfo::type_field_size;
+using TFieldSizeTotal	    = typename TEntityInfo::type_field_size_total;
+using TFieldInfo		    = typename TEntityInfo::type_field_info;
+using TFieldInfoWrapper	    = typename TEntityInfo::type_field_info_wrapper;
 using TEntityInfoWrapper    = typename ipgdlib::wrap<TEntityInfo,ewConstPointer>::value;
 
 public:
@@ -40,49 +40,49 @@ public:
 	return this->m_EntityInfo;
     }
 
-    bool copyAttrTo(TAttrIndex const &attrIndex,void *pDst) const override
+    bool copyFieldTo(TFieldIndex const &fieldIndex,void *pDst) const override
     {
 	std::memcpy(
 		pDst,
-		&this->m_pEntityData[this->getEntityInfo()->getFieldOffset(attrIndex)],
-		this->m_EntityInfo->getField(attrIndex)->size()
+		&this->m_pEntityData[this->getEntityInfo()->getFieldOffset(fieldIndex)],
+		this->m_EntityInfo->getField(fieldIndex)->size()
 	);
 	return true;
     }
 
-    bool copyAttrTo(TAttrName const &attrName,void *pDst) const override
+    bool copyFieldTo(TFieldName const &fieldName,void *pDst) const override
     {
-	return copyAttrTo(
-	    this->m_EntityInfo->getIndex(attrName),
+	return copyFieldTo(
+	    this->m_EntityInfo->getIndex(fieldName),
 	    pDst
 	);
     }
 
-    bool copyAttrFrom(TAttrIndex const &attrIndex,const void *pSrc) override
+    bool copyFieldFrom(TFieldIndex const &fieldIndex,const void *pSrc) override
     {
 	std::memcpy(
-	    &this->m_pEntityData[this->getEntityInfo()->getFieldOffset(attrIndex)],
+	    &this->m_pEntityData[this->getEntityInfo()->getFieldOffset(fieldIndex)],
 	    pSrc,
-	    this->m_EntityInfo->getField(attrIndex)->size()
+	    this->m_EntityInfo->getField(fieldIndex)->size()
 	);
 	return true;
     }
 
-    bool copyAttrFrom(TAttrName const &attrName,const void *pSrc) override
+    bool copyFieldFrom(TFieldName const &fieldName,const void *pSrc) override
     {
-	return copyAttrFrom(
-		this->m_EntityInfo->getIndex(attrName),
+	return copyFieldFrom(
+		this->m_EntityInfo->getIndex(fieldName),
 		pSrc
 	);
     }
 
-    bool copyAttrsTo(void *pDest) const override
+    bool copyFieldsTo(void *pDest) const override
     {
 	std::memcpy(pDest,this->m_pEntityData,this->getEntityInfo()->getFieldsSize());
 	return true;
     }
 
-    bool copyAttrsFrom(const void *pSrc) override
+    bool copyFieldsFrom(const void *pSrc) override
     {
 	std::memcpy(this->m_pEntityData,pSrc,this->getEntityInfo()->getFieldsSize());
 	return true;
@@ -100,46 +100,46 @@ public:
     }
 
     template <typename T>
-    T &getAs(TAttrIndex const &attrIndex)
+    T &getAs(TFieldIndex const &fieldIndex)
     {
-	return *reinterpret_cast<T*>(&this->m_pEntityData[this->m_EntityInfo->getFieldOffset(attrIndex)]);
+	return *reinterpret_cast<T*>(&this->m_pEntityData[this->m_EntityInfo->getFieldOffset(fieldIndex)]);
     }
 
     template <typename T>
-    T const &getAs(TAttrIndex const &attrIndex) const
+    T const &getAs(TFieldIndex const &fieldIndex) const
     {
-	return *reinterpret_cast<T*>(&this->m_pEntityData[this->m_EntityInfo->getFieldOffset(attrIndex)]);
+	return *reinterpret_cast<T*>(&this->m_pEntityData[this->m_EntityInfo->getFieldOffset(fieldIndex)]);
     }
 
     template <typename T>
-    T const &getAs(TAttrName const &attrName) const
+    T const &getAs(TFieldName const &fieldName) const
     {
-	return getAs<T>(this->m_EntityInfo->getIndex(attrName));
+	return getAs<T>(this->m_EntityInfo->getIndex(fieldName));
     }
 
     template <typename T>
-    T &getAs(TAttrName const &attrName)
+    T &getAs(TFieldName const &fieldName)
     {
-	return getAs<T>(this->m_EntityInfo->getIndex(attrName));
+	return getAs<T>(this->m_EntityInfo->getIndex(fieldName));
     }
 
 
     template<typename T>
-    bool toCustomType(TAttrIndex const &attrIndex,ICustomType<T> &ref)
+    bool toCustomType(TFieldIndex const &fieldIndex,ICustomType<T> &ref)
     {
-	if(ref.getTypeSize() == this->m_EntityInfo->getField(attrIndex)->size())
+	if(ref.getTypeSize() == this->m_EntityInfo->getField(fieldIndex)->size())
 	{
-	    ref.setPtr(&this->m_pEntityData[this->m_EntityInfo->getFieldOffset(attrIndex)]);
+	    ref.setPtr(&this->m_pEntityData[this->m_EntityInfo->getFieldOffset(fieldIndex)]);
 	    return true;
 	}
 	else
 	    return false;
     }
     template <typename T>
-    bool toCustomType(TAttrName const &attrName,ICustomType<T> &ref)
+    bool toCustomType(TFieldName const &fieldName,ICustomType<T> &ref)
     {
 	return toCustomType(
-	    this->m_EntityInfo->getIndex(attrName),
+	    this->m_EntityInfo->getIndex(fieldName),
 	    ref
 	);
     }

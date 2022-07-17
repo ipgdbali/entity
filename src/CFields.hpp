@@ -13,26 +13,26 @@ namespace ipgdlib::entity
 {
 
 template <
-	typename TAttrIndex,
-	typename TAttrSizeTotal,
-	typename TAttrInfo
+	typename TFieldIndex,
+	typename TFieldSizeTotal,
+	typename TFieldInfo
 >
 class CFields :
-    public IFields<TAttrIndex,TAttrSizeTotal,TAttrInfo,ewConstPointer>
+    public IFields<TFieldIndex,TFieldSizeTotal,TFieldInfo,ewConstPointer>
 {
 
-using TAttrInfoWrapper = typename ipgdlib::wrap<TAttrInfo,ewConstPointer>::value;
-using TAttrName = typename TAttrInfo::iface::type_attr_name;
-using TAttrSize = typename TAttrInfo::iface::type_attr_size;
+using TFieldInfoWrapper = typename ipgdlib::wrap<TFieldInfo,ewConstPointer>::value;
+using TFieldName = typename TFieldInfo::iface::type_field_name;
+using TFieldSize = typename TFieldInfo::iface::type_field_size;
 
 public:
-    using iface = IFields<TAttrIndex,TAttrSizeTotal,TAttrInfo,ewConstPointer>;
-    using type_attr_name = TAttrName;
-    using type_attr_index = TAttrIndex;
-    using type_attr_size = TAttrSize;
-    using type_attr_size_total = TAttrSizeTotal;
-    using type_attr_info = TAttrInfo;
-    using type_attr_info_wrapper = TAttrInfoWrapper;
+    using iface = IFields<TFieldIndex,TFieldSizeTotal,TFieldInfo,ewConstPointer>;
+    using type_field_name = TFieldName;
+    using type_field_index = TFieldIndex;
+    using type_field_size = TFieldSize;
+    using type_field_size_total = TFieldSizeTotal;
+    using type_field_info = TFieldInfo;
+    using type_field_info_wrapper = TFieldInfoWrapper;
 
     CFields() = delete;
     CFields(const CFields &ref) = delete;
@@ -40,21 +40,21 @@ public:
     CFields(CFields && ref) = delete;
     CFields &operator = (CFields && ref) = delete;
 
-    CFields(std::initializer_list<TAttrInfoWrapper> ltpAttrInfo)
+    CFields(std::initializer_list<TFieldInfoWrapper> ltpFieldInfo)
     {
-	this->m_AttrCount = ltpAttrInfo.size();
-	this->m_arrAttrInfos = new TAttrInfoWrapper[this->m_AttrCount];
-	this->m_RunningSum = new TAttrSizeTotal[this->m_AttrCount];
+	this->m_FieldCount = ltpFieldInfo.size();
+	this->m_arrFieldInfos = new TFieldInfoWrapper[this->m_FieldCount];
+	this->m_RunningSum = new TFieldSizeTotal[this->m_FieldCount];
 
-	TAttrIndex idx = 0;
-	TAttrSizeTotal sum = 0;
+	TFieldIndex idx = 0;
+	TFieldSizeTotal sum = 0;
 
-	for(auto it = ltpAttrInfo.begin();it != ltpAttrInfo.end();++it)
+	for(auto it = ltpFieldInfo.begin();it != ltpFieldInfo.end();++it)
 	{
 	    if(this->hasName((*it)->name()))
 		throw "Duplicate Name";
 
-	    this->m_arrAttrInfos[idx] = *it;
+	    this->m_arrFieldInfos[idx] = *it;
 	    this->m_RunningSum[idx] = (*it)->size() + sum;
 	    sum = this->m_RunningSum[idx];
 	    m_Mapper[(*it)->name()] = idx;
@@ -64,29 +64,29 @@ public:
 
     ~CFields()
     {
-	for(TAttrIndex li = 0;li < this->m_AttrCount;li++)
-	    delete this->m_arrAttrInfos[li];
+	for(TFieldIndex li = 0;li < this->m_FieldCount;li++)
+	    delete this->m_arrFieldInfos[li];
 
-	delete [] this->m_arrAttrInfos;
+	delete [] this->m_arrFieldInfos;
 	delete [] this->m_RunningSum;
     }
 
-    TAttrIndex getFieldCount() const noexcept override
+    TFieldIndex getFieldCount() const noexcept override
     {
-	return this->m_AttrCount;
+	return this->m_FieldCount;
     }
 
-    TAttrInfoWrapper getField(TAttrIndex index) const override
+    TFieldInfoWrapper getField(TFieldIndex index) const override
     {
-	return this->m_arrAttrInfos[index];
+	return this->m_arrFieldInfos[index];
     }
 
-    TAttrSizeTotal getRunningSum(TAttrIndex index) const override
+    TFieldSizeTotal getRunningSum(TFieldIndex index) const override
     {
 	return this->m_RunningSum[index];
     }
 
-    TAttrSizeTotal getFieldOffset(TAttrIndex index) const noexcept override
+    TFieldSizeTotal getFieldOffset(TFieldIndex index) const noexcept override
     {
 	if(index == 0)
 	    return 0;
@@ -94,31 +94,31 @@ public:
 	    return this->m_RunningSum[index - 1];
     }
 
-    TAttrSizeTotal getFieldsSize() const noexcept override
+    TFieldSizeTotal getFieldsSize() const noexcept override
     {
-	return this->m_RunningSum[this->m_AttrCount - 1];
+	return this->m_RunningSum[this->m_FieldCount - 1];
     }
 
-    bool hasName(TAttrName const &attrName) const noexcept override
+    bool hasName(TFieldName const &fieldName) const noexcept override
     {
-	return this->m_Mapper.count(attrName) == 1;
+	return this->m_Mapper.count(fieldName) == 1;
     }
 
-    TAttrIndex getIndex(TAttrName const &attrName) const override
+    TFieldIndex getIndex(TFieldName const &fieldName) const override
     {
-	return this->m_Mapper.at(attrName);
+	return this->m_Mapper.at(fieldName);
     }
 
-    TAttrName const &getName(TAttrIndex index) const override
+    TFieldName const &getName(TFieldIndex index) const override
     {
-	return this->m_arrAttrInfos[index]->name();
+	return this->m_arrFieldInfos[index]->name();
     }
 
 private:
-    TAttrIndex m_AttrCount;
-    TAttrInfoWrapper *m_arrAttrInfos;
-    TAttrSizeTotal *m_RunningSum;
-    std::map<TAttrName,TAttrIndex> m_Mapper;
+    TFieldIndex m_FieldCount;
+    TFieldInfoWrapper *m_arrFieldInfos;
+    TFieldSizeTotal *m_RunningSum;
+    std::map<TFieldName,TFieldIndex> m_Mapper;
 };
 
 };
