@@ -2,28 +2,36 @@
 #define IFIELD_HPP
 
 #include <type_traits>
+#include "wrapper.hpp"
 
 namespace ipgdlib::entity
 {
 
 template <
-    typename TFieldName,
-    typename TFieldSize
+    typename TName,
+    typename TSize,
+    eWrapper eWName,
+    eWrapper eWSize
 >
 class IField
 {
 
-static_assert(std::is_integral<TFieldSize>::value && !std::is_same<bool,TFieldSize>::value);
+static_assert(std::is_integral<TSize>::value && !std::is_same<bool,TSize>::value);
+
+using TWName			    = typename ipgdlib::wrap<TName,eWName>::value;
+using TWSize			    = typename ipgdlib::wrap<TSize,eWSize>::value;
 
 public:
 
     virtual ~IField() {};
 
-    using type_field_size = TFieldSize;
-    using type_field_name = TFieldName;
+    using type_name				= TName;
+    using type_size				= TSize;
+    static constexpr eWrapper enum_wrapper_name = eWName;
+    static constexpr eWrapper enum_wrapper_size = eWSize;
 
-    virtual const TFieldName &name() const noexcept = 0;
-    virtual const TFieldSize &size() const noexcept = 0;
+    virtual TWName name() const noexcept = 0;
+    virtual TWSize size() const noexcept = 0;
 };
 
 };

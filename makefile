@@ -5,7 +5,8 @@ DIR_INCLUDE = src iface ../ipgdlib
 
 FILES =	CField \
 	CFields \
-	CEntity \
+
+#	CEntity \
 	model \
 	CEntities \
 	CEntitiesCursor \

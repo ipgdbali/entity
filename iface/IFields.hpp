@@ -9,49 +9,47 @@ namespace ipgdlib::entity
 {
 
 template <
-    typename TFieldIndex,		
-    typename TFieldSizeTotal,
-    typename TFieldInfo,
-    eWrapper w
+    typename TCount,		
+    typename TSizeTotal,
+    typename TField,
+    eWrapper eWField
 >
 class IFields
 {
 
-using TFieldName = typename TFieldInfo::iface::type_field_name;
-using TFieldSize = typename TFieldInfo::iface::type_field_size;
-using TFieldInfoWrapper = typename ipgdlib::wrap<TFieldInfo,w>::value;
-
-static_assert(std::is_integral<TFieldIndex>::value && !std::is_same<bool,TFieldIndex>::value);
+using TWField			    = typename ipgdlib::wrap<TField,eWField>::value;
+using TFieldName		    = typename TField::iface::type_name;
+using TFieldSize		    = typename TField::iface::type_size;
 static_assert(std::is_integral<TFieldSize>::value && !std::is_same<bool,TFieldSize>::value);
-static_assert(std::is_integral<TFieldSizeTotal>::value && !std::is_same<bool,TFieldSizeTotal>::value);
-
-static_assert(std::is_base_of<IField<TFieldName,TFieldSize>,TFieldInfo>::value);
+static constexpr eWrapper eWName    = TField::iface::enum_wrapper_name;
+static constexpr eWrapper eWSize    = TField::iface::enum_wrapper_size;
+ 
+static_assert(std::is_integral<TCount>::value && !std::is_same<bool,TCount>::value);
+static_assert(std::is_integral<TSizeTotal>::value && !std::is_same<bool,TSizeTotal>::value);
+static_assert(std::is_base_of<IField<TFieldName,TFieldSize,eWName,eWSize>,TField>::value);
 
 public:
 
     virtual ~IFields() {};
 
-    using type_field_name		= TFieldName;
-    using type_field_index		= TFieldIndex;
-    using type_field_size		= TFieldSize;
-    using type_field_size_total		= TFieldSizeTotal;
-    using type_field_info		= TFieldInfo;
-    using type_field_info_wrapper	= TFieldInfoWrapper;
+    using type_count				    = TCount;
+    using type_size_total			    = TSizeTotal;
+    using type_field				    = TField;
+    constexpr static eWrapper enum_field_wrapper    = eWField;
 
-    constexpr static eWrapper kind_field_info_wrapper = w;
+    virtual TCount count() const noexcept = 0;
 
-    virtual TFieldIndex getFieldCount() const noexcept = 0;
-    virtual TFieldInfoWrapper getField(TFieldIndex index) const = 0;
+    virtual TWField operator [] (TCount index) const = 0;
 
-    virtual TFieldSizeTotal getRunningSum(TFieldIndex index) const = 0;
+    virtual TSizeTotal sum(TCount index) const = 0; // field sum
 
-    virtual TFieldSizeTotal getFieldOffset(TFieldIndex index) const noexcept = 0;
-    virtual TFieldSizeTotal getFieldsSize() const noexcept = 0;
+    virtual TSizeTotal offset(TCount index) const = 0; // fieldoffset
+
+    virtual TSizeTotal size() const noexcept = 0;
 
     virtual bool hasName(TFieldName const &fieldName) const noexcept = 0;
-    virtual TFieldIndex getIndex(TFieldName const &fieldName) const = 0;
+    virtual TCount indexOf(TFieldName const &fieldName) const = 0;
 
-    virtual TFieldName const &getName(TFieldIndex index) const = 0;
 };
 
 };

@@ -13,26 +13,20 @@ namespace ipgdlib::entity
 {
 
 template <
-	typename TFieldIndex,
-	typename TFieldSizeTotal,
-	typename TFieldInfo
+	typename TCount,
+	typename TSizeTotal,
+	typename TField
 >
 class CFields :
-    public IFields<TFieldIndex,TFieldSizeTotal,TFieldInfo,ewConstPointer>
+    public IFields<TCount,TSizeTotal,TField,ewConstPointer>
 {
 
-using TFieldInfoWrapper = typename ipgdlib::wrap<TFieldInfo,ewConstPointer>::value;
-using TFieldName = typename TFieldInfo::iface::type_field_name;
-using TFieldSize = typename TFieldInfo::iface::type_field_size;
+using TWField		= typename ipgdlib::wrap<TField,ewConstPointer>::value;
+using TFieldName	= typename TField::iface::type_name;
+using TFieldSize	= typename TField::iface::type_size;
 
 public:
-    using iface = IFields<TFieldIndex,TFieldSizeTotal,TFieldInfo,ewConstPointer>;
-    using type_field_name = TFieldName;
-    using type_field_index = TFieldIndex;
-    using type_field_size = TFieldSize;
-    using type_field_size_total = TFieldSizeTotal;
-    using type_field_info = TFieldInfo;
-    using type_field_info_wrapper = TFieldInfoWrapper;
+    using iface = IFields<TCount,TSizeTotal,TField,ewConstPointer>;
 
     CFields() = delete;
     CFields(const CFields &ref) = delete;
@@ -40,14 +34,14 @@ public:
     CFields(CFields && ref) = delete;
     CFields &operator = (CFields && ref) = delete;
 
-    CFields(std::initializer_list<TFieldInfoWrapper> ltpFieldInfo)
+    CFields(std::initializer_list<TWField> ltpFieldInfo)
     {
-	this->m_FieldCount = ltpFieldInfo.size();
-	this->m_arrFieldInfos = new TFieldInfoWrapper[this->m_FieldCount];
-	this->m_RunningSum = new TFieldSizeTotal[this->m_FieldCount];
+	this->m_FieldCount	= ltpFieldInfo.size();
+	this->m_arrFieldInfos	= new TWField[this->m_FieldCount];
+	this->m_RunningSum	= new TSizeTotal[this->m_FieldCount];
 
-	TFieldIndex idx = 0;
-	TFieldSizeTotal sum = 0;
+	TCount idx		= 0;
+	TSizeTotal sum		= 0;
 
 	for(auto it = ltpFieldInfo.begin();it != ltpFieldInfo.end();++it)
 	{
@@ -64,29 +58,29 @@ public:
 
     ~CFields()
     {
-	for(TFieldIndex li = 0;li < this->m_FieldCount;li++)
+	for(TCount li = 0;li < this->m_FieldCount;li++)
 	    delete this->m_arrFieldInfos[li];
 
 	delete [] this->m_arrFieldInfos;
 	delete [] this->m_RunningSum;
     }
 
-    TFieldIndex getFieldCount() const noexcept override
+    TCount count() const noexcept override
     {
 	return this->m_FieldCount;
     }
 
-    TFieldInfoWrapper getField(TFieldIndex index) const override
+    TWField operator [](TCount index) const override
     {
 	return this->m_arrFieldInfos[index];
     }
 
-    TFieldSizeTotal getRunningSum(TFieldIndex index) const override
+    TSizeTotal sum(TCount index) const override
     {
 	return this->m_RunningSum[index];
     }
 
-    TFieldSizeTotal getFieldOffset(TFieldIndex index) const noexcept override
+    TSizeTotal offset(TCount index) const override
     {
 	if(index == 0)
 	    return 0;
@@ -94,7 +88,7 @@ public:
 	    return this->m_RunningSum[index - 1];
     }
 
-    TFieldSizeTotal getFieldsSize() const noexcept override
+    TSizeTotal size() const noexcept override
     {
 	return this->m_RunningSum[this->m_FieldCount - 1];
     }
@@ -104,21 +98,16 @@ public:
 	return this->m_Mapper.count(fieldName) == 1;
     }
 
-    TFieldIndex getIndex(TFieldName const &fieldName) const override
+    TCount indexOf(TFieldName const &fieldName) const override
     {
 	return this->m_Mapper.at(fieldName);
     }
 
-    TFieldName const &getName(TFieldIndex index) const override
-    {
-	return this->m_arrFieldInfos[index]->name();
-    }
-
 private:
-    TFieldIndex m_FieldCount;
-    TFieldInfoWrapper *m_arrFieldInfos;
-    TFieldSizeTotal *m_RunningSum;
-    std::map<TFieldName,TFieldIndex> m_Mapper;
+    TCount m_FieldCount;
+    TWField *m_arrFieldInfos;
+    TSizeTotal *m_RunningSum;
+    std::map<TFieldName,TCount> m_Mapper;
 };
 
 };

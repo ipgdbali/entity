@@ -8,24 +8,24 @@ namespace ipgdlib::entity
 {
 
 template <
-    typename TFieldName,
-    typename TFieldSize
+    typename TName,
+    typename TSize
 >
 class CField :
-    public IField<TFieldName,TFieldSize>
+    public IField<TName,TSize,ewConstReference,ewConstReference>
 {
 public:
 
-    using iface = IField<TFieldName,TFieldSize>;
+    using iface = IField<TName,TSize,ewConstReference,ewConstReference>;
 
     template <typename T>
-    static CField<TFieldName,TFieldSize> create(TFieldName const &name)
+    static CField<TName,TSize> create(TName const &name)
     {
 	return {name,sizeof(T)};
     }
 
     template <typename T>
-    static CField<TFieldName,TFieldSize> *alloc(TFieldName const &name)
+    static CField<TName,TSize> *alloc(TName const &name)
     {
 	return new CField(name,sizeof(T));
     }
@@ -37,7 +37,7 @@ public:
     {
     }
 
-    CField<TFieldName,TFieldSize> &operator = (const CField &ref)
+    CField<TName,TSize> &operator = (const CField &ref)
     {
 	this->m_Name = ref.m_Name;
 	this->m_Size = ref.m_Size;
@@ -58,24 +58,24 @@ public:
 	return *this;
     }
 
-    CField(const TFieldName &name,const TFieldSize &size) :
+    CField(const TName &name,const TSize &size) :
 	m_Name(name),m_Size(size)
     {
     }
 
-    const TFieldSize &size() const noexcept
-    {
-	return this->m_Size;
-    }
-
-    const TFieldName &name() const noexcept
+    const TName &name() const noexcept override
     {
 	return this->m_Name;
     }
 
+    const TSize &size() const noexcept override
+    {
+	return this->m_Size;
+    }
+
 private:
-    TFieldName m_Name;
-    TFieldSize m_Size;
+    TName m_Name;
+    TSize m_Size;
 
 };
 

@@ -2,8 +2,6 @@
 #include <cassert>
 #include "CField.hpp"
 
-
-
 using CField = ipgdlib::entity::CField<std::string,size_t>;
 
 int main(int argc,char * argv[])

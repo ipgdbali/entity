@@ -5,12 +5,12 @@
 #include <iostream>
 #include <iomanip>
 
-using CField	    = ipgdlib::entity::CField<std::string,unsigned char>;
-using CFields   = ipgdlib::entity::CFields<size_t,size_t,CField>;
+using CField	= ipgdlib::entity::CField<std::string,unsigned char>;
+using CFields	= ipgdlib::entity::CFields<size_t,size_t,CField>;
 
 int main(int argc,char * argv[])
 {
-    CFields eInfo({
+    CFields fProduct({
 	CField::alloc<unsigned int>("id"),
 	CField::alloc<void*>("fullname"),
 	CField::alloc<void*>("shortname"),
@@ -22,7 +22,7 @@ int main(int argc,char * argv[])
 	CField::alloc<unsigned short>("stock_warehouse")
 	});
 
-    assert(eInfo.getFieldCount() == 9);
+    assert(fProduct.count() == 9);
 
     return 0;
 }
