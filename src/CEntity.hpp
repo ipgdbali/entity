@@ -54,6 +54,12 @@ public:
 	);
     }
 
+    bool copyTo(void *pDest) const override
+    {
+	std::memcpy(pDest,this->m_pEntityData,this->getFields()->size());
+	return true;
+    }
+
     bool copyAttrFrom(TFieldIndex const &fieldIndex,const void *pSrc) override
     {
 	std::memcpy(
@@ -72,13 +78,7 @@ public:
 	);
     }
 
-    bool copyAttrsTo(void *pDest) const override
-    {
-	std::memcpy(pDest,this->m_pEntityData,this->getFields()->size());
-	return true;
-    }
-
-    bool copyAttrsFrom(const void *pSrc) override
+    bool copyFrom(const void *pSrc) override
     {
 	std::memcpy(this->m_pEntityData,pSrc,this->getFields()->size());
 	return true;
@@ -108,13 +108,13 @@ public:
     }
 
     template <typename T>
-    T const &as(TFieldName const &fieldName) const
+    T &as(TFieldName const &fieldName)
     {
 	return as<T>(this->m_Fields->indexOf(fieldName));
     }
 
     template <typename T>
-    T &as(TFieldName const &fieldName)
+    T const &as(TFieldName const &fieldName) const
     {
 	return as<T>(this->m_Fields->indexOf(fieldName));
     }

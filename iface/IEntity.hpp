@@ -33,11 +33,11 @@ public:
 
     virtual bool copyAttrTo(const TFieldIndex &fieldIndex,void *pDst) const = 0;
     virtual bool copyAttrTo(const TFieldName &fieldName,void *pDst) const = 0;
+    virtual bool copyTo(void *pDest) const = 0;
+
     virtual bool copyAttrFrom(const TFieldIndex &fieldIndex,const void *pSrc) = 0;
     virtual bool copyAttrFrom(const TFieldName &fieldName,const void *pSrc) = 0;
-
-    virtual bool copyAttrsFrom(const void *pSrc) = 0;
-    virtual bool copyAttrsTo(void *pDest) const = 0;
+    virtual bool copyFrom(const void *pSrc) = 0;
 
     virtual bool shareTo(IEntityShared<TFields,ewFields> &eShared) const = 0;
 
