@@ -11,86 +11,82 @@
 namespace ipgdlib::entity
 {
 
-template <typename TEntityInfo>
+template <typename TFields>
 class CEntity :
-    public virtual IEntity<TEntityInfo,ewConstPointer>
+    public virtual IEntity<TFields,ewConstPointer>
 {
-using TFieldName		    = typename TEntityInfo::type_field_name;
-using TFieldIndex	    = typename TEntityInfo::type_field_index;
-using TFieldSize		    = typename TEntityInfo::type_field_size;
-using TFieldSizeTotal	    = typename TEntityInfo::type_field_size_total;
-using TFieldInfo		    = typename TEntityInfo::type_field_info;
-using TFieldInfoWrapper	    = typename TEntityInfo::type_field_info_wrapper;
-using TEntityInfoWrapper    = typename ipgdlib::wrap<TEntityInfo,ewConstPointer>::value;
+
+using TFieldName		    = typename TFields::iface::type_field::type_name;
+using TFieldIndex		    = typename TFields::type_count;
+using TFieldsWrapper		    = typename ipgdlib::wrap<TFields,ewConstPointer>::value;
 
 public:
-    using iface = IEntity<TEntityInfo,ewConstPointer>;
-    using type_entity_info = TEntityInfo;
-    using type_entity_info_wrapper = TEntityInfoWrapper;
+    using iface = IEntity<TFields,ewConstPointer>;
+    using type_fields = TFields;
 
 public:
 
     CEntity() :
-	m_EntityInfo(nullptr),m_pEntityData(nullptr)
+	m_Fields(nullptr),m_pEntityData(nullptr)
     {
     }
 
-    TEntityInfoWrapper getEntityInfo() const noexcept override
+    TFieldsWrapper getFields() const noexcept override
     {
-	return this->m_EntityInfo;
+	return this->m_Fields;
     }
 
-    bool copyFieldTo(TFieldIndex const &fieldIndex,void *pDst) const override
+    bool copyAttrTo(TFieldIndex const &fieldIndex,void *pDst) const override
     {
 	std::memcpy(
 		pDst,
-		&this->m_pEntityData[this->getEntityInfo()->getFieldOffset(fieldIndex)],
-		this->m_EntityInfo->getField(fieldIndex)->size()
+		&this->m_pEntityData[this->getFields()->offset(fieldIndex)],
+		this->m_Fields->getField(fieldIndex)->size()
 	);
 	return true;
     }
 
-    bool copyFieldTo(TFieldName const &fieldName,void *pDst) const override
+    bool copyAttrTo(TFieldName const &fieldName,void *pDst) const override
     {
-	return copyFieldTo(
-	    this->m_EntityInfo->getIndex(fieldName),
+	return copyAttrTo(
+	    this->m_Fields->indexOf(fieldName),
 	    pDst
 	);
     }
 
-    bool copyFieldFrom(TFieldIndex const &fieldIndex,const void *pSrc) override
+    bool copyAttrFrom(TFieldIndex const &fieldIndex,const void *pSrc) override
     {
 	std::memcpy(
-	    &this->m_pEntityData[this->getEntityInfo()->getFieldOffset(fieldIndex)],
+	    &this->m_pEntityData[this->getFields()->offset(fieldIndex)],
 	    pSrc,
-	    this->m_EntityInfo->getField(fieldIndex)->size()
+	    this->m_Fields->getField(fieldIndex)->size()
 	);
 	return true;
     }
 
-    bool copyFieldFrom(TFieldName const &fieldName,const void *pSrc) override
+    bool copyAttrFrom(TFieldName const &fieldName,const void *pSrc) override
     {
-	return copyFieldFrom(
-		this->m_EntityInfo->getIndex(fieldName),
+	return copyAttrFrom(
+		this->m_Fields->indexOf(fieldName),
 		pSrc
 	);
     }
 
-    bool copyFieldsTo(void *pDest) const override
+    bool copyAttrsTo(void *pDest) const override
     {
-	std::memcpy(pDest,this->m_pEntityData,this->getEntityInfo()->getFieldsSize());
+	std::memcpy(pDest,this->m_pEntityData,this->getFields()->size());
 	return true;
     }
 
-    bool copyFieldsFrom(const void *pSrc) override
+    bool copyAttrsFrom(const void *pSrc) override
     {
-	std::memcpy(this->m_pEntityData,pSrc,this->getEntityInfo()->getFieldsSize());
+	std::memcpy(this->m_pEntityData,pSrc,this->getFields()->size());
 	return true;
     }
 
-    bool shareTo(IEntityShared<TEntityInfo,ewConstPointer> &eShared) const override
+    bool shareTo(IEntityShared<TFields,ewConstPointer> &eShared) const override
     {
-	eShared.set(this->m_EntityInfo,this->m_pEntityData);
+	eShared.set(this->m_Fields,this->m_pEntityData);
 	return true;
     }
 
@@ -102,34 +98,34 @@ public:
     template <typename T>
     T &getAs(TFieldIndex const &fieldIndex)
     {
-	return *reinterpret_cast<T*>(&this->m_pEntityData[this->m_EntityInfo->getFieldOffset(fieldIndex)]);
+	return *reinterpret_cast<T*>(&this->m_pEntityData[this->m_Fields->offset(fieldIndex)]);
     }
 
     template <typename T>
     T const &getAs(TFieldIndex const &fieldIndex) const
     {
-	return *reinterpret_cast<T*>(&this->m_pEntityData[this->m_EntityInfo->getFieldOffset(fieldIndex)]);
+	return *reinterpret_cast<T*>(&this->m_pEntityData[this->m_Fields->offset(fieldIndex)]);
     }
 
     template <typename T>
     T const &getAs(TFieldName const &fieldName) const
     {
-	return getAs<T>(this->m_EntityInfo->getIndex(fieldName));
+	return getAs<T>(this->m_Fields->indexOf(fieldName));
     }
 
     template <typename T>
     T &getAs(TFieldName const &fieldName)
     {
-	return getAs<T>(this->m_EntityInfo->getIndex(fieldName));
+	return getAs<T>(this->m_Fields->indexOf(fieldName));
     }
 
 
     template<typename T>
     bool toCustomType(TFieldIndex const &fieldIndex,ICustomType<T> &ref)
     {
-	if(ref.getTypeSize() == this->m_EntityInfo->getField(fieldIndex)->size())
+	if(ref.getTypeSize() == this->m_Fields->getField(fieldIndex)->size())
 	{
-	    ref.setPtr(&this->m_pEntityData[this->m_EntityInfo->getFieldOffset(fieldIndex)]);
+	    ref.setPtr(&this->m_pEntityData[this->m_Fields->offset(fieldIndex)]);
 	    return true;
 	}
 	else
@@ -139,7 +135,7 @@ public:
     bool toCustomType(TFieldName const &fieldName,ICustomType<T> &ref)
     {
 	return toCustomType(
-	    this->m_EntityInfo->getIndex(fieldName),
+	    this->m_Fields->indexOf(fieldName),
 	    ref
 	);
     }
@@ -157,14 +153,14 @@ protected:
 	return true;
     }
 
-    bool setEntityInfo(TEntityInfoWrapper entityInfo) override
+    bool setFields(TFieldsWrapper entityInfo) override
     {
-	this->m_EntityInfo = entityInfo;
+	this->m_Fields = entityInfo;
 	return true;
     }
 
 private:
-    TEntityInfoWrapper m_EntityInfo;
+    TFieldsWrapper m_Fields;
     char *m_pEntityData;
 };
 

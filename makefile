@@ -5,9 +5,8 @@ DIR_INCLUDE = src iface ../ipgdlib
 
 FILES =	CField \
 	CFields \
-
-#	CEntity \
-	model \
+	CEntity \
+	#model \
 	CEntities \
 	CEntitiesCursor \
 	CCTStaticPrimitive \

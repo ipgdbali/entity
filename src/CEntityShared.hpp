@@ -7,19 +7,19 @@
 namespace ipgdlib::entity
 {
 
-template <typename TEntityInfo>
+template <typename TFields>
 class CEntityShared :
-    public CEntity<TEntityInfo>,
-    public virtual IEntityShared<TEntityInfo,ewConstPointer>
+    public CEntity<TFields>,
+    public virtual IEntityShared<TFields,ewConstPointer>
 {
-using TEntityInfoWrapper = TEntityInfo const *;
+using TFieldsWrapper = TFields const *;
 
 public:
 
-    using CEntity<TEntityInfo>::setEntityInfo;
+    using CEntity<TFields>::setFields;
 
     /**
-     *  EntityInfo must be non null
+     *  Fields must be non null
      */
     void assignFrom(void *pSrc) override
     {
@@ -31,16 +31,16 @@ public:
 	pDest = this->getEntityPtr();
     }
 
-    void set(TEntityInfoWrapper pInfo,void *pSrc) override
+    void set(TFieldsWrapper pInfo,void *pSrc) override
     {
 	this->setEntityPtr(static_cast<char*>(pSrc));
-	this->setEntityInfo(pInfo);
+	this->setFields(pInfo);
     }
 
     void clear() override
     {
 	this->setEntityPtr(nullptr);
-	this->setEntityInfo(nullptr);
+	this->setFields(nullptr);
     }
 
 };

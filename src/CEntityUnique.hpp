@@ -8,12 +8,12 @@
 namespace ipgdlib::entity
 {
 
-template <typename TEntityInfo>
+template <typename TFields>
 class CEntityUnique :
-    public CEntity<TEntityInfo>,
-    public virtual IEntityUnique<TEntityInfo,ewConstPointer>
+    public CEntity<TFields>,
+    public virtual IEntityUnique<TFields,ewConstPointer>
 {
-using TEntityInfoWrapper = TEntityInfo const *;
+using TFieldsWrapper = TFields const *;
 public:
 
     virtual ~CEntityUnique()
@@ -21,21 +21,21 @@ public:
 	this->clear();
     }
 
-    bool createFrom(TEntityInfo const &entityInfo) override
+    bool createFrom(TFields const &entityInfo) override
     {
 	this->clear();
 
-	this->setEntityInfo(&entityInfo);
-	this->setEntityPtr(new char [this->getEntityInfo()->getFieldsSize()]);
+	this->setFields(&entityInfo);
+	this->setEntityPtr(new char [this->getFields()->size()]);
 	return true;
     }
 
-    bool createFrom(IEntity<TEntityInfo,ewConstPointer> const &entity) override
+    bool createFrom(IEntity<TFields,ewConstPointer> const &entity) override
     {
 	this->clear();
-	this->setEntityInfo(entity.getEntityInfo());
-	this->setEntityPtr(new char [this->getEntityInfo()->getFieldsSize()]);
-	entity.copyFieldsTo(this->getEntityPtr());
+	this->setFields(entity.getFields());
+	this->setEntityPtr(new char [this->getFields()->size()]);
+	entity.copyAttrsTo(this->getEntityPtr());
 	return true;
     }
 
@@ -45,7 +45,7 @@ public:
 	{
 	    delete []this->getEntityPtr();
 	    this->setEntityPtr(nullptr);
-	    this->setEntityInfo(nullptr);
+	    this->setFields(nullptr);
 	}
     }
 

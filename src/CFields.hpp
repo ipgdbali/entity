@@ -4,7 +4,6 @@
 #include "wrapper.hpp"
 
 #include "IFields.hpp"
-#include "IField.hpp"
 #include "CField.hpp"
 #include <initializer_list>
 #include <map>
@@ -70,7 +69,7 @@ public:
 	return this->m_FieldCount;
     }
 
-    TWField operator [](TCount index) const override
+    TWField getField(TCount index) const override
     {
 	return this->m_arrFieldInfos[index];
     }

@@ -39,7 +39,7 @@ public:
 
     virtual TCount count() const noexcept = 0;
 
-    virtual TWField operator [] (TCount index) const = 0;
+    virtual TWField getField(TCount index) const = 0;
 
     virtual TSizeTotal sum(TCount index) const = 0; // field sum
 
