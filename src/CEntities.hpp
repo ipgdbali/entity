@@ -7,14 +7,14 @@
 namespace ipgdlib::entity
 {
 
-template <typename TEntityCount,typename TEntityInfo>
+template <typename TCount,typename TFields>
 class CEntities :
-    public IEntities<TEntityCount,TEntityInfo,ewConstPointer>
+    public IEntities<TCount,TFields,ewConstPointer>
 {
-using TEntityInfoWrapper = TEntityInfo const *;
+using TFieldsWrapper = TFields const *;
 
 public:
-    using iface = IEntities<TEntityCount,TEntityInfo,ewConstPointer>;
+    using iface = IEntities<TCount,TFields,ewConstPointer>;
 
     virtual ~CEntities()
     {
@@ -25,20 +25,20 @@ public:
 	}
     }
 
-    CEntities(TEntityInfoWrapper entityInfo,TEntityCount entityCount) :
-	m_pEntityInfo(entityInfo),m_EntityCount(entityCount)
+    CEntities(TFieldsWrapper entityInfo,TCount entityCount) :
+	m_pFields(entityInfo),m_EntityCount(entityCount)
     {
 	this->m_arrPEntityData = new char*[m_EntityCount];
-	for(TEntityCount li = 0;li < m_EntityCount;li++)
+	for(TCount li = 0;li < m_EntityCount;li++)
 	    m_arrPEntityData[li] = nullptr;
     }
 
-    TEntityInfoWrapper getEntityInfo() const override
+    TFieldsWrapper getFields() const override
     {
-	return this->m_pEntityInfo;
+	return this->m_pFields;
     }
 
-    TEntityCount getEntityCount() const noexcept override
+    TCount count() const noexcept override
     {
 	return this->m_EntityCount;
     }
@@ -48,22 +48,22 @@ public:
 	return this->m_arrPEntityData == nullptr;
     }
 
-    bool isNullEntity(TEntityCount rowPos) const override
+    bool isNullEntity(TCount rowPos) const override
     {
 	return this->m_arrPEntityData[rowPos] == nullptr;
     }
 
-    void assignFrom(TEntityCount rowPos,void *pSrc) override
+    void assignFrom(TCount rowPos,void *pSrc) override
     {
 	this->m_arrPEntityData[rowPos] = static_cast<char*>(pSrc);
     }
 
-    void assignTo(TEntityCount rowPos,void *&pDest) const override
+    void assignTo(TCount rowPos,void *&pDest) const override
     {
 	pDest = m_arrPEntityData[rowPos];
     }
 
-    void *getPData(TEntityCount rowPos) override
+    void *getPData(TCount rowPos) override
     {
 	return this->m_arrPEntityData[rowPos];
     }
@@ -71,29 +71,29 @@ public:
     /**
      * Should not be null
      */
-    void copyFrom(TEntityCount rowPos,const void *pSrc) override
+    void copyFrom(TCount rowPos,const void *pSrc) override
     {
-	std::memcpy(m_arrPEntityData[rowPos],pSrc,m_pEntityInfo->getFieldsSize());
+	std::memcpy(m_arrPEntityData[rowPos],pSrc,m_pFields->size());
     }
 
     /**
      * Should not be null
      */
-    void copyTo(TEntityCount rowPos,void *pDest) const override
+    void copyTo(TCount rowPos,void *pDest) const override
     {
-	std::memcpy(pDest,m_arrPEntityData[rowPos],m_pEntityInfo->getFieldsSize());
+	std::memcpy(pDest,m_arrPEntityData[rowPos],m_pFields->size());
     }
 
-    void shareTo(TEntityCount rowPos,IEntityShared<TEntityInfo,ewConstPointer> &eShared) const override
+    void shareTo(IEntityShared<TFields,ewConstPointer> &eShared,TCount rowPos) const override
     {
-	eShared.set(m_pEntityInfo,m_arrPEntityData[rowPos]);
+	eShared.set(m_pFields,m_arrPEntityData[rowPos]);
     }
 
 protected:
 
 private:
-    TEntityInfoWrapper m_pEntityInfo;
-    TEntityCount m_EntityCount;
+    TFieldsWrapper m_pFields;
+    TCount m_EntityCount;
     char* *m_arrPEntityData;
 };
 

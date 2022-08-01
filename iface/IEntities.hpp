@@ -6,32 +6,35 @@
 namespace ipgdlib::entity
 {
 
-template <typename TEntityCount,typename TEntityInfo,eWrapper ewEntityInfo>
+template <
+    typename TCount,
+    typename TFields,
+    eWrapper ewFields>
 class IEntities
 {
-using TEntityInfoWrapper = typename ipgdlib::wrap<TEntityInfo,ewEntityInfo>::value;
+using TFieldsWrapper = typename ipgdlib::wrap<TFields,ewFields>::value;
 
 public:
-    using type_entity_count = TEntityCount;
-    using type_entity_info = TEntityInfo;
-    using type_entity_info_wrapper = TEntityInfoWrapper;
+    using type_count = TCount;
+    using type_fields = TFields;
+    constexpr static eWrapper enum_wrapper_fields = ewFields;
 
     virtual ~IEntities() {};
 
-    virtual TEntityInfoWrapper getEntityInfo() const = 0;
-    virtual TEntityCount getEntityCount() const noexcept = 0;
+    virtual TFieldsWrapper getFields() const = 0;
+    virtual TCount count() const noexcept = 0;
 
     virtual bool isNullEntities() const noexcept = 0;
-    virtual bool isNullEntity(TEntityCount rowPos) const = 0;
+    virtual bool isNullEntity(TCount rowPos) const = 0;
 
-    virtual void assignFrom(TEntityCount rowPos,void *pSrc) = 0;
-    virtual void assignTo(TEntityCount rowPos,void *&pDest) const = 0;
-    virtual void *getPData(TEntityCount rowPos) = 0;
+    virtual void assignFrom(TCount rowPos,void *pSrc) = 0;
+    virtual void assignTo(TCount rowPos,void *&pDest) const = 0;
+    virtual void *getPData(TCount rowPos) = 0;
     
     // must be called for non null row
-    virtual void copyFrom(TEntityCount rowPos,const void *pSrc) = 0;
-    virtual void copyTo(TEntityCount rowPos,void *pDest) const = 0;
-    virtual void shareTo(TEntityCount rowPos,IEntityShared<TEntityInfo,ewEntityInfo> &eShared) const = 0;
+    virtual void copyFrom(TCount rowPos,const void *pSrc) = 0;
+    virtual void copyTo(TCount rowPos,void *pDest) const = 0;
+    virtual void shareTo(IEntityShared<TFields,ewFields> &eShared,TCount rowPos) const = 0;
 
 };
 

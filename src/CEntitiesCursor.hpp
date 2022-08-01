@@ -9,23 +9,23 @@ namespace ipgdlib::entity
 
 template <typename TEntities>
 class CEntitiesCursor :
-    public IEntitiesCursor<TEntities,TEntities*,CEntityShared<typename TEntities::iface::type_entity_info>>
+    public IEntitiesCursor<TEntities,ewPointer,CEntityShared<typename TEntities::iface::type_fields>>
 {
 public:
-    using iface = IEntitiesCursor<TEntities,TEntities*,CEntityShared<typename TEntities::iface::type_entity_info>>;
+    using iface = IEntitiesCursor<TEntities,ewPointer,CEntityShared<typename TEntities::iface::type_fields>>;
 
 private:
 
-using TEntityCount = typename iface::type_entity_count;
-using TEntitiesWrapper = typename iface::type_entities_wrapper;
-using TEntitiesShared = typename iface::type_entities_shared;
+using TCount = typename TEntities::iface::type_count;
+using TEntitiesWrapper = typename ipgdlib::wrap<TEntities,ewPointer>::value;
+using TEntityShared = typename iface::type_entity_shared;
 
 public:
     void createFrom(TEntitiesWrapper entities) override
     {
 	this->m_pEntities = entities;
-	this->m_RowPosition = 0;
-	this->m_ActiveRow.set(entities->getEntityInfo(),entities->getPData(0));
+	this->m_ActivePosition = 0;
+	this->m_ActiveEntity.set(entities->getFields(),entities->getPData(0));
     }
 
     TEntitiesWrapper getEntities()
@@ -33,32 +33,32 @@ public:
 	return this->m_pEntities;
     }
 
-    void setRowPosition(TEntityCount rowPos) override
+    void setActivePosition(TCount rowPos) override
     {
-	this->m_RowPosition = rowPos;
-	this->m_ActiveRow.assignFrom(this->m_pEntities->getPData(rowPos));
+	this->m_ActivePosition = rowPos;
+	this->m_ActiveEntity.assignFrom(this->m_pEntities->getPData(rowPos));
     }
 
-    TEntityCount getRowPosition() const noexcept override
+    TCount getActivePosition() const noexcept override
     {
-	return this->m_RowPosition;
+	return this->m_ActivePosition;
     }
 
-    TEntitiesShared &getActiveRow() override
+    TEntityShared &getActiveEntity() override
     {
-	return this->m_ActiveRow;
+	return this->m_ActiveEntity;
     }
 
-    TEntitiesShared &getRow(TEntityCount rowPos)
+    TEntityShared &getRow(TCount rowPos)
     {
-	this->m_RowPosition = rowPos;
-	this->m_ActiveRow.assignFrom(this->m_pEntities->getPData(rowPos));
-	return this->m_ActiveRow;
+	this->m_ActivePosition = rowPos;
+	this->m_ActiveEntity.assignFrom(this->m_pEntities->getPData(rowPos));
+	return this->m_ActiveEntity;
     }
 
 private:
-    TEntityCount m_RowPosition;
-    TEntitiesShared m_ActiveRow;
+    TCount m_ActivePosition;
+    TEntityShared m_ActiveEntity;
     TEntities *m_pEntities;
 };
 

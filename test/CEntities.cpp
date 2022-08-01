@@ -15,25 +15,21 @@ int main(int argc,char * argv[])
 {
     CFields eInfo({
 	CField::alloc<unsigned int>("id"),
-	CField::alloc<const char*>("fullname"),
-	CField::alloc<const char *>("shortname"),
+	CField::alloc<const char*>("name"),
 	CField::alloc<unsigned int>("price_sell_unit"),
 	CField::alloc<unsigned int>("price_buy_pcs"),
 	CField::alloc<unsigned char>("pcs_per_unit"),
-	CField::alloc<unsigned char>("min_sale_unit"),
-	CField::alloc<unsigned short>("stock_outlet"),
-	CField::alloc<unsigned short>("stock_warehouse")
 	});
 
     CEntities entities(&eInfo,3);
 
-    for(size_t li = 0;li < entities.getEntityCount();li++)
-	entities.assignFrom(li,new char [eInfo.getFieldsSize()]);
+    for(size_t li = 0;li < entities.count();li++)
+	entities.assignFrom(li,new char [eInfo.size()]);
 
     CEntityShared eShared;
-    entities.shareTo(0,eShared);
-    eShared.getAs<unsigned int>("id") = 10;
-    assert(eShared.getAs<unsigned int>("id") == 10);
+    entities.shareTo(eShared,0);
+    eShared.as<unsigned int>("id") = 10;
+    assert(eShared.as<unsigned int>("id") == 10);
 
     return 0;
 }

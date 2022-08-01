@@ -96,27 +96,27 @@ public:
     }
 
     template <typename T>
-    T &getAs(TFieldIndex const &fieldIndex)
+    T &as(TFieldIndex const &fieldIndex)
     {
 	return *reinterpret_cast<T*>(&this->m_pEntityData[this->m_Fields->offset(fieldIndex)]);
     }
 
     template <typename T>
-    T const &getAs(TFieldIndex const &fieldIndex) const
+    T const &as(TFieldIndex const &fieldIndex) const
     {
 	return *reinterpret_cast<T*>(&this->m_pEntityData[this->m_Fields->offset(fieldIndex)]);
     }
 
     template <typename T>
-    T const &getAs(TFieldName const &fieldName) const
+    T const &as(TFieldName const &fieldName) const
     {
-	return getAs<T>(this->m_Fields->indexOf(fieldName));
+	return as<T>(this->m_Fields->indexOf(fieldName));
     }
 
     template <typename T>
-    T &getAs(TFieldName const &fieldName)
+    T &as(TFieldName const &fieldName)
     {
-	return getAs<T>(this->m_Fields->indexOf(fieldName));
+	return as<T>(this->m_Fields->indexOf(fieldName));
     }
 
 

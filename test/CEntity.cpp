@@ -15,48 +15,49 @@ using CEntityShared = ipgdlib::entity::CEntityShared<CFields>;
 
 int main(int argc,char * argv[])
 {
-    CFields eInfo({
+    CFields fieldProduct({
 	CField::alloc<unsigned int>("id"),
-	CField::alloc<const char*>("fullname"),
-	CField::alloc<const char *>("shortname"),
+	CField::alloc<const char*>("name"),
 	CField::alloc<unsigned int>("price_sell_unit"),
 	CField::alloc<unsigned int>("price_buy_pcs"),
 	CField::alloc<unsigned char>("pcs_per_unit"),
-	CField::alloc<unsigned char>("min_sale_unit"),
-	CField::alloc<unsigned short>("stock_outlet"),
-	CField::alloc<unsigned short>("stock_warehouse")
 	});
 
-    assert(eInfo.count() == 9);
+    assert(fieldProduct.count() == 5);
 
     CEntityUnique eProduct;
-    eProduct.createFrom(eInfo);
-    eProduct.getAs<unsigned int>("id") = 10;
-    assert(eProduct.getAs<unsigned int>("id") == 10);
-    eProduct.getAs<const char *>(1) = "Kucing";
-    eProduct.getAs<const char *>(2) = "Kumbang";
-    eProduct.getAs<unsigned int>(3) = 180000;
-    eProduct.getAs<unsigned int>(4) = 100000;
-    eProduct.getAs<unsigned char>("pcs_per_unit") = 20;
-    eProduct.getAs<unsigned char>("min_sale_unit") = 1;
-    eProduct.getAs<unsigned short>("stock_outlet") = 35;
-    eProduct.getAs<unsigned short>("stock_warehouse") = 80;
+    eProduct.createFrom(fieldProduct);
+    eProduct.as<unsigned int>("id") = 10;
+    eProduct.as<const char *>("name") = "Resistor 10K Ohm";
+    eProduct.as<unsigned int>("price_sell_unit") = 2500;
+    eProduct.as<unsigned int>("price_buy_pcs") = 200;
+    eProduct.as<unsigned char>("pcs_per_unit") = 10;
+
+    assert(eProduct.as<unsigned int>(0) == 10); // ijj
+    assert(strcmp(eProduct.as<const char *>(1),"Resistor 10K Ohm") == 0); // id
+    assert(eProduct.as<unsigned int>(2) == 2500); // id
+    assert(eProduct.as<unsigned int>(3) == 200); // id
+    assert(eProduct.as<unsigned char>(4) == 10); // id
 
     CEntityShared eSharedProduct;
     eProduct.shareTo(eSharedProduct);
-    eSharedProduct.getAs<unsigned int>(0) = 30;
-    assert(eProduct.getAs<unsigned int>(0) == 30);
+    assert(eSharedProduct.as<unsigned int>(0) == 10); // ijj
+    assert(strcmp(eSharedProduct.as<const char *>(1),"Resistor 10K Ohm") == 0); // id
+    assert(eSharedProduct.as<unsigned int>(2) == 2500); // id
+    assert(eSharedProduct.as<unsigned int>(3) == 200); // id
+    assert(eSharedProduct.as<unsigned char>(4) == 10); // id
+						       //
+    eSharedProduct.as<unsigned int>("id")		= 20;
+    eSharedProduct.as<const char *>("name")		= "Resistor 20K Ohm";
+    eSharedProduct.as<unsigned int>("price_sell_unit")	= 3000;
+    eSharedProduct.as<unsigned int>("price_buy_pcs")	= 250;
+    eSharedProduct.as<unsigned char>("pcs_per_unit")	= 20;
 
-    assert(eSharedProduct.getAs<unsigned int>(3) == 180000);
-    assert(eProduct.getAs<unsigned int>(0) == 30);
-    assert(strcmp(eProduct.getAs<const char*>(1),"Kucing") == 0);
-
-    ipgdlib::entity::CCTStaticPrimitive<unsigned int,size_t> iPrice;
-    eProduct.toCustomType(3,iPrice);
-
-    iPrice = 200;
-
-    assert(eProduct.getAs<unsigned int>(3) == 200);
-
+    assert(eProduct.as<unsigned int>(0) == 20); // ijj
+    assert(strcmp(eProduct.as<const char *>(1),"Resistor 20K Ohm") == 0); // id
+    assert(eProduct.as<unsigned int>(2) == 3000); // id
+    assert(eProduct.as<unsigned int>(3) == 250); // id
+    assert(eProduct.as<unsigned char>(4) == 20); // id
+						 //
     return 0;
 }

@@ -4,24 +4,27 @@
 namespace ipgdlib::entity
 {
 
-template <typename TEntities,typename TEntitiesWrapper,typename TEntitiesShared>
+template <
+    typename TEntities,
+    eWrapper ewEntities,
+    typename TEntityShared>
 class IEntitiesCursor
 {
-using TEntityCount = typename TEntities::iface::type_entity_count;
+using TCount	= typename TEntities::iface::type_count;
+using TEntitiesWrapper	= typename ipgdlib::wrap<TEntities,ewEntities>::value;
 
 public:
     using type_entities = TEntities;
-    using type_entities_wrapper = TEntitiesWrapper;
-    using type_entities_shared = TEntitiesShared;
-    using type_entity_count = TEntityCount;
+    static constexpr eWrapper enum_wrapper_entities = ewEntities;
+    using type_entity_shared = TEntityShared;
 
     virtual ~IEntitiesCursor() {};
     virtual void createFrom(TEntitiesWrapper entities) = 0;
 
-    virtual void setRowPosition(TEntityCount rowPos) = 0;
-    virtual TEntityCount getRowPosition() const noexcept = 0;
+    virtual void setActivePosition(TCount rowPos) = 0;
+    virtual TCount getActivePosition() const noexcept = 0;
 
-    virtual TEntitiesShared &getActiveRow() = 0;
+    virtual TEntityShared &getActiveEntity() = 0;
 
 };
 

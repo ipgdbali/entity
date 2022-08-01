@@ -29,16 +29,16 @@ int main(int argc,char * argv[])
 
     CEntities entities(&eInfo,3);
 
-    for(size_t li = 0;li < entities.getEntityCount();li++)
-	entities.assignFrom(li,new char [eInfo.getFieldsSize()]);
+    for(size_t li = 0;li < entities.count();li++)
+	entities.assignFrom(li,new char [eInfo.size()]);
 
     CEntitiesCursor eCursor;
     eCursor.createFrom(&entities);
-    for(size_t li = 0;li < entities.getEntityCount();li++)
-	eCursor.getRow(li).getAs<unsigned int>("id") = (li + 1) * 10;
+    for(size_t li = 0;li < entities.count();li++)
+	eCursor.getRow(li).as<unsigned int>("id") = (li + 1) * 10;
 
-    for(size_t li = 0;li < entities.getEntityCount();li++)
-	assert(eCursor.getRow(li).getAs<unsigned int>("id") == (li + 1) * 10);
+    for(size_t li = 0;li < entities.count();li++)
+	assert(eCursor.getRow(li).as<unsigned int>("id") == (li + 1) * 10);
 
     return 0;
 }

@@ -25,7 +25,7 @@ using TFieldName				= typename TFields::iface::type_field::type_name;
 
 public:
     using type_fields = TFields;
-    constexpr static eWrapper eWFields = ewFields;
+    constexpr static eWrapper enum_wrapper_fields = ewFields;
 
     virtual ~IEntity() {};
 
