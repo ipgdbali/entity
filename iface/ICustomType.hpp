@@ -19,6 +19,10 @@ public:
 
     virtual void setPtr(void *pSrc) = 0;
 
+    /*
+    virtual bool isNull() const noexcept = 0;
+    */
+
 };
 
 };

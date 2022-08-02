@@ -33,27 +33,46 @@ public:
     CFields(CFields && ref) = delete;
     CFields &operator = (CFields && ref) = delete;
 
-    CFields(std::initializer_list<TWField> ltpFieldInfo)
+    CFields(std::initializer_list<TWField> ltpFieldInfo) :
+	CFields(ltpFieldInfo.begin(),ltpFieldInfo.end(),ltpFieldInfo.size())
     {
-	this->m_FieldCount	= ltpFieldInfo.size();
+    }
+
+    template <typename TIt>
+    CFields(TIt first,TIt last,TCount count = 0)
+    {
+	if(count == 0)
+	{
+	    m_FieldCount = 0;
+	    for(auto it = first;it != last;++it)
+		this->m_FieldCount++;
+	}
+	else
+	    m_FieldCount = count;
+
 	this->m_arrFieldInfos	= new TWField[this->m_FieldCount];
 	this->m_RunningSum	= new TSizeTotal[this->m_FieldCount];
 
-	TCount idx		= 0;
 	TSizeTotal sum		= 0;
 
-	for(auto it = ltpFieldInfo.begin();it != ltpFieldInfo.end();++it)
+	auto it = first;
+	TCount li = 0;
+	while(li < m_FieldCount || it != last)
 	{
 	    if(this->hasName((*it)->name()))
 		throw "Duplicate Name";
 
-	    this->m_arrFieldInfos[idx] = *it;
-	    this->m_RunningSum[idx] = (*it)->size() + sum;
-	    sum = this->m_RunningSum[idx];
-	    m_Mapper[(*it)->name()] = idx;
-	    idx++;
+	    this->m_arrFieldInfos[li] = *it;
+	    this->m_RunningSum[li] = (*it)->size() + sum;
+	    sum = this->m_RunningSum[li];
+	    m_Mapper[(*it)->name()] = li;
+
+	    //forward
+	    li++;
+	    ++it;
 	}
     }
+
 
     ~CFields()
     {

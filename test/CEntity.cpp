@@ -7,6 +7,7 @@
 #include <cassert>
 #include <iostream>
 #include <iomanip>
+#include <vector>
 
 using CField = ipgdlib::entity::CField<std::string,unsigned char>;
 using CFields = ipgdlib::entity::CFields<size_t,size_t,CField>;
@@ -15,15 +16,17 @@ using CEntityShared = ipgdlib::entity::CEntityShared<CFields>;
 
 int main(int argc,char * argv[])
 {
-    CFields fieldProduct({
+    std::vector<const CField *> vFields = {
 	CField::alloc<unsigned int>("id"),
 	CField::alloc<const char*>("name"),
 	CField::alloc<unsigned int>("price_sell_unit"),
 	CField::alloc<unsigned int>("price_buy_pcs"),
 	CField::alloc<unsigned char>("pcs_per_unit"),
-	});
+    };
 
-    assert(fieldProduct.count() == 5);
+    CFields fieldProduct(vFields.begin(),vFields.end());
+
+    assert(fieldProduct.count() == vFields.size());
 
     CEntityUnique eProduct;
     eProduct.createFrom(fieldProduct);
