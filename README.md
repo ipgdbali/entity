@@ -12,7 +12,7 @@ There is also a method to cast attribute into a custom type for ease of use.
 Attribute size is defined earlier before entity is created among its name.
 
 ## Get started
-1. Create a Fields Info from Field Info
+### 1. Create a Fields from Field
 ```
 CFields fCustomer({
     CField::alloc<unsigned int>("id"),  // index - 0
@@ -21,21 +21,32 @@ CFields fCustomer({
     CField::alloc<char>("sex")          // index - 3
 });
 ```
-2. Create Entity from Fields Info
- ```
- // Create Unique Entity
- CEntityUnique eCustomer;
- eCustomer.createFrom(fCustomer)
+### 2. Create Entity from Fields
 
-// Create Array of Entity
+- #### Create an Unique Entity
+```
+CEntityUnique eCustomer;
+eCustomer.createFrom(fCustomer)
+```
+
+- #### Create an Array of Entity 
+```
 CEntities eCustomers;
 eCustomers.createfrom(fCustomer)
+```
 
-// Create Shared Entity
+- #### Create Shared Entity
+     - ##### From Unique Entity
+     ```
+     TODO
+     ```
+     - ##### From Array of Entity
+     ```
+     TODO
+     ```
 
 
- ```
-3. Access attribute
+### 3. Access attribute
 ```
 eCustomer.as<unsigned int>(0) = 10;                 // access by index
 assert(eCustomer.as<unsigned int>("id") == 10);     // access by name
