@@ -14,7 +14,7 @@ int main(int argc,char * argv[])
 	CField::alloc<unsigned int>("id"),
 	CField::alloc<void*>("fullname"),
 	CField::alloc<void*>("shortname"),
-	CField::alloc<unsigned int>("price_sell_unit"),
+	CField::alloc<sizeof(unsigned int)>("price_sell_unit"),
 	CField::alloc<unsigned int>("price_buy_pcs"),
 	CField::alloc<unsigned char>("pcs_per_unit"),
 	CField::alloc<unsigned char>("min_sale_unit"),

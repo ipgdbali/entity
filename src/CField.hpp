@@ -30,6 +30,12 @@ public:
 	return new CField(name,sizeof(T));
     }
 
+    template <TSize size>
+    static CField<TName,TSize> *alloc(TName const &name)
+    {
+	return new CField(name,size);
+    }
+
     CField() = delete;
 
     CField(const CField &ref) :
