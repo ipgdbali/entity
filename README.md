@@ -4,7 +4,7 @@
 # Entity Library
 A C++ header only Entity library.
 
-## What it does
+## Description
 It creates a data structure at runtime.\
 This structure contains one to many attributes that can be accessed by index or name.
 Each attribute may have its value to be be copied from or to another memory.
@@ -31,18 +31,24 @@ eCustomer.createFrom(fCustomer)
 
 - #### Create an Array of Entity 
 ```
+constexprt size_t ROW_COUNT = 10;
 CEntities eCustomers;
-eCustomers.createfrom(fCustomer)
+eCustomers.createFrom(fCustomer,ROW_COUNT)
+
+for(size_t li = 0;li < ROW_COUNT;li++)
+    eCustomers.assignFrom(li,new char[fCustomers.size()]);  // initialize memory
 ```
 
 - #### Create Shared Entity
      - ##### From Unique Entity
      ```
-     TODO
+     CEntityShared eSharedCustomer;
+     eCustomers.shareTo(eSharedCustomer);
      ```
      - ##### From Array of Entity
      ```
-     TODO
+     CEntityShared eSharedCustomer;
+     eCustomers.shareTo(eSharedCustomer,index);
      ```
 
 
@@ -50,4 +56,20 @@ eCustomers.createfrom(fCustomer)
 ```
 eCustomer.as<unsigned int>(0) = 10;                 // access by index
 assert(eCustomer.as<unsigned int>("id") == 10);     // access by name
+```
+- #### Using Custom Type
+```
+CCTPrimitive<unsigned int> ctID;
+
+eCustomer.toCustomType(0,ctID);                     // access by index
+
+ctID = 20
+assert(ctID = 20);
+assert(eCustomer.as<unsigned int>("id") == 20);
+
+eCustomer.toCustomType("id",ctID);                  // access by name
+
+ctID = 30
+assert(ctID = 30);
+assert(eCustomer.as<unsigned int>(0) == 30);
 ```
