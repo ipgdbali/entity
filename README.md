@@ -33,8 +33,8 @@ eCustomer.createFrom(fCustomer)
 ```
 constexprt size_t ROW_COUNT = 10;
 CEntities eCustomers;
-eCustomers.createFrom(fCustomer,ROW_COUNT)
 
+eCustomers.createFrom(fCustomer,ROW_COUNT)
 for(size_t li = 0;li < ROW_COUNT;li++)
     eCustomers.assignFrom(li,new char[fCustomers.size()]);  // initialize memory
 ```
