@@ -1,7 +1,7 @@
 .PHONY : clean
 
 DIR_DEST = bin
-DIR_INCLUDE = src iface ../ipgdlib
+DIR_INCLUDE = src iface 
 
 FILES =	CField \
 	CFields \
