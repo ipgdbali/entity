@@ -53,23 +53,43 @@ for(size_t li = 0;li < ROW_COUNT;li++)
 
 
 ### 3. Access attribute
+- #### Using copy memory
 ```
-eCustomer.as<unsigned int>(0) = 10;                 // access by index
-assert(eCustomer.as<unsigned int>("id") == 10);     // access by name
+unsigned int id;
+
+id = 20;
+eCustomer.copyAttrFrom(0,&id);
+id = 0;
+eCustomer.copyAttrTo("id",&id);
+assert(id == 20);
+
+id = 30;
+eCustomer.copyAttrFrom("id",&id);
+id = 0;
+eCustomer.copyAttrTo(0,"&id);
+assert(id == 30);
+
+```
+- #### Using as method 
+```
+eCustomer.as<unsigned int>(0) = 10;                 
+assert(eCustomer.as<unsigned int>("id") == 10);     
+
+eCustomer.as<unsigned int>("id") = 20;                 
+assert(eCustomer.as<unsigned int>(0) == 20);
+
 ```
 - #### Using Custom Type
 ```
 CCTPrimitive<unsigned int> ctID;
 
-eCustomer.toCustomType(0,ctID);                     // access by index
-
+eCustomer.toCustomType(0,ctID);
 ctID = 20
-assert(ctID = 20);
+assert(ctID == 20);
 assert(eCustomer.as<unsigned int>("id") == 20);
 
-eCustomer.toCustomType("id",ctID);                  // access by name
-
+eCustomer.toCustomType("id",ctID);
 ctID = 30
-assert(ctID = 30);
+assert(ctID == 30);
 assert(eCustomer.as<unsigned int>(0) == 30);
 ```
