@@ -15,10 +15,10 @@ Attribute size is defined earlier before entity is created among its name.
 ### 1. Create a Fields from Field
 ```
 CFields fCustomer({
-    CField::alloc<unsigned int>("id"),  // index - 0
-    CField::alloc<void*>("fullname"),   // index - 1
-    CField::alloc<void*>("nickname"),   // index - 2
-    CField::alloc<char>("sex")          // index - 3
+    CField::alloc<unsigned int>("id"),      // index - 0
+    CField::alloc<char*>("name"),           // index - 1
+    CField::alloc<char>("sex")              // index - 2
+    CField::alloc<unsigned char>("age"),    // index - 3
 });
 ```
 ### 2. Create Entity from Fields
@@ -72,24 +72,24 @@ assert(id == 30);
 ```
 - #### Using as method 
 ```
-eCustomer.as<unsigned int>(0) = 10;                 
-assert(eCustomer.as<unsigned int>("id") == 10);     
+eCustomer.as<char>(2) = 'F';
+assert(eCustomer.as<char>("sex") == 'F');
 
-eCustomer.as<unsigned int>("id") = 20;                 
-assert(eCustomer.as<unsigned int>(0) == 20);
+eCustomer.as<char>("sex") = 'M';
+assert(eCustomer.as<char>(2) == 'M');
 
 ```
 - #### Using Custom Type
 ```
-CCTPrimitive<unsigned int> ctID;
+CCTPrimitive<unsigned char> ctAge;
 
-eCustomer.toCustomType(0,ctID);
-ctID = 20
-assert(ctID == 20);
-assert(eCustomer.as<unsigned int>("id") == 20);
+eCustomer.toCustomType(3,ctAge);
+ctAge = 20
+assert(ctAge == 20);
+assert(eCustomer.as<unsigned char>("age") == 20);
 
-eCustomer.toCustomType("id",ctID);
-ctID = 30
-assert(ctID == 30);
-assert(eCustomer.as<unsigned int>(0) == 30);
+eCustomer.toCustomType("age",ctAge);
+ctAge = 30
+assert(ctAge == 30);
+assert(eCustomer.as<unsigned char>(2) == 30);
 ```
