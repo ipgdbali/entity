@@ -37,6 +37,6 @@ eCustomers.createfrom(fCustomer)
  ```
 3. Access attribute
 ```
-eCustomer.as<unsigned int>(0) = 10;
-assert(eCustomer.as<unsigned int>("id") == 10);
+eCustomer.as<unsigned int>(0) = 10;                 // access by index
+assert(eCustomer.as<unsigned int>("id") == 10);     // access by name
 ```
