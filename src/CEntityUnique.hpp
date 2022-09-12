@@ -21,22 +21,17 @@ public:
 	this->clear();
     }
 
-    bool createFrom(TFields const &entityInfo) override
+    CEntityUnique(TFields const &entityInfo)
     {
-	this->clear();
-
 	this->setFields(&entityInfo);
 	this->setEntityPtr(new char [this->getFields()->size()]);
-	return true;
     }
 
-    bool createFrom(IEntity<TFields,ewConstPointer> const &entity) override
+    CEntityUnique(IEntity<TFields,ewConstPointer> const &entity)
     {
-	this->clear();
 	this->setFields(entity.getFields());
 	this->setEntityPtr(new char [this->getFields()->size()]);
 	entity.copyTo(this->getEntityPtr());
-	return true;
     }
 
     void clear() override
@@ -45,7 +40,6 @@ public:
 	{
 	    delete []this->getEntityPtr();
 	    this->setEntityPtr(nullptr);
-	    this->setFields(nullptr);
 	}
     }
 

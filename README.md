@@ -26,14 +26,12 @@ CFields fCustomer({
 
 - #### Create an Unique Entity
 ```
-CEntityUnique eCustomer;
-eCustomer.createFrom(fCustomer)
+CEntityUnique eCustomer(fCustomer);
 ```
 
 - #### Create an Array of Entity 
 ```
-constexprt size_t ROW_COUNT = 10;
-CEntities eCustomers;
+CEntities eCustomers(fCustomer,10); // create 10 entities
 
 eCustomers.createFrom(fCustomer,ROW_COUNT)
 for(size_t li = 0;li < ROW_COUNT;li++)

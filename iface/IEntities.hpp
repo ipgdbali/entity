@@ -24,16 +24,8 @@ public:
     virtual TFieldsWrapper getFields() const = 0;
     virtual TCount count() const noexcept = 0;
 
-    virtual bool isNullEntities() const noexcept = 0;
-    virtual bool isNullEntity(TCount rowPos) const = 0;
-
-    virtual void assignFrom(TCount rowPos,void *pSrc) = 0;
-    virtual void assignTo(TCount rowPos,void *&pDest) const = 0;
     virtual void *getPData(TCount rowPos) = 0;
     
-    // must be called for non null row
-    virtual void copyFrom(TCount rowPos,const void *pSrc) = 0;
-    virtual void copyTo(TCount rowPos,void *pDest) const = 0;
     virtual void shareTo(IEntityShared<TFields,ewFields> &eShared,TCount rowPos) const = 0;
 
 };

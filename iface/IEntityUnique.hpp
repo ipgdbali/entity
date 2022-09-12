@@ -15,8 +15,6 @@ class IEntityUnique :
 	public virtual IEntity<TEntityInfo,ewEntityInfo>
 {
 public:
-    virtual bool createFrom(TEntityInfo const &entityInfo) = 0;
-    virtual bool createFrom(IEntity<TEntityInfo,ewEntityInfo> const &entity) = 0;
 };
 
 };
