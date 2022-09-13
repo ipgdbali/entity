@@ -41,11 +41,10 @@ public:
 
     virtual TWField getField(TCount index) const = 0;
 
-    virtual TSizeTotal sum(TCount index) const = 0; // field sum
+    virtual TSizeTotal sum(TCount index) const = 0; // field running sum
+    virtual TSizeTotal offset(TCount index) const = 0; // offset(0) = 0
 
-    virtual TSizeTotal offset(TCount index) const = 0; // fieldoffset
-
-    virtual TSizeTotal size() const noexcept = 0;
+    virtual TSizeTotal size() const noexcept = 0; // sum of all field size
 
     virtual bool hasName(TFieldName const &fieldName) const noexcept = 0;
     virtual TCount indexOf(TFieldName const &fieldName) const = 0;
