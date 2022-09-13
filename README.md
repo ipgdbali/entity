@@ -16,10 +16,10 @@ Attribute size is defined earlier before entity is created among its name.
 ### 1. Create a Fields from Field
 ```
 CFields fCustomer({
-    CField::alloc<unsigned int>("id"),      // index - 0
-    CField::alloc<char*>("name"),           // index - 1
-    CField::alloc<char>("sex")              // index - 2
-    CField::alloc<unsigned char>("age"),    // index - 3
+    CField::alloc<unsigned int>("id"),              // index - 0
+    CField::alloc<char*>("name"),                   // index - 1
+    CField::alloc<char>("sex")                      // index - 2
+    CField::alloc<sizeof(unsigned char)>("age"),    // index - 3
 });
 ```
 ### 2. Create Entity from Fields
