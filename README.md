@@ -32,10 +32,6 @@ CEntityUnique eCustomer(fCustomer);
 - #### Create an Array of Entity 
 ```
 CEntities eCustomers(fCustomer,10); // create 10 entities
-
-eCustomers.createFrom(fCustomer,ROW_COUNT)
-for(size_t li = 0;li < ROW_COUNT;li++)
-    eCustomers.assignFrom(li,new char[fCustomers.size()]);  // initialize memory
 ```
 
 - #### Create Shared Entity

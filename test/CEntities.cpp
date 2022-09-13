@@ -14,17 +14,18 @@ using CEntities = ipgdlib::entity::CEntities<size_t,CFields>;
 int main(int argc,char * argv[])
 {
     CFields eInfo({
-	CField::alloc<unsigned int>("id"),
-	CField::alloc<const char*>("name"),
-	CField::alloc<unsigned int>("price_sell_unit"),
-	CField::alloc<unsigned int>("price_buy_pcs"),
-	CField::alloc<unsigned char>("pcs_per_unit"),
+        CField::alloc<unsigned int>("id"),
+        CField::alloc<const char*>("name"),
+        CField::alloc<unsigned int>("price_sell_unit"),
+        CField::alloc<unsigned int>("price_buy_pcs"),
+        CField::alloc<unsigned char>("pcs_per_unit"),
 	});
 
     CEntities entities(&eInfo,3);
-
+    /*
     for(size_t li = 0;li < entities.count();li++)
 	entities.assignFrom(li,new char [eInfo.size()]);
+    */
 
     CEntityShared eShared;
     entities.shareTo(eShared,0);

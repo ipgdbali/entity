@@ -22,6 +22,7 @@ public:
     virtual ~IEntities() {};
 
     virtual TFieldsWrapper getFields() const = 0;
+
     virtual TCount count() const noexcept = 0;
 
     virtual void *getPData(TCount rowPos) = 0;

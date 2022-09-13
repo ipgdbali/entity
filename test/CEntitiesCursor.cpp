@@ -29,9 +29,6 @@ int main(int argc,char * argv[])
 
     CEntities entities(&eInfo,3);
 
-    for(size_t li = 0;li < entities.count();li++)
-	entities.assignFrom(li,new char [eInfo.size()]);
-
     CEntitiesCursor eCursor;
     eCursor.createFrom(&entities);
     for(size_t li = 0;li < entities.count();li++)
