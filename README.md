@@ -38,7 +38,7 @@ CEntities eCustomers(fCustomer,10); // create 10 entities
      - ##### From Unique Entity
      ```
      CEntityShared eSharedCustomer;
-     eCustomers.shareTo(eSharedCustomer);
+     eCustomer.shareTo(eSharedCustomer);
      ```
      - ##### From Array of Entity
      ```
