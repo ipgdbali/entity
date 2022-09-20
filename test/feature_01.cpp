@@ -4,24 +4,29 @@
 #include "CEntityShared.hpp"
 #include "CustomType/CCTPrimitive.hpp"
 #include <cassert>
+#include <vector>
 
 
 using CField            = ipgdlib::entity::CField<std::string,unsigned char>;
 using CFields           = ipgdlib::entity::CFields<size_t,size_t,CField>;
 using CEntityUnique     = ipgdlib::entity::CEntityUnique<CFields>;
 using CEntityShared     = ipgdlib::entity::CEntityShared<CFields>;
+
+using TWField = typename ipgdlib::wrap<CField,CFields::iface::enum_field_wrapper>::value;
+
 template <typename T>
 using CCTPrimitive      = ipgdlib::entity::CCTPrimitive<T,CField::type_size>;
 
 int main(int argc,char * argv[])
 {
 
-    CFields fCustomer({
-        CField::alloc<unsigned int>("id"),              // index - 0
-        CField::alloc<sizeof(char*)>("name"),           // index - 1
-        CField::alloc<char>("sex"),                     // index - 2
-        CField::alloc<sizeof(unsigned char)>("age")     // index - 3
-    });
+    std::vector<TWField> fields;
+    fields.push_back(CField::alloc<unsigned int>("id"));
+    fields.push_back(CField::alloc<sizeof(char*)>("name"));
+    fields.push_back(CField::alloc<char>("sex"));
+    fields.push_back(CField::alloc<sizeof(unsigned char)>("age"));
+
+    CFields fCustomer(fields);
     assert(fCustomer.count() == 4);
 
     // Create Unique Entity

@@ -87,11 +87,12 @@ You can see source code above [here](https://github.com/ipgdbali/entity/blob/mas
 ## Feature
 ### Create CFields from collection
 ```
-vector<CField *> fields;
+std::vector<TWField> fields;
 fields.push_back(CField::alloc<unsigned int>("id"));
 fields.push_back(CField::alloc<sizeof(char*)>("name"));
 fields.push_back(CField::alloc<char>("sex"));
 fields.push_back(CField::alloc<sizeof(unsigned char)>("age"));
 
 CFields fCustomer(fields);
+assert(fCustomer.count() == 4);
 ```

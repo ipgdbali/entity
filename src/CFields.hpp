@@ -33,49 +33,7 @@ public:
     CFields(CFields && ref) = delete;
     CFields &operator = (CFields && ref) = delete;
 
-    CFields(std::initializer_list<TWField> ltpFieldInfo) :
-		CFields(ltpFieldInfo.begin(),ltpFieldInfo.end(),ltpFieldInfo.size())
-    {
-    }
-
-    template <typename TIt>
-    CFields(TIt first,TIt last,TCount count = 0)
-    {
-		if(count == 0)
-		{
-			m_FieldCount = 0;
-			for(auto it = first;it != last;++it)
-			this->m_FieldCount++;
-		}
-		else
-			m_FieldCount = count;
-
-		this->m_arrFieldInfos			= new TWField[this->m_FieldCount];
-		this->m_RunningSum				= new TSizeTotal[this->m_FieldCount];
-		TSizeTotal sum					= 0;
-		TCount li 						= 0;
-		auto it 						= first;
-		while(li < m_FieldCount)
-		{
-			if(it == last)
-				throw "less than count";
-
-			if(this->hasName((*it)->name()))
-				throw "Duplicate Name";
-
-			this->m_arrFieldInfos[li] 	= *it;
-			this->m_RunningSum[li] 		= (*it)->size() + sum;
-			sum 						= this->m_RunningSum[li];
-			m_Mapper[(*it)->name()] 	= li;
-
-			//forward
-			li++;
-			++it;
-		}
-    }
-
-
-    ~CFields()
+	~CFields()
     {
 		for(TCount li = 0;li < this->m_FieldCount;li++)
 			delete this->m_arrFieldInfos[li];
@@ -83,6 +41,44 @@ public:
 		delete [] this->m_arrFieldInfos;
 		delete [] this->m_RunningSum;
     }
+
+
+    CFields(std::initializer_list<TWField> ltpFieldInfo)
+    {
+		this->m_FieldCount 				= ltpFieldInfo.size();
+		this->m_arrFieldInfos			= new TWField[this->m_FieldCount];
+		this->m_RunningSum				= new TSizeTotal[this->m_FieldCount];
+		TSizeTotal sum					= 0;
+		TCount li 						= 0;
+		for(TWField field : ltpFieldInfo)
+		{
+			this->m_arrFieldInfos[li] 	= field;
+			this->m_RunningSum[li] 		= field->size() + sum;
+			sum 						= this->m_RunningSum[li];
+			m_Mapper[field->name()] 	= li;
+
+			li++;
+		}
+    }
+	
+	template <typename T>
+	CFields(T &col)
+	{
+		this->m_FieldCount 				= col.size();
+		this->m_arrFieldInfos			= new TWField[this->m_FieldCount];
+		this->m_RunningSum				= new TSizeTotal[this->m_FieldCount];
+		TSizeTotal sum					= 0;
+		TCount li 						= 0;
+		for(TWField field : col)
+		{
+			this->m_arrFieldInfos[li] 	= field;
+			this->m_RunningSum[li] 		= field->size() + sum;
+			sum 						= this->m_RunningSum[li];
+			m_Mapper[field->name()] 	= li;
+
+			li++;
+		}
+	}
 
     TCount count() const noexcept override
     {
