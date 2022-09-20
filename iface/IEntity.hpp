@@ -33,21 +33,12 @@ public:
 
     virtual bool copyAttrTo(const TFieldIndex &fieldIndex,void *pDst) const = 0;
     virtual bool copyAttrTo(const TFieldName &fieldName,void *pDst) const = 0;
-    virtual bool copyTo(void *pDest) const = 0;
 
     virtual bool copyAttrFrom(const TFieldIndex &fieldIndex,const void *pSrc) = 0;
     virtual bool copyAttrFrom(const TFieldName &fieldName,const void *pSrc) = 0;
-    virtual bool copyFrom(const void *pSrc) = 0;
 
     virtual bool shareTo(IEntityShared<TFields,ewFields> &eShared) const = 0;
-
-    virtual bool isNull() const noexcept = 0;
-    virtual void clear() = 0;
-
-protected:
-    virtual char *getEntityPtr() const = 0;
-    virtual bool setEntityPtr(char *pEntity) = 0;
-    virtual bool setFields(TFieldsWrapper eInfo) = 0;
+    
 };
 
 };

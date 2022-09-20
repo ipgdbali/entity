@@ -2,7 +2,7 @@
 #define CENTITY_UNIQUE_HPP
 
 #include "IEntityUnique.hpp"
-#include "CEntity.hpp"
+#include "CEntityAbs.hpp"
 #include "CFields.hpp"
 
 namespace ipgdlib::entity
@@ -10,7 +10,7 @@ namespace ipgdlib::entity
 
 template <typename TFields>
 class CEntityUnique :
-    public CEntity<TFields>,
+    public CEntityAbs<TFields>,
     public virtual IEntityUnique<TFields,ewConstPointer>
 {
 using TFieldsWrapper = TFields const *;
@@ -18,29 +18,13 @@ public:
 
     virtual ~CEntityUnique()
     {
-	this->clear();
+        if(this->getEntityPtr() != nullptr)
+            delete []this->getEntityPtr();
     }
 
-    CEntityUnique(TFields const &entityInfo)
+    CEntityUnique(TFields const &entityInfo) :
+        CEntityAbs<TFields>(entityInfo,new char[entityInfo.size()])
     {
-	this->setFields(&entityInfo);
-	this->setEntityPtr(new char [this->getFields()->size()]);
-    }
-
-    CEntityUnique(IEntity<TFields,ewConstPointer> const &entity)
-    {
-	this->setFields(entity.getFields());
-	this->setEntityPtr(new char [this->getFields()->size()]);
-	entity.copyTo(this->getEntityPtr());
-    }
-
-    void clear() override
-    {
-	if(this->getEntityPtr() != nullptr)
-	{
-	    delete []this->getEntityPtr();
-	    this->setEntityPtr(nullptr);
-	}
     }
 
 };

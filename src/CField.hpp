@@ -21,19 +21,19 @@ public:
     template <typename T>
     static CField<TName,TSize> create(TName const &name)
     {
-	return {name,sizeof(T)};
+	    return {name,sizeof(T)};
     }
 
     template <typename T>
     static CField<TName,TSize> *alloc(TName const &name)
     {
-	return new CField(name,sizeof(T));
+	    return new CField(name,sizeof(T));
     }
 
     template <TSize size>
     static CField<TName,TSize> *alloc(TName const &name)
     {
-	return new CField(name,size);
+	    return new CField(name,size);
     }
 
     CField() = delete;
@@ -45,38 +45,38 @@ public:
 
     CField<TName,TSize> &operator = (const CField &ref)
     {
-	this->m_Name = ref.m_Name;
-	this->m_Size = ref.m_Size;
-	return *this;
+        this->m_Name = ref.m_Name;
+        this->m_Size = ref.m_Size;
+        return *this;
     }
 
     CField(CField &&ref) :
 	m_Name(std::move(ref.m_Name)),m_Size(ref.m_Size)
     {
-	ref.m_Size = 0;
+	    ref.m_Size = 0;
     }
 
     CField &operator = (CField &&ref)
     {
-	this->m_Name = std::move(ref.m_Name);
-	this->m_Size = ref.m_Size;
-	ref.m_Size = 0;
-	return *this;
+        this->m_Name = std::move(ref.m_Name);
+        this->m_Size = ref.m_Size;
+        ref.m_Size = 0;
+        return *this;
     }
 
     CField(const TName &name,const TSize &size) :
-	m_Name(name),m_Size(size)
+    	m_Name(name),m_Size(size)
     {
     }
 
     const TName &name() const noexcept override
     {
-	return this->m_Name;
+	    return this->m_Name;
     }
 
     const TSize &size() const noexcept override
     {
-	return this->m_Size;
+	    return this->m_Size;
     }
 
 private:

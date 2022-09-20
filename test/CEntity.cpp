@@ -42,7 +42,7 @@ int main(int argc,char * argv[])
     assert(eProduct.as<unsigned int>(3)     == 200);
     assert(eProduct.as<unsigned char>(4)    == 10);
 
-    CEntityShared eSharedProduct;
+    CEntityShared eSharedProduct(fieldProduct);
     eProduct.shareTo(eSharedProduct);
     assert(eSharedProduct.as<unsigned int>(0)   == 10);
     assert(strcmp(eSharedProduct.as<const char *>(1),"Resistor 10K Ohm") == 0);

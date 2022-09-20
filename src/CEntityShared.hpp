@@ -2,45 +2,38 @@
 #define CENTITY_SHARED_HPP
 
 #include "IEntityShared.hpp"
-#include "CEntity.hpp"
+#include "CEntityAbs.hpp"
 
 namespace ipgdlib::entity
 {
 
 template <typename TFields>
 class CEntityShared :
-    public CEntity<TFields>,
+    public CEntityAbs<TFields>,
     public virtual IEntityShared<TFields,ewConstPointer>
 {
 using TFieldsWrapper = TFields const *;
 
 public:
 
-    using CEntity<TFields>::setFields;
-
-    /**
-     *  Fields must be non null
-     */
-    void assignFrom(void *pSrc) override
+    CEntityShared(const TFields& fields) :
+        CEntityAbs<TFields>(fields,nullptr)
     {
-	this->setEntityPtr(static_cast<char*>(pSrc));
     }
 
-    void assignTo(void *&pDest) const override
+    void set(void *pSrc) override
     {
-	pDest = this->getEntityPtr();
+        this->setEntityPtr(static_cast<char*>(pSrc));
     }
 
-    void set(TFieldsWrapper pInfo,void *pSrc) override
+    bool isNull() const noexcept override
     {
-	this->setEntityPtr(static_cast<char*>(pSrc));
-	this->setFields(pInfo);
+        return this->getEntityPtr() == nullptr;
     }
 
-    void clear() override
+    void clear() noexcept override
     {
-	this->setEntityPtr(nullptr);
-	this->setFields(nullptr);
+        this->setEntityPtr(nullptr);
     }
 
 };

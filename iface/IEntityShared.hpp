@@ -12,10 +12,9 @@ class IEntityShared :
 {
 public:
 
-    virtual void assignFrom(void *pSrc) = 0;
-    virtual void assignTo(void *&pDest) const = 0;
-
-    virtual void set(TEntityInfo const *pInfo,void *pSrc) = 0;
+    virtual void set(void *pSrc) = 0;
+    virtual bool isNull() const noexcept = 0;
+    virtual void clear() noexcept = 0;
 
 };
 

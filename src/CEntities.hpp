@@ -40,55 +40,15 @@ public:
     {
         return this->m_EntityCount;
     }
-    /*
-        bool isNullEntities() const noexcept override
-        {
-        return this->m_arrPEntityData == nullptr;
-        }
-
-        bool isNullEntity(TCount rowPos) const override
-        {
-        return this->m_arrPEntityData[rowPos] == nullptr;
-        }
-    */
-    /*
-    void assignFrom(TCount rowPos,void *pSrc) override
-    {
-    this->m_arrPEntityData[rowPos] = static_cast<char*>(pSrc);
-    }
-
-    void assignTo(TCount rowPos,void *&pDest) const override
-    {
-    pDest = m_arrPEntityData[rowPos];
-    }
-    */
 
     void *getPData(TCount rowPos) override
     {
         return this->m_arrPEntityData[rowPos];
     }
 
-    /**
-     * Should not be null
-     */
-    /*
-        void copyFrom(TCount rowPos,const void *pSrc) override
-        {
-        std::memcpy(m_arrPEntityData[rowPos],pSrc,m_pFields->size());
-        }
-    */
-    /**
-     * Should not be null
-     */
-    /*
-        void copyTo(TCount rowPos,void *pDest) const override
-        {
-        std::memcpy(pDest,m_arrPEntityData[rowPos],m_pFields->size());
-        }
-    */
-    void shareTo(IEntityShared<TFields, ewConstPointer> &eShared, TCount rowPos) const override
+    void shareTo(TCount rowPos,IEntityShared<TFields, ewConstPointer> &eShared) const override
     {
-        eShared.set(m_pFields, m_arrPEntityData[rowPos]);
+        eShared.set(m_arrPEntityData[rowPos]);
     }
 
 protected:

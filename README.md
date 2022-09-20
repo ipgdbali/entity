@@ -17,7 +17,7 @@ Attribute size is defined earlier before entity is created among its name.
 ```
 CFields fCustomer({
     CField::alloc<unsigned int>("id"),              // index - 0
-    CField::alloc<char*>("name"),                   // index - 1
+    CField::alloc<sizeof(char*)>("name"),           // index - 1
     CField::alloc<char>("sex")                      // index - 2
     CField::alloc<sizeof(unsigned char)>("age"),    // index - 3
 });
@@ -37,13 +37,13 @@ CEntities eCustomers(fCustomer,10); // create 10 entities
 - #### Create Shared Entity
      - ##### From Unique Entity
      ```
-     CEntityShared eSharedCustomer;
+     CEntityShared eSharedCustomer(fCustomer);
      eCustomers.shareTo(eSharedCustomer);
      ```
      - ##### From Array of Entity
      ```
-     CEntityShared eSharedCustomer;
-     eCustomers.shareTo(eSharedCustomer,index);
+     CEntityShared eSharedCustomer(fCustomer);
+     eCustomers.shareTo(index,eSharedCustomer);
      ```
 
 

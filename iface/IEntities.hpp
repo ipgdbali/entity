@@ -27,7 +27,7 @@ public:
 
     virtual void *getPData(TCount rowPos) = 0;
     
-    virtual void shareTo(IEntityShared<TFields,ewFields> &eShared,TCount rowPos) const = 0;
+    virtual void shareTo(TCount rowPos,IEntityShared<TFields,ewFields> &eShared) const = 0;
 
 };
 

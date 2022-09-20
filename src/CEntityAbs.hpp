@@ -1,5 +1,5 @@
-#ifndef CENTITY_HPP
-#define CENTITY_HPP
+#ifndef CENTITYABS_HPP
+#define CENTITYABS_HPP
 
 #include "IEntity.hpp"
 #include "CField.hpp"
@@ -12,19 +12,22 @@ namespace ipgdlib::entity
 {
 
 template <typename TFields>
-class CEntity : public virtual IEntity<TFields, ewConstPointer>
+class CEntityAbs : 
+    public virtual IEntity<TFields, ewConstPointer>
 {
 
-using TFieldName = typename TFields::iface::type_field::type_name;
-using TFieldIndex = typename TFields::type_count;
-using TFieldsWrapper = typename ipgdlib::wrap<TFields, ewConstPointer>::value;
+using TFieldName        = typename TFields::iface::type_field::type_name;
+using TFieldIndex       = typename TFields::type_count;
+using TFieldsWrapper    = typename ipgdlib::wrap<TFields, ewConstPointer>::value;
 
 public:
     using iface = IEntity<TFields, ewConstPointer>;
     using type_fields = TFields;
 
 public:
-    CEntity() : m_Fields(nullptr), m_pEntityData(nullptr)
+
+    CEntityAbs(const TFields &Fields,char *pData) : 
+        m_Fields(&Fields), m_pEntityData(pData)
     {
     }
 
@@ -49,12 +52,6 @@ public:
             pDst);
     }
 
-    bool copyTo(void *pDest) const override
-    {
-        std::memcpy(pDest, this->m_pEntityData, this->getFields()->size());
-        return true;
-    }
-
     bool copyAttrFrom(TFieldIndex const &fieldIndex, const void *pSrc) override
     {
         std::memcpy(
@@ -71,21 +68,10 @@ public:
             pSrc);
     }
 
-    bool copyFrom(const void *pSrc) override
-    {
-        std::memcpy(this->m_pEntityData, pSrc, this->getFields()->size());
-        return true;
-    }
-
     bool shareTo(IEntityShared<TFields, ewConstPointer> &eShared) const override
     {
-        eShared.set(this->m_Fields, this->m_pEntityData);
+        eShared.set(this->m_pEntityData);
         return true;
-    }
-
-    bool isNull() const noexcept override
-    {
-        return this->m_pEntityData == nullptr;
     }
 
     template <typename T>
@@ -132,26 +118,20 @@ public:
     }
 
 protected:
-    char *getEntityPtr() const override
+    char *getEntityPtr() const
     {
         return this->m_pEntityData;
     }
 
-    bool setEntityPtr(char *pEntity) override
+    bool setEntityPtr(char *pEntity)
     {
         this->m_pEntityData = pEntity;
         return true;
     }
 
-    bool setFields(TFieldsWrapper entityInfo) override
-    {
-        this->m_Fields = entityInfo;
-        return true;
-    }
-
 private:
-    TFieldsWrapper m_Fields;
-    char *m_pEntityData;
+    TFieldsWrapper  m_Fields;
+    char*           m_pEntityData;
 };
 
 };

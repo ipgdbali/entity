@@ -22,13 +22,9 @@ int main(int argc,char * argv[])
 	});
 
     CEntities entities(&eInfo,3);
-    /*
-    for(size_t li = 0;li < entities.count();li++)
-	entities.assignFrom(li,new char [eInfo.size()]);
-    */
 
-    CEntityShared eShared;
-    entities.shareTo(eShared,0);
+    CEntityShared eShared(eInfo);
+    entities.shareTo(0,eShared);
     eShared.as<unsigned int>("id") = 10;
     assert(eShared.as<unsigned int>("id") == 10);
 

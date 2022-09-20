@@ -8,9 +8,9 @@ FILES =	CField \
 	CEntity \
 	model \
 	CEntities \
-	CEntitiesCursor \
 	CCTStaticPrimitive \
 	CCTStaticCString
+#	CEntitiesCursor \
 
 FILES_TARGET = $(foreach FILE,$(FILES),$(addprefix $(DIR_DEST)/debug/,$(FILE)) $(addprefix $(DIR_DEST)/release/,$(FILE)))
 
