@@ -88,10 +88,10 @@ You can see source code above [here](https://github.com/ipgdbali/entity/blob/mas
 ### Create CFields from collection
 ```
 vector<CField *> fields;
-fields.push_back(new CField<sizeof(int)>("id"));
-fields.push_back(new CField<const char *>("name"));
-fields.push_back(new CField<sizeof(char)>("sex"));
-fields.push_back(new CField<sizeof(unsigned char)>("age"));
+fields.push_back(CField::alloc<unsigned int>("id"));
+fields.push_back(CField::alloc<sizeof(char*)>("name"));
+fields.push_back(CField::alloc<char>("sex"));
+fields.push_back(CField::alloc<sizeof(unsigned char)>("age"));
 
 CFields fCustomer(fields);
 ```
