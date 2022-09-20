@@ -14,7 +14,7 @@ red and color, red is and attribute and color is field.
 
 Each attribute of an entity may have its value to be be copied from or to another memory using methods.
 To be able to store a value into an attribute, an attribute size must be defined along its name.
-Attribute definition is made before an entity can be made.
+Attribute definition (CFields class) is made before an entity can be made.
 
 ## Get started
 ### 1. Create a Fields from Field
