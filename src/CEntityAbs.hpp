@@ -24,8 +24,11 @@ public:
     using iface = IEntity<TFields, ewConstPointer>;
     using type_fields = TFields;
 
-public:
-
+    CEntityAbs() = delete;
+    CEntityAbs(const CEntityAbs &ref) = delete;
+    CEntityAbs &operator = (const CEntityAbs &ref) = delete;
+    CEntityAbs(CEntityAbs &&ref) = delete;
+    CEntityAbs &operator = (CEntityAbs &&ref) = delete;
 
     TFieldsWrapper getFields() const noexcept override
     {

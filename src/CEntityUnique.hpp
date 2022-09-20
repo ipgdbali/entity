@@ -21,6 +21,13 @@ public:
             delete []this->getEntityPtr();
     }
 
+    CEntityUnique() = delete;
+    CEntityUnique(const CEntityUnique &ref) = delete;
+    CEntityUnique &operator = (const CEntityUnique &ref) = delete;
+    CEntityUnique(CEntityUnique &&ref) = delete;
+    CEntityUnique &operator = (CEntityUnique &&ref) = delete;
+
+
     CEntityUnique(TFieldsWrapper pEntityInfo) :
         CEntityAbs<TFields>(pEntityInfo,new char[pEntityInfo->size()])
     {

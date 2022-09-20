@@ -34,97 +34,98 @@ public:
     CFields &operator = (CFields && ref) = delete;
 
     CFields(std::initializer_list<TWField> ltpFieldInfo) :
-	CFields(ltpFieldInfo.begin(),ltpFieldInfo.end(),ltpFieldInfo.size())
+		CFields(ltpFieldInfo.begin(),ltpFieldInfo.end(),ltpFieldInfo.size())
     {
     }
 
     template <typename TIt>
     CFields(TIt first,TIt last,TCount count = 0)
     {
-	if(count == 0)
-	{
-	    m_FieldCount = 0;
-	    for(auto it = first;it != last;++it)
-		this->m_FieldCount++;
-	}
-	else
-	    m_FieldCount = count;
+		if(count == 0)
+		{
+			m_FieldCount = 0;
+			for(auto it = first;it != last;++it)
+			this->m_FieldCount++;
+		}
+		else
+			m_FieldCount = count;
 
-	this->m_arrFieldInfos	= new TWField[this->m_FieldCount];
-	this->m_RunningSum	= new TSizeTotal[this->m_FieldCount];
+		this->m_arrFieldInfos			= new TWField[this->m_FieldCount];
+		this->m_RunningSum				= new TSizeTotal[this->m_FieldCount];
+		TSizeTotal sum					= 0;
+		TCount li 						= 0;
+		auto it 						= first;
+		while(li < m_FieldCount)
+		{
+			if(it == last)
+				throw "less than count";
 
-	TSizeTotal sum		= 0;
+			if(this->hasName((*it)->name()))
+				throw "Duplicate Name";
 
-	auto it = first;
-	TCount li = 0;
-	while(li < m_FieldCount || it != last)
-	{
-	    if(this->hasName((*it)->name()))
-		throw "Duplicate Name";
+			this->m_arrFieldInfos[li] 	= *it;
+			this->m_RunningSum[li] 		= (*it)->size() + sum;
+			sum 						= this->m_RunningSum[li];
+			m_Mapper[(*it)->name()] 	= li;
 
-	    this->m_arrFieldInfos[li] = *it;
-	    this->m_RunningSum[li] = (*it)->size() + sum;
-	    sum = this->m_RunningSum[li];
-	    m_Mapper[(*it)->name()] = li;
-
-	    //forward
-	    li++;
-	    ++it;
-	}
+			//forward
+			li++;
+			++it;
+		}
     }
 
 
     ~CFields()
     {
-	for(TCount li = 0;li < this->m_FieldCount;li++)
-	    delete this->m_arrFieldInfos[li];
+		for(TCount li = 0;li < this->m_FieldCount;li++)
+			delete this->m_arrFieldInfos[li];
 
-	delete [] this->m_arrFieldInfos;
-	delete [] this->m_RunningSum;
+		delete [] this->m_arrFieldInfos;
+		delete [] this->m_RunningSum;
     }
 
     TCount count() const noexcept override
     {
-	return this->m_FieldCount;
+		return this->m_FieldCount;
     }
 
     TWField getField(TCount index) const override
     {
-	return this->m_arrFieldInfos[index];
+		return this->m_arrFieldInfos[index];
     }
 
     TSizeTotal sum(TCount index) const override
     {
-	return this->m_RunningSum[index];
+		return this->m_RunningSum[index];
     }
 
     TSizeTotal offset(TCount index) const override
     {
-	if(index == 0)
-	    return 0;
-	else
-	    return this->m_RunningSum[index - 1];
+		if(index == 0)
+			return 0;
+		else
+			return this->m_RunningSum[index - 1];
     }
 
     TSizeTotal size() const noexcept override
     {
-	return this->m_RunningSum[this->m_FieldCount - 1];
+		return this->m_RunningSum[this->m_FieldCount - 1];
     }
 
     bool hasName(TFieldName const &fieldName) const noexcept override
     {
-	return this->m_Mapper.count(fieldName) == 1;
+		return this->m_Mapper.count(fieldName) == 1;
     }
 
     TCount indexOf(TFieldName const &fieldName) const override
     {
-	return this->m_Mapper.at(fieldName);
+		return this->m_Mapper.at(fieldName);
     }
 
 private:
-    TCount m_FieldCount;
-    TWField *m_arrFieldInfos;
-    TSizeTotal *m_RunningSum;
+    TCount						m_FieldCount;
+    TWField*					m_arrFieldInfos;
+    TSizeTotal*					m_RunningSum;
     std::map<TFieldName,TCount> m_Mapper;
 };
 

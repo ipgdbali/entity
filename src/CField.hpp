@@ -37,32 +37,10 @@ public:
     }
 
     CField() = delete;
-
-    CField(const CField &ref) :
-	m_Name(ref.m_Name),m_Size(ref.m_Size)
-    {
-    }
-
-    CField<TName,TSize> &operator = (const CField &ref)
-    {
-        this->m_Name = ref.m_Name;
-        this->m_Size = ref.m_Size;
-        return *this;
-    }
-
-    CField(CField &&ref) :
-	m_Name(std::move(ref.m_Name)),m_Size(ref.m_Size)
-    {
-	    ref.m_Size = 0;
-    }
-
-    CField &operator = (CField &&ref)
-    {
-        this->m_Name = std::move(ref.m_Name);
-        this->m_Size = ref.m_Size;
-        ref.m_Size = 0;
-        return *this;
-    }
+    CField(const CField &ref) = delete;
+    CField<TName,TSize> &operator = (const CField &ref) = delete;
+    CField(CField &&ref) = delete;
+    CField &operator = (CField &&ref) = delete;
 
     CField(const TName &name,const TSize &size) :
     	m_Name(name),m_Size(size)

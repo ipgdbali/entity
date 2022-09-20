@@ -22,13 +22,16 @@ int main(int argc,char * argv[])
     CFields fCustomer({
         CField::alloc<unsigned int>("id"),              // index - 0
         CField::alloc<sizeof(char*)>("name"),           // index - 1
-        CField::alloc<char>("sex"),                      // index - 2
-        CField::alloc<sizeof(unsigned char)>("age")    // index - 3
+        CField::alloc<char>("sex"),                     // index - 2
+        CField::alloc<sizeof(unsigned char)>("age")     // index - 3
     });
     assert(fCustomer.count() == 4);
 
-    // Create Entity
-    CEntityUnique eCustomer(&fCustomer);    
+    // Create Unique Entity
+    CEntityUnique eCustomer(&fCustomer);
+
+    // Create Shared Entity
+    CEntityShared eSharedCustomer(eCustomer);
 
     // Access
 
