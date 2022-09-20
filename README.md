@@ -8,9 +8,13 @@ A C++ header only Entity library.
 ## Description
 It creates a data structure at runtime.\
 This structure contains one to many attributes that can be accessed by index or name.
-Each attribute may have its value to be be copied from or to another memory.
-There is also a method to cast attribute into a custom type for ease of use.
-Attribute size is defined earlier before entity is created among its name.
+Name of an Attribute, is a Field. Attribute is a value of a field.
+For examples :
+red and color, red is and attribute and color is field. 
+
+Each attribute of an entity may have its value to be be copied from or to another memory using methods.
+To be able to store a value into an attribute, an attribute size must be defined along its name.
+Attribute definition (CFields class) is made before an entity can be made.
 
 ## Get started
 ### 1. Create a Fields from Field
@@ -79,3 +83,15 @@ assert((eCustomer.as<unsigned char>(3) == 30));
 
 
 You can see source code above [here](https://github.com/ipgdbali/entity/blob/master/test/start.cpp)
+
+## Feature
+### Create CFields from collection
+```
+vector<CField *> fields;
+fields.push_back(CField::alloc<unsigned int>("id"));
+fields.push_back(CField::alloc<sizeof(char*)>("name"));
+fields.push_back(CField::alloc<char>("sex"));
+fields.push_back(CField::alloc<sizeof(unsigned char)>("age"));
+
+CFields fCustomer(fields);
+```
