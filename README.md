@@ -83,3 +83,6 @@ assert((eCustomer.as<unsigned char>(3) == 30));
 
 
 You can see source code above [here](https://github.com/ipgdbali/entity/blob/master/test/start.cpp)
+
+## Feature
+### Create CFields from collection
