@@ -86,3 +86,12 @@ You can see source code above [here](https://github.com/ipgdbali/entity/blob/mas
 
 ## Feature
 ### Create CFields from collection
+```
+vector<CField *> fields;
+fields.push_back(new CField<sizeof(int)>("id"));
+fields.push_back(new CField<const char *>("name"));
+fields.push_back(new CField<sizeof(char)>("sex"));
+fields.push_back(new CField<sizeof(unsigned char)>("age"));
+
+CFields fCustomer(fields);
+```
