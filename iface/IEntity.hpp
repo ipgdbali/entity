@@ -37,8 +37,6 @@ public:
     virtual bool copyAttrFrom(const TFieldIndex &fieldIndex,const void *pSrc) = 0;
     virtual bool copyAttrFrom(const TFieldName &fieldName,const void *pSrc) = 0;
 
-    virtual bool shareTo(IEntityShared<TFields,ewFields> &eShared) const = 0;
-    
 };
 
 };

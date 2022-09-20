@@ -6,11 +6,11 @@ DIR_INCLUDE = src iface
 FILES =	CField \
 	CFields \
 	CEntity \
-	model \
-	CEntities \
 	CCTStaticPrimitive \
 	CCTStaticCString
-#	CEntitiesCursor \
+#	model \
+	CEntities \
+	CEntitiesCursor \
 
 FILES_TARGET = $(foreach FILE,$(FILES),$(addprefix $(DIR_DEST)/debug/,$(FILE)) $(addprefix $(DIR_DEST)/release/,$(FILE)))
 

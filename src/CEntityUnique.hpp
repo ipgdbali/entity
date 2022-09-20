@@ -10,8 +10,7 @@ namespace ipgdlib::entity
 
 template <typename TFields>
 class CEntityUnique :
-    public CEntityAbs<TFields>,
-    public virtual IEntityUnique<TFields,ewConstPointer>
+    public CEntityAbs<TFields>
 {
 using TFieldsWrapper = TFields const *;
 public:
@@ -22,8 +21,8 @@ public:
             delete []this->getEntityPtr();
     }
 
-    CEntityUnique(TFields const &entityInfo) :
-        CEntityAbs<TFields>(entityInfo,new char[entityInfo.size()])
+    CEntityUnique(TFieldsWrapper pEntityInfo) :
+        CEntityAbs<TFields>(pEntityInfo,new char[pEntityInfo->size()])
     {
     }
 

@@ -26,26 +26,15 @@ CFields fCustomer({
 
 - #### Create an Unique Entity
 ```
-CEntityUnique eCustomer(fCustomer);
-```
-
-- #### Create an Array of Entity 
-```
-CEntities eCustomers(fCustomer,10); // create 10 entities
+CEntityUnique eCustomer(&fCustomer);
 ```
 
 - #### Create Shared Entity
      - ##### From Unique Entity
      ```
-     CEntityShared eSharedCustomer(fCustomer);
+     CEntityShared eSharedCustomer(&fCustomer);
      eCustomers.shareTo(eSharedCustomer);
      ```
-     - ##### From Array of Entity
-     ```
-     CEntityShared eSharedCustomer(fCustomer);
-     eCustomers.shareTo(index,eSharedCustomer);
-     ```
-
 
 ### 3. Access attribute
 - #### Using copy memory
@@ -61,7 +50,7 @@ assert(id == 20);
 id = 30;
 eCustomer.copyAttrFrom("id",&id);
 id = 0;
-eCustomer.copyAttrTo(0,"&id);
+eCustomer.copyAttrTo(0,"&id");
 assert(id == 30);
 
 ```

@@ -67,13 +67,13 @@ public:
 
     CCTStaticCString<T,TSize,TIndex,len> &operator = (const T* ref)
     {
-	this->copyFrom(ref);
-	return *this;
+        this->copyFrom(ref);
+        return *this;
     }
 
     void setPtr(void *pSrc) override
     {
-	this->m_pData = static_cast<char*>(pSrc);
+    	this->m_pData = static_cast<char*>(pSrc);
     }
 
     const T &get(TIndex index) const

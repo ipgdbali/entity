@@ -1,14 +1,14 @@
 #include <iostream>
 #include <cassert>
 
-#include "CustomType/CCTStaticPrimitive.hpp"
+#include "CustomType/CCTPrimitive.hpp"
 
 using namespace ipgdlib::entity;
 
 int main(int argc,char * argv[])
 {
     float f;
-    CCTStaticPrimitive<float,size_t> fPointer;
+    CCTPrimitive<float,size_t> fPointer;
     fPointer.setPtr(&f);
 
     fPointer = 100.0f;

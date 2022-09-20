@@ -26,10 +26,6 @@ public:
 
 public:
 
-    CEntityAbs(const TFields &Fields,char *pData) : 
-        m_Fields(&Fields), m_pEntityData(pData)
-    {
-    }
 
     TFieldsWrapper getFields() const noexcept override
     {
@@ -66,12 +62,6 @@ public:
         return copyAttrFrom(
             this->m_Fields->indexOf(fieldName),
             pSrc);
-    }
-
-    bool shareTo(IEntityShared<TFields, ewConstPointer> &eShared) const override
-    {
-        eShared.set(this->m_pEntityData);
-        return true;
     }
 
     template <typename T>
@@ -118,6 +108,20 @@ public:
     }
 
 protected:
+
+    // Unique Entity & 
+    CEntityAbs(TFieldsWrapper pFields,char *pData) : 
+        m_Fields(pFields), m_pEntityData(pData)
+    {
+    }
+
+
+    // Shared Entity
+    CEntityAbs(CEntityAbs &ref) :
+        CEntityAbs(ref.m_Fields,ref.m_pEntityData)
+    {
+    }
+
     char *getEntityPtr() const
     {
         return this->m_pEntityData;

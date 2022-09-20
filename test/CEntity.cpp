@@ -2,17 +2,17 @@
 #include "CField.hpp"
 #include "CEntityUnique.hpp"
 #include "CEntityShared.hpp"
-#include "CustomType/CCTStaticPrimitive.hpp"
+#include "CustomType/CCTPrimitive.hpp"
 #include <string>
 #include <cassert>
 #include <iostream>
 #include <iomanip>
 #include <vector>
 
-using CField = ipgdlib::entity::CField<std::string,unsigned char>;
-using CFields = ipgdlib::entity::CFields<size_t,size_t,CField>;
-using CEntityUnique = ipgdlib::entity::CEntityUnique<CFields>;
-using CEntityShared = ipgdlib::entity::CEntityShared<CFields>;
+using CField            = ipgdlib::entity::CField<std::string,unsigned char>;
+using CFields           = ipgdlib::entity::CFields<size_t,size_t,CField>;
+using CEntityUnique     = ipgdlib::entity::CEntityUnique<CFields>;
+using CEntityShared     = ipgdlib::entity::CEntityShared<CFields>;
 
 int main(int argc,char * argv[])
 {
@@ -29,7 +29,7 @@ int main(int argc,char * argv[])
 
     assert(fieldProduct.count() == vFields.size());
 
-    CEntityUnique eProduct(fieldProduct);
+    CEntityUnique eProduct(&fieldProduct);
     eProduct.as<unsigned int>("id")                 = 10;
     eProduct.as<const char *>("name")               = "Resistor 10K Ohm";
     eProduct.as<unsigned int>("price_sell_unit")    = 2500;
@@ -42,8 +42,8 @@ int main(int argc,char * argv[])
     assert(eProduct.as<unsigned int>(3)     == 200);
     assert(eProduct.as<unsigned char>(4)    == 10);
 
-    CEntityShared eSharedProduct(fieldProduct);
-    eProduct.shareTo(eSharedProduct);
+    CEntityShared eSharedProduct(eProduct);
+    
     assert(eSharedProduct.as<unsigned int>(0)   == 10);
     assert(strcmp(eSharedProduct.as<const char *>(1),"Resistor 10K Ohm") == 0);
     assert(eSharedProduct.as<unsigned int>(2)   == 2500);

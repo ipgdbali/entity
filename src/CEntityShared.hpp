@@ -9,31 +9,15 @@ namespace ipgdlib::entity
 
 template <typename TFields>
 class CEntityShared :
-    public CEntityAbs<TFields>,
-    public virtual IEntityShared<TFields,ewConstPointer>
+    public CEntityAbs<TFields>
 {
 using TFieldsWrapper = TFields const *;
 
 public:
 
-    CEntityShared(const TFields& fields) :
-        CEntityAbs<TFields>(fields,nullptr)
+    CEntityShared(CEntityAbs<TFields> &ref) :
+        CEntityAbs<TFields>(ref)
     {
-    }
-
-    void set(void *pSrc) override
-    {
-        this->setEntityPtr(static_cast<char*>(pSrc));
-    }
-
-    bool isNull() const noexcept override
-    {
-        return this->getEntityPtr() == nullptr;
-    }
-
-    void clear() noexcept override
-    {
-        this->setEntityPtr(nullptr);
     }
 
 };

@@ -13,7 +13,7 @@ class CAbsCTStatic :
 public:
     typename ICustomType<TSize>::eCustomTypeKind getKind() const noexcept override
     {
-	return ICustomType<TSize>::ectkStatic;
+	    return ICustomType<TSize>::ectkStatic;
     }
 
     virtual void copyFrom(const void *pSrc) = 0;
