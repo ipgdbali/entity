@@ -17,6 +17,7 @@ class CEntityAbs :
 {
 
 using TFieldName        = typename TFields::iface::type_field::type_name;
+using TFieldSize        = typename TFields::iface::type_field::type_size;
 using TFieldIndex       = typename TFields::type_count;
 using TFieldsWrapper    = typename ipgdlib::wrap<TFields, ewConstPointer>::value;
 
@@ -91,8 +92,8 @@ public:
         return as<T>(this->m_Fields->indexOf(fieldName));
     }
 
-    template <typename T>
-    bool toCustomType(TFieldIndex const &fieldIndex, ICustomType<T> &ref)
+    
+    bool toCustomType(TFieldIndex const &fieldIndex, ICustomType<TFieldSize> &ref) override
     {
         if (ref.getTypeSize() == this->m_Fields->getField(fieldIndex)->size())
         {
@@ -102,8 +103,8 @@ public:
         else
             return false;
     }
-    template <typename T>
-    bool toCustomType(TFieldName const &fieldName, ICustomType<T> &ref)
+    
+    bool toCustomType(TFieldName const &fieldName, ICustomType<TFieldSize> &ref) override
     {
         return toCustomType(
             this->m_Fields->indexOf(fieldName),

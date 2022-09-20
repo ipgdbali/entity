@@ -14,7 +14,7 @@ using CFields           = ipgdlib::entity::CFields<size_t,size_t,CField>;
 using CEntityUnique     = ipgdlib::entity::CEntityUnique<CFields>;
 using CEntityShared     = ipgdlib::entity::CEntityShared<CFields>;
 template <typename T>
-using CCTPrimitive      = ipgdlib::entity::CCTPrimitive<T,size_t>;
+using CCTPrimitive      = ipgdlib::entity::CCTPrimitive<T,CField::type_size>;
 
 int main(int argc,char * argv[])
 {
