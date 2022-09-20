@@ -1,4 +1,4 @@
-make![Language](https://img.shields.io/badge/language-c++-red.svg)
+![Language](https://img.shields.io/badge/language-c++-red.svg)
 ![Platform](https://img.shields.io/badge/compiler-g++-lightgrey.svg)
 ![Platform](https://img.shields.io/badge/build-make-yellow.svg)
 
@@ -30,10 +30,9 @@ CEntityUnique eCustomer(&fCustomer);
 ```
 
 - #### Create Shared Entity
-     - ##### From Unique Entity
-     ```
-     CEntityShared eSharedCustomer(fCustomer);
-     ```
+```
+CEntityShared eSharedCustomer(fCustomer);
+```
 
 ### 3. Access attribute
 - #### Using copy memory
@@ -77,3 +76,6 @@ ctAge = 30;
 assert((ctAge == 30));
 assert((eCustomer.as<unsigned char>(3) == 30));
 ```
+
+
+You can see source code above [here](https://github.com/ipgdbali/entity/blob/master/test/start.cpp)
