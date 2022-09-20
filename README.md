@@ -1,4 +1,4 @@
-![Language](https://img.shields.io/badge/language-c++-red.svg)
+make![Language](https://img.shields.io/badge/language-c++-red.svg)
 ![Platform](https://img.shields.io/badge/compiler-g++-lightgrey.svg)
 ![Platform](https://img.shields.io/badge/build-make-yellow.svg)
 
@@ -32,8 +32,7 @@ CEntityUnique eCustomer(&fCustomer);
 - #### Create Shared Entity
      - ##### From Unique Entity
      ```
-     CEntityShared eSharedCustomer(&fCustomer);
-     eCustomers.shareTo(eSharedCustomer);
+     CEntityShared eSharedCustomer(fCustomer);
      ```
 
 ### 3. Access attribute
@@ -43,16 +42,17 @@ unsigned int id;
 
 id = 20;
 eCustomer.copyAttrFrom(0,&id);
+
 id = 0;
 eCustomer.copyAttrTo("id",&id);
 assert(id == 20);
 
 id = 30;
 eCustomer.copyAttrFrom("id",&id);
-id = 0;
-eCustomer.copyAttrTo(0,"&id");
-assert(id == 30);
 
+id = 0;
+eCustomer.copyAttrTo(0,&id);
+assert(id == 30);
 ```
 - #### Using as method 
 ```
@@ -68,12 +68,12 @@ assert(eCustomer.as<char>(2) == 'M');
 CCTPrimitive<unsigned char> ctAge;
 
 eCustomer.toCustomType(3,ctAge);
-ctAge = 20
-assert(ctAge == 20);
-assert(eCustomer.as<unsigned char>("age") == 20);
+ctAge = 20;
+assert((ctAge == 20));
+assert((eCustomer.as<unsigned char>("age") == 20));
 
 eCustomer.toCustomType("age",ctAge);
-ctAge = 30
-assert(ctAge == 30);
-assert(eCustomer.as<unsigned char>(2) == 30);
+ctAge = 30;
+assert((ctAge == 30));
+assert((eCustomer.as<unsigned char>(3) == 30));
 ```

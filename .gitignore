@@ -4,3 +4,12 @@ log
 Request
 token
 iface/IFieldNullable.hpp
+test/CCTPrimitive.cpp
+test/CCTStaticCString.cpp
+test/CEntities.cpp
+test/CEntitiesCursor.cpp
+test/CEntity.cpp
+test/CField.cpp
+test/CFields.cpp
+test/model.cpp
+test/test_01.cpp

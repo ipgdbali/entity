@@ -3,14 +3,7 @@
 DIR_DEST = bin
 DIR_INCLUDE = src iface 
 
-FILES =	CField \
-	CFields \
-	CEntity \
-	CCTStaticPrimitive \
-	CCTStaticCString
-#	model \
-	CEntities \
-	CEntitiesCursor \
+FILES =	start
 
 FILES_TARGET = $(foreach FILE,$(FILES),$(addprefix $(DIR_DEST)/debug/,$(FILE)) $(addprefix $(DIR_DEST)/release/,$(FILE)))
 

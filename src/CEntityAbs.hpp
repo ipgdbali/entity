@@ -115,7 +115,6 @@ protected:
     {
     }
 
-
     // Shared Entity
     CEntityAbs(CEntityAbs &ref) :
         CEntityAbs(ref.m_Fields,ref.m_pEntityData)
