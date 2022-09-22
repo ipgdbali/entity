@@ -30,7 +30,7 @@ CFields fCustomer({
 
 - #### Create an Unique Entity
 ```
-CEntityUnique eCustomer(&fCustomer);
+CEntityUnique eCustomer(fCustomer);
 ```
 
 - #### Create Shared Entity
