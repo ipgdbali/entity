@@ -35,7 +35,7 @@ CEntityUnique eCustomer(fCustomer);
 
 - #### Create Shared Entity
 ```
-CEntityShared eSharedCustomer(fCustomer);
+CEntityShared eSharedCustomer(eCustomer);
 ```
 
 ### 3. Access attribute
