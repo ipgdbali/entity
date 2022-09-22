@@ -26,14 +26,14 @@ CFields fCustomer({
     CFieldFactory::alloc<sizeof(unsigned char)>("age")
 });
 ```
-### 2. Create Entity from Fields
+### 2. Create Entity
 
 - #### Create an Unique Entity
 ```
 CEntityUnique eCustomer(fCustomer);
 ```
 
-- #### Create Shared Entity
+- #### Create Shared Entity from another entity
 ```
 CEntityShared eSharedCustomer(eCustomer);
 ```
