@@ -27,7 +27,7 @@ int main(int argc,char * argv[])
     assert(fCustomer.count() == 4);
 
     // Create Unique Entity
-    CEntityUnique eCustomer(&fCustomer);
+    CEntityUnique eCustomer(fCustomer);
 
     // Create Shared Entity
     CEntityShared eSharedCustomer(eCustomer);

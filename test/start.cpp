@@ -6,7 +6,6 @@
 #include <cassert>
 #include <vector>
 
-
 using CFieldFactory     = ipgdlib::entity::CFieldFactory<std::string,unsigned char>;
 using CFields           = ipgdlib::entity::CFields<size_t,size_t,CFieldFactory::CFieldAbs>;
 using CEntityUnique     = ipgdlib::entity::CEntityUnique<CFields>;
@@ -18,7 +17,6 @@ using CCTPrimitive      = ipgdlib::entity::CCTPrimitive<T,CFieldFactory::type_si
 int main(int argc,char * argv[])
 {
 
-
     CFields fCustomer({
         CFieldFactory::alloc<int>("id"),
         CFieldFactory::alloc<sizeof(char*)>("name"),
@@ -28,7 +26,7 @@ int main(int argc,char * argv[])
 
     assert(fCustomer.count() == 4);
     // Create Unique Entity
-    CEntityUnique eCustomer(&fCustomer);
+    CEntityUnique eCustomer(fCustomer);
 
     // Create Shared Entity
     CEntityShared eSharedCustomer(eCustomer);

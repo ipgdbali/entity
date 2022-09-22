@@ -8,13 +8,13 @@ namespace ipgdlib::entity
 {
 
 template <
-    typename TEntityInfo,
-    eWrapper ewEntityInfo
+    typename TFields,
+    eWrapper ewFields
 >
 class IEntityUnique :
-	public virtual IEntity<TEntityInfo,ewEntityInfo>
+	public virtual IEntity<TFields,ewFields>
 {
-public:
+    
 };
 
 };

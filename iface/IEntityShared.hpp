@@ -6,9 +6,11 @@
 namespace ipgdlib::entity
 {
 
-template <typename TEntityInfo,eWrapper ewEntityInfo>
+template <
+    typename TFields,
+    eWrapper ewFields>
 class IEntityShared :
-	public virtual IEntity<TEntityInfo,ewEntityInfo>
+	public virtual IEntity<TFields,ewFields>
 {
 public:
 

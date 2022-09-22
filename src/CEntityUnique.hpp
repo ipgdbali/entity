@@ -12,8 +12,10 @@ template <typename TFields>
 class CEntityUnique :
     public CEntityAbs<TFields>
 {
-using TFieldsWrapper = TFields const *;
+
 public:
+    using parent    = CEntityAbs<TFields>;
+    using TWFields  = typename parent::TWFields;
 
     virtual ~CEntityUnique()
     {
@@ -28,8 +30,8 @@ public:
     CEntityUnique &operator = (CEntityUnique &&ref) = delete;
 
 
-    CEntityUnique(TFieldsWrapper pEntityInfo) 
-        : CEntityAbs<TFields>(pEntityInfo,new char[pEntityInfo->size()])
+    CEntityUnique(TWFields fields) 
+        : CEntityAbs<TFields>(fields,new char[fields.size()])
     {
     }
 

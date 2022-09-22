@@ -16,7 +16,7 @@ template <
     eWrapper ewFields>
 class IEntities
 {
-using TFieldsWrapper = typename ipgdlib::wrap<TFields,ewFields>::value;
+using TWFields = typename ipgdlib::wrap<TFields,ewFields>::value;
 
 public:
     using type_count = TCount;
@@ -25,7 +25,7 @@ public:
 
     virtual ~IEntities() {};
 
-    virtual TFieldsWrapper getFields() const = 0;
+    virtual TWFields getFields() const = 0;
     virtual TCount count() const noexcept = 0;
 
     virtual CEntityShared<TFields> getEntity(TCount rowPos) = 0;

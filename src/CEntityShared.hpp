@@ -10,12 +10,13 @@ namespace ipgdlib::entity
 template <typename TFields>
 class CEntityShared :
     public CEntityAbs<TFields>,
-    virtual public IEntityShared<TFields,ewConstPointer>
+    virtual public IEntityShared<TFields,ewConstReference>
 {
-using TFieldsWrapper = TFields const *;
 
 public:
-
+    using parent = CEntityAbs<TFields>;
+    using TWFields = typename parent::TWFields;
+    
     CEntityShared() = delete;
     CEntityShared(const CEntityShared &ref) = delete;
     CEntityShared &operator = (const CEntityShared &ref) = delete;
@@ -27,12 +28,12 @@ public:
     {
     }
 
-    CEntityShared(TFieldsWrapper fields,char *pData) :
+    CEntityShared(TWFields fields,char *pData) :
         CEntityAbs<TFields>(fields,pData)
     {
     }
 
-    CEntityShared(TFieldsWrapper fields) :
+    CEntityShared(TWFields fields) :
         CEntityAbs<TFields>(fields)
     {
     }

@@ -10,7 +10,7 @@ namespace ipgdlib::entity
 template <typename TCount, typename TFields>
 class CEntities : public IEntities<TCount, TFields, ewConstPointer>
 {
-    using TFieldsWrapper = TFields const *;
+    using TWFields = TFields const *;
 
 public:
     using iface = IEntities<TCount, TFields, ewConstPointer>;
@@ -24,7 +24,7 @@ public:
         }
     }
 
-    CEntities(TFieldsWrapper entityInfo, TCount entityCount) 
+    CEntities(TWFields entityInfo, TCount entityCount) 
         : m_pFields(entityInfo), m_EntityCount(entityCount)
     {
         this->m_arrPEntityData = new char *[m_EntityCount];
@@ -32,7 +32,7 @@ public:
             m_arrPEntityData[li] = new char[m_pFields->size()];
     }
 
-    TFieldsWrapper getFields() const override
+    TWFields getFields() const override
     {
         return this->m_pFields;
     }
@@ -81,7 +81,7 @@ public:
 
 protected:
 private:
-    TFieldsWrapper m_pFields;
+    TWFields m_pFields;
     TCount m_EntityCount;
     char **m_arrPEntityData;
 };
