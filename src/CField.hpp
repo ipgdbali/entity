@@ -11,7 +11,6 @@ namespace ipgdlib::entity
 template <typename TName,typename TSize,bool isPointer>
 class CField
 {
-
 };
 
 
@@ -22,7 +21,7 @@ class CFieldFactory
         using type_size = TSize;
         using type_name = TName;
 
-        class CBaseField :
+        class CFieldAbs :
             public virtual IField<TName,TSize,ewConstReference,ewNoChange>
         {
         public:
@@ -33,7 +32,7 @@ class CFieldFactory
                 return this->m_Name;
             }
 
-            CBaseField(const TName &name) :
+            CFieldAbs(const TName &name) :
                 m_Name(name)
             {
             }
@@ -62,25 +61,25 @@ class CFieldFactory
         };
 
         template <typename T,typename std::enable_if<std::is_pointer<T>::value,bool>::type = true>
-        static CBaseField *alloc(const TName &name)
+        static CFieldAbs *alloc(const TName &name)
         {
             return new CField<true>(name);
         }
 
         template <typename T,typename std::enable_if<!std::is_pointer<T>::value,bool>::type = true>
-        static CBaseField *alloc(const TName &name)
+        static CFieldAbs *alloc(const TName &name)
         {
             return new CField<false>(name,sizeof(T));
         }
 
         template <TSize size,typename std::enable_if<size == sizeof(void *),bool>::type = true>
-        static CBaseField *alloc(const TName &name)
+        static CFieldAbs *alloc(const TName &name)
         {
             return new CField<true>(name);
         }
 
         template <TSize size,typename std::enable_if<size != sizeof(void *),bool>::type = true>
-        static CBaseField *alloc(const TName &name)
+        static CFieldAbs *alloc(const TName &name)
         {
             return new CField<false>(name,size);
         }
@@ -89,12 +88,12 @@ class CFieldFactory
 
 template <typename TName,typename TSize>
 class CField<TName,TSize,false> :
-    public CFieldFactory<TName,TSize>::CBaseField
+    public CFieldFactory<TName,TSize>::CFieldAbs
 {
 public:
 
     using iface         = IField<TName,TSize,ewConstReference,ewNoChange>;
-    using parent        = typename CFieldFactory<TName,TSize>::CBaseField;
+    using parent        = typename CFieldFactory<TName,TSize>::CFieldAbs;
 
     CField()                                                    = delete;
     CField(const CField &ref)                                   = delete;
@@ -103,7 +102,7 @@ public:
     CField<TName,TSize,false> &operator = (CField &&ref)        = delete;
 
     CField(const TName &name,const TSize &size) :
-        CFieldFactory<TName,TSize>::CBaseField(name),m_Size(size)
+        CFieldFactory<TName,TSize>::CFieldAbs(name),m_Size(size)
     {
     }
 
@@ -123,11 +122,11 @@ private:
 
 template <typename TName,typename TSize>
 class CField<TName,TSize,true> : 
-    public CFieldFactory<TName,TSize>::CBaseField
+    public CFieldFactory<TName,TSize>::CFieldAbs
 {
 public:
     using iface         = IField<TName,TSize,ewConstReference,ewConstReference>;
-    using parent        = typename CFieldFactory<TName,TSize>::CBaseField;
+    using parent        = typename CFieldFactory<TName,TSize>::CFieldAbs;
 
     CField()                                        = delete;
     CField(const CField &ref)                       = delete;
@@ -136,7 +135,7 @@ public:
     CField<TName,TSize,true> &operator = (CField &&ref)         = delete;
 
     CField(const TName &name) :
-        CFieldFactory<TName,TSize>::CBaseField(name)
+        CFieldFactory<TName,TSize>::CFieldAbs(name)
     {
     }
 
