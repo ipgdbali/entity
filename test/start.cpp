@@ -7,18 +7,17 @@
 #include <vector>
 
 
-template <bool pointer>
-using CField            = ipgdlib::entity::CField<std::string,unsigned char,pointer>;
-using CBaseField        = ipgdlib::entity::CBaseField<std::string,unsigned char>;
 using CFieldFactory     = ipgdlib::entity::CFieldFactory<std::string,unsigned char>;
-using CFields           = ipgdlib::entity::CFields<size_t,size_t,CBaseField>;
+using CFields           = ipgdlib::entity::CFields<size_t,size_t,CFieldFactory::CBaseField>;
 using CEntityUnique     = ipgdlib::entity::CEntityUnique<CFields>;
 using CEntityShared     = ipgdlib::entity::CEntityShared<CFields>;
+
 template <typename T>
-using CCTPrimitive      = ipgdlib::entity::CCTPrimitive<T,CBaseField::iface::type_size>;
+using CCTPrimitive      = ipgdlib::entity::CCTPrimitive<T,CFieldFactory::type_size>;
 
 int main(int argc,char * argv[])
 {
+
 
     CFields fCustomer({
         CFieldFactory::alloc<int>("id"),
