@@ -1,15 +1,14 @@
 #include "CFields.hpp"
 #include "CField.hpp"
-#include "CEntityUnique.hpp"
-#include "CEntityShared.hpp"
+#include "CEntity.hpp"
 #include "CustomType/CCTPrimitive.hpp"
 #include <cassert>
 #include <vector>
 
 using CFieldFactory     = ipgdlib::entity::CFieldFactory<std::string,unsigned char>;
 using CFields           = ipgdlib::entity::CFields<size_t,size_t,CFieldFactory::CFieldAbs>;
-using CEntityUnique     = ipgdlib::entity::CEntityUnique<CFields>;
-using CEntityShared     = ipgdlib::entity::CEntityShared<CFields>;
+using CEntityUnique     = ipgdlib::entity::CEntity<CFields>::Unique;
+using CEntityShared     = ipgdlib::entity::CEntity<CFields>::Shared;
 
 template <typename T>
 using CCTPrimitive      = ipgdlib::entity::CCTPrimitive<T,CFieldFactory::type_size>;

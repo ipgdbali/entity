@@ -1,5 +1,5 @@
-#ifndef CENTITYABS_HPP
-#define CENTITYABS_HPP
+#ifndef CEntity_HPP
+#define CEntity_HPP
 
 #include "IEntity.hpp"
 #include "CField.hpp"
@@ -12,7 +12,7 @@ namespace ipgdlib::entity
 {
 
 template <typename TFields>
-class CEntityAbs : 
+class CEntity : 
     public virtual IEntity<TFields, ewConstReference>
 {
 
@@ -21,15 +21,16 @@ using TFieldSize        = typename TFields::iface::type_field::type_size;
 using TFieldIndex       = typename TFields::type_count;
 
 public:
-    using iface         = IEntity<TFields, ewConstPointer>;
-    using type_fields   = TFields;
-    using TWFields      = typename ipgdlib::wrap<TFields, ewConstReference>::value;
-
-    CEntityAbs() = delete;
-    CEntityAbs(const CEntityAbs &ref) = delete;
-    CEntityAbs &operator = (const CEntityAbs &ref) = delete;
-    CEntityAbs(CEntityAbs &&ref) = delete;
-    CEntityAbs &operator = (CEntityAbs &&ref) = delete;
+    using iface                                     = IEntity<TFields, ewConstPointer>;
+    using type_fields                               = TFields;
+    static constexpr eWrapper enum_wrapper_fields   = ewConstReference;
+    using TWFields                                  = typename ipgdlib::wrap<TFields, ewConstReference>::value;
+    
+    CEntity() = delete;
+    CEntity(const CEntity &ref) = delete;
+    CEntity &operator = (const CEntity &ref) = delete;
+    CEntity(CEntity &&ref) = delete;
+    CEntity &operator = (CEntity &&ref) = delete;
 
     TWFields getFields() const noexcept override
     {
@@ -111,15 +112,18 @@ public:
             ref);
     }
 
+    class Unique;
+    class Shared;
+    
 protected:
 
-    CEntityAbs(TWFields fields) :
+    CEntity(TWFields fields) :
         m_Fields(fields),m_pEntityData(nullptr)
     {
     }
 
     // Unique Entity & CShared Entity
-    CEntityAbs(TWFields fields,char *pData) : 
+    CEntity(TWFields fields,char *pData) : 
         m_Fields(fields), m_pEntityData(pData)
     {
         if(m_pEntityData == nullptr)
@@ -127,8 +131,8 @@ protected:
     }
 
     // Shared Entity
-    CEntityAbs(CEntityAbs &ref) :
-        CEntityAbs(ref.m_Fields,ref.m_pEntityData)
+    CEntity(CEntity &ref) :
+        CEntity(ref.m_Fields,ref.m_pEntityData)
     {
     }
 
@@ -143,8 +147,86 @@ protected:
     }
 
 private:
-    TWFields  m_Fields;
-    char*           m_pEntityData;
+    TWFields    m_Fields;
+    char*       m_pEntityData;
+};
+
+template <typename TFields>
+class CEntity<TFields>::Unique :
+    public CEntity<TFields>,
+    virtual public IEntity<TFields,CEntity<TFields>::enum_wrapper_fields>::IUnique
+{
+    public:
+        using parent    = CEntity<TFields>;
+        using TWFields  = typename parent::TWFields;
+
+        virtual ~Unique()
+        {
+            if(this->getEntityPtr() != nullptr)
+                delete []this->getEntityPtr();
+        }
+
+        Unique() = delete;
+        Unique(const Unique &ref) = delete;
+        Unique &operator = (const Unique &ref) = delete;
+        Unique(Unique &&ref) = delete;
+        Unique &operator = (Unique &&ref) = delete;
+
+
+        Unique(TWFields fields) 
+            : CEntity<TFields>(fields,new char[fields.size()])
+        {
+        }
+
+};
+
+template <typename TFields>
+class CEntity<TFields>::Shared :
+    public CEntity<TFields>,
+    virtual public IEntity<TFields,CEntity<TFields>::enum_wrapper_fields>::IShared
+{
+
+    public:
+
+        using parent = CEntity<TFields>;
+        using TWFields = typename parent::TWFields;
+        
+        Shared() = delete;
+        Shared(const Shared &ref) = delete;
+        Shared &operator = (const Shared &ref) = delete;
+        Shared(Shared &&ref) = delete;
+        Shared &operator = (Shared &&ref) = delete;
+
+        Shared(CEntity<TFields> &ref) :
+            CEntity<TFields>(ref)
+        {
+        }
+
+        Shared(TWFields fields,char *pData) :
+            CEntity<TFields>(fields,pData)
+        {
+        }
+
+        Shared(TWFields fields) :
+            CEntity<TFields>(fields)
+        {
+        }
+
+        void set(void *pSrc) override
+        {
+            this->setEntityPtr(static_cast<char*>(pSrc));
+        }
+
+        bool isNull() const noexcept override
+        {
+            return this->getEntityPtr() == nullptr;
+        }
+
+        void clear() noexcept override
+        {
+            this->setEntityPtr(nullptr);
+        }
+
 };
 
 };

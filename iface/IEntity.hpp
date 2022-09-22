@@ -12,12 +12,6 @@ namespace ipgdlib::entity
 template <
     typename TFields,
     eWrapper ewFields
-> 
-class IEntityShared;
-
-template <
-    typename TFields,
-    eWrapper ewFields
 >
 class IEntity
 {
@@ -44,7 +38,33 @@ class IEntity
         virtual bool toCustomType(TFieldIndex const &fieldIndex, ICustomType<TFieldSize> &ref) = 0;
         virtual bool toCustomType(TFieldName const &fieldName, ICustomType<TFieldSize> &ref) = 0;
 
+        class IUnique;
+        class IShared;
 };
+
+
+template <
+    typename TFields,
+    eWrapper ewFields
+>
+class IEntity<TFields,ewFields>::IUnique :
+    public virtual IEntity<TFields,ewFields>
+{
+
+};
+
+template <
+    typename TFields,
+    eWrapper ewFields
+>
+class IEntity<TFields,ewFields>::IShared : 
+    public virtual IEntity<TFields,ewFields>
+{
+    virtual void set(void *pSrc) = 0;
+    virtual bool isNull() const noexcept = 0;
+    virtual void clear() noexcept = 0;
+};
+
 
 };
 
