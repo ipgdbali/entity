@@ -4,6 +4,9 @@
 namespace ipgdlib::entity
 {
 
+template <typename TFields>
+class CEntityShared;
+
 template <
     typename TEntities,
     eWrapper ewEntities,
@@ -19,12 +22,11 @@ public:
     using type_entity_shared = TEntityShared;
 
     virtual ~IEntitiesCursor() {};
-    virtual void createFrom(TEntitiesWrapper entities) = 0;
 
-    virtual void setActivePosition(TCount rowPos) = 0;
-    virtual TCount getActivePosition() const noexcept = 0;
+    virtual void setRowPos(TCount rowPos) = 0;
+    virtual TCount getRowPos() const noexcept = 0;
 
-    virtual TEntityShared &getActiveEntity() = 0;
+    virtual CEntityShared<TFields> &getEntity() = 0;
 
 };
 

@@ -4,26 +4,30 @@
 #include "CEntityShared.hpp"
 #include "CustomType/CCTPrimitive.hpp"
 #include <cassert>
+#include <vector>
 
 
-using CField            = ipgdlib::entity::CField<std::string,unsigned char>;
-using CFields           = ipgdlib::entity::CFields<size_t,size_t,CField>;
+template <bool pointer>
+using CField            = ipgdlib::entity::CField<std::string,unsigned char,pointer>;
+using CBaseField        = ipgdlib::entity::CBaseField<std::string,unsigned char>;
+using CFieldFactory     = ipgdlib::entity::CFieldFactory<std::string,unsigned char>;
+using CFields           = ipgdlib::entity::CFields<size_t,size_t,CBaseField>;
 using CEntityUnique     = ipgdlib::entity::CEntityUnique<CFields>;
 using CEntityShared     = ipgdlib::entity::CEntityShared<CFields>;
 template <typename T>
-using CCTPrimitive      = ipgdlib::entity::CCTPrimitive<T,CField::type_size>;
+using CCTPrimitive      = ipgdlib::entity::CCTPrimitive<T,CBaseField::iface::type_size>;
 
 int main(int argc,char * argv[])
 {
 
     CFields fCustomer({
-        CField::alloc<unsigned int>("id"),              // index - 0
-        CField::alloc<sizeof(char*)>("name"),           // index - 1
-        CField::alloc<char>("sex"),                     // index - 2
-        CField::alloc<sizeof(unsigned char)>("age")     // index - 3
+        CFieldFactory::alloc<int>("id"),
+        CFieldFactory::alloc<sizeof(char*)>("name"),
+        CFieldFactory::alloc<char>("sex"),
+        CFieldFactory::alloc<sizeof(unsigned char)>("age")
     });
-    assert(fCustomer.count() == 4);
 
+    assert(fCustomer.count() == 4);
     // Create Unique Entity
     CEntityUnique eCustomer(&fCustomer);
 
@@ -69,6 +73,6 @@ int main(int argc,char * argv[])
     ctAge = 30;
     assert((ctAge == 30));
     assert((eCustomer.as<unsigned char>(3) == 30));
-    
+
     return 0;
 }

@@ -20,10 +20,10 @@ Attribute definition (CFields class) is made before an entity can be made.
 ### 1. Create a Fields from Field
 ```
 CFields fCustomer({
-    CField::alloc<unsigned int>("id"),              // index - 0
-    CField::alloc<sizeof(char*)>("name"),           // index - 1
-    CField::alloc<char>("sex")                      // index - 2
-    CField::alloc<sizeof(unsigned char)>("age"),    // index - 3
+    CFieldFactory::alloc<int>("id"),
+    CFieldFactory::alloc<sizeof(char*)>("name"),
+    CFieldFactory::alloc<char>("sex"),
+    CFieldFactory::alloc<sizeof(unsigned char)>("age")
 });
 ```
 ### 2. Create Entity from Fields
@@ -87,7 +87,7 @@ You can see source code above [here](https://github.com/ipgdbali/entity/blob/mas
 ## Feature
 ### Create CFields from collection
 ```
-std::vector<TWField> fields;
+std::vector<CFields::TWField> fields;
 fields.push_back(CField::alloc<unsigned int>("id"));
 fields.push_back(CField::alloc<sizeof(char*)>("name"));
 fields.push_back(CField::alloc<char>("sex"));

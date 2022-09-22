@@ -6,6 +6,10 @@
 namespace ipgdlib::entity
 {
 
+
+template <typename TFields>
+class CEntityShared;
+
 template <
     typename TCount,
     typename TFields,
@@ -22,12 +26,9 @@ public:
     virtual ~IEntities() {};
 
     virtual TFieldsWrapper getFields() const = 0;
-
     virtual TCount count() const noexcept = 0;
 
-    virtual void *getPData(TCount rowPos) = 0;
-    
-    virtual void shareTo(TCount rowPos,IEntityShared<TFields,ewFields> &eShared) const = 0;
+    virtual CEntityShared<TFields> getEntity(TCount rowPos) = 0;
 
 };
 

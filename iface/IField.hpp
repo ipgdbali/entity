@@ -32,6 +32,7 @@ public:
 
     virtual TWName name() const noexcept = 0;
     virtual TWSize size() const noexcept = 0;
+    virtual bool isPointer() const noexcept = 0;
 };
 
 };

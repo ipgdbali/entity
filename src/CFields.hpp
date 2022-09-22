@@ -20,12 +20,12 @@ class CFields :
     public IFields<TCount,TSizeTotal,TField,ewConstPointer>
 {
 
-using TWField		= typename ipgdlib::wrap<TField,ewConstPointer>::value;
 using TFieldName	= typename TField::iface::type_name;
 using TFieldSize	= typename TField::iface::type_size;
 
 public:
-    using iface = IFields<TCount,TSizeTotal,TField,ewConstPointer>;
+    using iface 		= IFields<TCount,TSizeTotal,TField,ewConstPointer>;
+	using TWField		= typename ipgdlib::wrap<TField,ewConstPointer>::value;
 
     CFields() = delete;
     CFields(const CFields &ref) = delete;
@@ -45,39 +45,13 @@ public:
 
     CFields(std::initializer_list<TWField> ltpFieldInfo)
     {
-		this->m_FieldCount 				= ltpFieldInfo.size();
-		this->m_arrFieldInfos			= new TWField[this->m_FieldCount];
-		this->m_RunningSum				= new TSizeTotal[this->m_FieldCount];
-		TSizeTotal sum					= 0;
-		TCount li 						= 0;
-		for(TWField field : ltpFieldInfo)
-		{
-			this->m_arrFieldInfos[li] 	= field;
-			this->m_RunningSum[li] 		= field->size() + sum;
-			sum 						= this->m_RunningSum[li];
-			m_Mapper[field->name()] 	= li;
-
-			li++;
-		}
+		this->create(ltpFieldInfo);
     }
 	
 	template <typename T>
 	CFields(T &col)
 	{
-		this->m_FieldCount 				= col.size();
-		this->m_arrFieldInfos			= new TWField[this->m_FieldCount];
-		this->m_RunningSum				= new TSizeTotal[this->m_FieldCount];
-		TSizeTotal sum					= 0;
-		TCount li 						= 0;
-		for(TWField field : col)
-		{
-			this->m_arrFieldInfos[li] 	= field;
-			this->m_RunningSum[li] 		= field->size() + sum;
-			sum 						= this->m_RunningSum[li];
-			m_Mapper[field->name()] 	= li;
-
-			li++;
-		}
+		this->create(col);
 	}
 
     TCount count() const noexcept override
@@ -123,6 +97,25 @@ private:
     TWField*					m_arrFieldInfos;
     TSizeTotal*					m_RunningSum;
     std::map<TFieldName,TCount> m_Mapper;
+
+	template <typename T>
+	void create(T &col)
+	{
+		this->m_FieldCount 				= col.size();
+		this->m_arrFieldInfos			= new TWField[this->m_FieldCount];
+		this->m_RunningSum				= new TSizeTotal[this->m_FieldCount];
+		TSizeTotal sum					= 0;
+		TCount li 						= 0;
+		for(TWField field : col)
+		{
+			this->m_arrFieldInfos[li] 	= field;
+			this->m_RunningSum[li] 		= field->size() + sum;
+			sum 						= this->m_RunningSum[li];
+			m_Mapper[field->name()] 	= li;
+
+			li++;
+		}
+	}
 };
 
 };

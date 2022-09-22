@@ -28,8 +28,8 @@ public:
     CEntityUnique &operator = (CEntityUnique &&ref) = delete;
 
 
-    CEntityUnique(TFieldsWrapper pEntityInfo) :
-        CEntityAbs<TFields>(pEntityInfo,new char[pEntityInfo->size()])
+    CEntityUnique(TFieldsWrapper pEntityInfo) 
+        : CEntityAbs<TFields>(pEntityInfo,new char[pEntityInfo->size()])
     {
     }
 

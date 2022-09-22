@@ -113,10 +113,17 @@ public:
 
 protected:
 
-    // Unique Entity & 
+    CEntityAbs(TFieldsWrapper pFields) :
+        m_Fields(pFields),m_pEntityData(nullptr)
+    {
+    }
+
+    // Unique Entity & CShared Entity
     CEntityAbs(TFieldsWrapper pFields,char *pData) : 
         m_Fields(pFields), m_pEntityData(pData)
     {
+        if(m_pEntityData == nullptr)
+            throw "pData cannot be null";
     }
 
     // Shared Entity
@@ -130,10 +137,9 @@ protected:
         return this->m_pEntityData;
     }
 
-    bool setEntityPtr(char *pEntity)
+    void setEntityPtr(char *pData)
     {
-        this->m_pEntityData = pEntity;
-        return true;
+        this->m_pEntityData = pData;
     }
 
 private:

@@ -7,24 +7,24 @@
 #include <vector>
 
 
-using CField            = ipgdlib::entity::CField<std::string,unsigned char>;
-using CFields           = ipgdlib::entity::CFields<size_t,size_t,CField>;
+template <bool pointer>
+using CField            = ipgdlib::entity::CField<std::string,unsigned char,pointer>;
+using CBaseField        = ipgdlib::entity::CBaseField<std::string,unsigned char>;
+using CFieldFactory     = ipgdlib::entity::CFieldFactory<std::string,unsigned char>;
+using CFields           = ipgdlib::entity::CFields<size_t,size_t,CBaseField>;
 using CEntityUnique     = ipgdlib::entity::CEntityUnique<CFields>;
 using CEntityShared     = ipgdlib::entity::CEntityShared<CFields>;
-
-using TWField = typename ipgdlib::wrap<CField,CFields::iface::enum_field_wrapper>::value;
-
 template <typename T>
-using CCTPrimitive      = ipgdlib::entity::CCTPrimitive<T,CField::type_size>;
+using CCTPrimitive      = ipgdlib::entity::CCTPrimitive<T,CBaseField::iface::type_size>;
 
 int main(int argc,char * argv[])
 {
 
-    std::vector<TWField> fields;
-    fields.push_back(CField::alloc<unsigned int>("id"));
-    fields.push_back(CField::alloc<sizeof(char*)>("name"));
-    fields.push_back(CField::alloc<char>("sex"));
-    fields.push_back(CField::alloc<sizeof(unsigned char)>("age"));
+    std::vector<CFields::TWField> fields;
+    fields.push_back(CFieldFactory::alloc<unsigned int>("id"));
+    fields.push_back(CFieldFactory::alloc<sizeof(char*)>("name"));
+    fields.push_back(CFieldFactory::alloc<char>("sex"));
+    fields.push_back(CFieldFactory::alloc<sizeof(unsigned char)>("age"));
 
     CFields fCustomer(fields);
     assert(fCustomer.count() == 4);

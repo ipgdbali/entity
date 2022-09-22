@@ -24,7 +24,8 @@ public:
         }
     }
 
-    CEntities(TFieldsWrapper entityInfo, TCount entityCount) : m_pFields(entityInfo), m_EntityCount(entityCount)
+    CEntities(TFieldsWrapper entityInfo, TCount entityCount) 
+        : m_pFields(entityInfo), m_EntityCount(entityCount)
     {
         this->m_arrPEntityData = new char *[m_EntityCount];
         for (TCount li = 0; li < m_EntityCount; li++)
@@ -41,14 +42,41 @@ public:
         return this->m_EntityCount;
     }
 
-    void *getPData(TCount rowPos) override
+    CEntityShared<TFields> getEntity(TCount rowPos) override
     {
-        return this->m_arrPEntityData[rowPos];
+        return {this->m_pFields,this->m_arrPEntityData[rowPos]}
     }
 
-    void shareTo(TCount rowPos,IEntityShared<TFields, ewConstPointer> &eShared) const override
+    class CEntitiesCursor :
+        public virtual IEntitiesCursor
     {
-        eShared.set(m_arrPEntityData[rowPos]);
+        public:
+            CEntitiesCursor(CEntities & entities)
+                : m_arrPEntityDaya(entities.m_arrPEntityData),m_RowPos(0),m_EntityShared(m_pFields,m_arrPEntityData[0])
+            {
+            }
+
+            void setRowPos(TCount rowPos) override
+            {
+                this->m_RowPos = rowPos;
+                this->m_EntityShared.set(m_pArrPEntityDaya[rowPos]);
+            }
+
+            TCount getRowPos() const noexcept override
+            {
+                return this->m_RowPos;
+            }
+
+            CEntityShared<TFields> &getEntity() override
+            {
+                return this->m_EntityShared;
+            }
+
+        protected:
+        private:
+            char **m_pArrPEntityDaya
+            TCount m_RowPos;
+            CEntityShared m_EntityShared;
     }
 
 protected:
