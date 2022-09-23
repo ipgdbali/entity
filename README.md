@@ -108,8 +108,3 @@ fields.push_back(CFieldFactory::alloc<sizeof(unsigned char)>("age"));
 CFields fCustomer(fields);
 assert(fCustomer.count() == 4);
 ```
-### Create array of entity
-```
-CEntities eCustomers(fCustomer,10);     // Create 10 entities
-CSharedEntity eCustomers.getEntity(0);
-```
