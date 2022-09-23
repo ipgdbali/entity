@@ -27,18 +27,31 @@ CFields fCustomer({
 });
 ```
 ### 2. Create Entity
-
-- #### Create an Unique Entity
+#### a. Single Entity
+##### Create Unique Entity
 ```
-CEntityUnique eCustomer(fCustomer);
+CEntity::Unique eCustomer(fCustomer);
 ```
-
-- #### Create Shared Entity from another entity
+##### Create Shared Entity from other Entity
 ```
-CEntityShared eSharedCustomer(eCustomer);
+CEntity::Shared eSharedCustomer(eCustomer);
+CEntity::Shared eSharedSharedCustomer(eSharedCustomer);
+```
+#### b. Array of Entity
+##### Create Entities
+```
+CEntities entities(fCustomer,num);
+CEntity::Shared eSharedCustomer = entities.getEntity(rowNum); // return new object
+```
+##### Create cursor to access entities individually
+```
+CEntities::Cursor cursor(entities);
+CEntity::Shared &eSharedCustomer = cursor.setRowPos(rowNum).getEntity(); // return reference to internal object
 ```
 
 ### 3. Access attribute
+Array of Entities (CEntities) must be transfered to CEntity::Shared to access entities individually.
+
 - #### Using copy memory
 ```
 unsigned int id;
@@ -64,7 +77,6 @@ assert(eCustomer.as<char>("sex") == 'F');
 
 eCustomer.as<char>("sex") = 'M';
 assert(eCustomer.as<char>(2) == 'M');
-
 ```
 - #### Using Custom Type
 ```
