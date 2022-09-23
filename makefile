@@ -18,7 +18,7 @@ bin/debug/% : test/%.cpp | bin/debug
 bin/release/% : test/%.cpp | bin/release
 	g++ $(CPPFLAGS) -o $@ $<
 	@$@
-
+	
 bin/debug :
 	@mkdir -p bin/debug
 

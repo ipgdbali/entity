@@ -5,7 +5,7 @@
 #include <cassert>
 #include <vector>
 
-using CFieldFactory     = ipgdlib::entity::CFieldFactory<std::string,unsigned char>;
+using CFieldFactory     = ipgdlib::entity::CFieldFactory<std::string,size_t>;
 using CFields           = ipgdlib::entity::CFields<size_t,size_t,CFieldFactory::CFieldAbs>;
 using CEntityUnique     = ipgdlib::entity::CEntity<CFields>::Unique;
 using CEntityShared     = ipgdlib::entity::CEntity<CFields>::Shared;

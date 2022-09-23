@@ -5,10 +5,9 @@
 #include <cassert>
 #include <vector>
 
-using CFieldFactory     = ipgdlib::entity::CFieldFactory<std::string,unsigned char>;
+using CFieldFactory     = ipgdlib::entity::CFieldFactory<std::string,size_t>;
 using CFields           = ipgdlib::entity::CFields<size_t,size_t,CFieldFactory::CFieldAbs>;
-using CEntityUnique     = ipgdlib::entity::CEntity<CFields>::Unique;
-using CEntityShared     = ipgdlib::entity::CEntity<CFields>::Shared;
+using CEntity           = ipgdlib::entity::CEntity<CFields>;
 
 template <typename T>
 using CCTPrimitive      = ipgdlib::entity::CCTPrimitive<T,CFieldFactory::type_size>;
@@ -25,10 +24,10 @@ int main(int argc,char * argv[])
 
     assert(fCustomer.count() == 4);
     // Create Unique Entity
-    CEntityUnique eCustomer(fCustomer);
+    CEntity::Unique eCustomer(fCustomer);
 
     // Create Shared Entity
-    CEntityShared eSharedCustomer(eCustomer);
+    CEntity::Shared eSharedCustomer(eCustomer);
 
     // Access
 

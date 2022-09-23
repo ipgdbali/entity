@@ -26,6 +26,8 @@ class CFieldFactory
         {
         public:
             using iface = IField<TName,TSize,ewConstReference,ewNoChange>;
+            using type_size = TSize;
+            using type_name = TName;
 
             const TName &name() const noexcept override
             {

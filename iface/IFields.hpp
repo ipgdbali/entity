@@ -32,12 +32,12 @@ static_assert(std::is_base_of<IField<TFieldName,TFieldSize,eWName,eWSize>,TField
 
 public:
 
-    virtual ~IFields() {};
-
     using type_count				    = TCount;
     using type_size_total			    = TSizeTotal;
     using type_field				    = TField;
     constexpr static eWrapper enum_field_wrapper    = eWField;
+
+    virtual ~IFields() {};
 
     virtual TCount count() const noexcept = 0;
 
