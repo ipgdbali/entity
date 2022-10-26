@@ -9,20 +9,20 @@ namespace ipgdlib::entity
 template <typename TFields>
 template <typename TRowIndex>
 class CEntityFacade<TFields>::Array<TRowIndex>::Cursor :
-    virtual public IeArray<TRowIndex,TFields,CEntityFacade<TFields>::Array<TRowIndex>::iface::enum_wrapper_fields>::ICursor
+    virtual public IEntities<TRowIndex,TFields,CEntityFacade<TFields>::Array<TRowIndex>::iface::enum_wrapper_fields>::ICursor
 {
 
     public:
 
         Cursor(Array& eArray)
-            : m_EntityArray(eArray),m_RowPos(0),m_EntityShared(eArray.m_Fields,eArray.m_arrPEntityData[0])
+            : m_EntityArray(eArray),m_RowPos(0),m_EntityShared(eArray.getFields(),eArray.m_arrPEntityData[0])
         {
         }
 
         Cursor &setRowPos(TRowIndex rowPos) override
         {
             this->m_RowPos = rowPos;
-            this->m_EntityShared.set(this->m_EntityArray.m_arrPEntityData[rowPos]);
+            this->m_EntityShared.setEntityPtr(this->m_EntityArray.m_arrPEntityData[rowPos]);
             return *this;
         }
 

@@ -11,7 +11,7 @@ class CEntityFacade<TFields>::Shared :
     public CEntityFacade<TFields>::Base,
     virtual public IEntity<TFields,CEntityFacade<TFields>::Base::enum_wrapper_fields>::IShared
 {
-    template <typename T>
+    template <typename TRowIndex>
     friend class CEntityFacade<TFields>::Array;
 
     public:

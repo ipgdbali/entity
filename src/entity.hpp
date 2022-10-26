@@ -6,3 +6,4 @@
 #include "CEntityUnique.hpp"
 #include "CEntityShared.hpp"
 #include "CEntityArray.hpp"
+#include "CEntityArrayCursor.hpp"

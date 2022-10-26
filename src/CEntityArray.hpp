@@ -33,16 +33,16 @@ class CEntityFacade<TFields>::Array :
         }
 
         Array(TWFields fields, TRowIndex entityCount)
-            : m_Fields(fields), m_EntityCount(entityCount)
+            : m_Fields(&fields), m_EntityCount(entityCount)
         {
             this->m_arrPEntityData = new char *[m_EntityCount];
             for (TRowIndex li = 0; li < m_EntityCount; li++)
-                m_arrPEntityData[li] = new char[m_Fields.size()];
+                m_arrPEntityData[li] = new char[m_Fields->size()];
         }
 
         TWFields getFields() const override
         {
-            return this->m_Fields;
+            return *this->m_Fields;
         }
 
         TRowIndex count() const noexcept override
@@ -52,7 +52,7 @@ class CEntityFacade<TFields>::Array :
 
         typename CEntityFacade<TFields>::Shared createEntity(TRowIndex rowPos) override
         {
-            return {this->m_Fields,this->m_arrPEntityData[rowPos]};
+            return {*this->m_Fields,this->m_arrPEntityData[rowPos]};
         }
 
     protected:
@@ -63,9 +63,9 @@ class CEntityFacade<TFields>::Array :
         }
 
     private:
-        TWFields    m_Fields;
-        TRowIndex   m_EntityCount;
-        char**      m_arrPEntityData;
+        const TFields*      m_Fields;
+        TRowIndex           m_EntityCount;
+        char**              m_arrPEntityData;
 
 };
 

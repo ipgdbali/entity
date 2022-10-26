@@ -39,15 +39,10 @@ int main(int argc,char *argv[])
     assert(eShared.as<unsigned int>("id") == 30);
     assert(eCustomer.as<unsigned int>("id") == 30);
 
-    CEntity::Array eArray(fCustomer,10);
-
+    CEntity::Array<unsigned char> eArray(fCustomer,10);
     assert(eArray.count() == 10);
-    CEntity::Shared tmp(eArray.createEntity(0));
 
-    tmp.as<int>(0) = 30;
-    
-
-
+    CEntity::Array<unsigned char>::Cursor cursor(eArray);
 
     return 0;
 }

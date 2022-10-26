@@ -13,11 +13,11 @@ all : $(FILES_TARGET)
 
 bin/debug/% : test/%.cpp | bin/debug
 	g++ $(CPPFLAGS) -g -o $@ $<
-	@$@
+	$@
 
 bin/release/% : test/%.cpp | bin/release
 	g++ $(CPPFLAGS) -o $@ $<
-	@$@
+	$@
 	
 bin/debug :
 	@mkdir -p bin/debug
