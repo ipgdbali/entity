@@ -26,7 +26,11 @@ public:
     {
     }
 
-    CField<TSize> &operator = (const CField &ref) = delete;
+    CField<TSize> &operator = (const CField &ref)
+    {
+        this->m_Name = ref.m_Name;
+        this->m_Size = ref.m_Size;
+    }
 
     CField(CField &&ref) 
         : m_Name(std::move(ref.m_Name)),m_Size(ref.m_Size)
@@ -34,7 +38,11 @@ public:
 	    ref.m_Size = 0;
     }
 
-    CField<TSize> &operator = (CField &&ref) = delete;
+    CField<TSize> &operator = (CField &&ref)
+    {
+        std::swap(this->m_Name,ref.m_Name);
+        std::swap(this->m_Size,ref.m_Size);
+    }
 
     CField(const std::string &name,const TSize &size)
         : m_Name(name),m_Size(size)
@@ -57,8 +65,8 @@ public:
     }
 
 private:
-    const std::string m_Name;
-    const TSize m_Size;
+    std::string m_Name;
+    TSize m_Size;
 
 };
 
