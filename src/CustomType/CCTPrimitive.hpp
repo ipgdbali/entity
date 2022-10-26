@@ -14,11 +14,9 @@ class CCTPrimitive :
 static_assert(std::is_arithmetic<T>::value);
 
 public:
-    constexpr static TSize size = sizeof(T);
-
     TSize getTypeSize() const noexcept override
     {
-	    return size;
+	    return sizeof(T);
     }
 
     void copyTo(void *pDest) const override

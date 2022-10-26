@@ -3,155 +3,65 @@
 
 #include "IField.hpp"
 #include <utility>
-#include <type_traits>
+#include <string>
 
 namespace ipgdlib::entity
 {
 
-template <typename TName,typename TSize,bool isPointer>
-class CField
+template <
+    typename TSize
+>
+class CField :
+    public IField<std::string,TSize,ewConstReference,ewConstReference>
 {
-};
 
-
-template <typename TName,typename TSize>
-class CFieldFactory
-{
-    public:
-        using type_size = TSize;
-        using type_name = TName;
-
-        class CFieldAbs :
-            public virtual IField<TName,TSize,ewConstReference,ewNoChange>
-        {
-        public:
-            using iface = IField<TName,TSize,ewConstReference,ewNoChange>;
-            using type_size = TSize;
-            using type_name = TName;
-
-            const TName &name() const noexcept override
-            {
-                return this->m_Name;
-            }
-
-            CFieldAbs(const TName &name) :
-                m_Name(name)
-            {
-            }
-
-        private:
-            TName m_Name;
-        };
-
-        template <bool isPointer>
-        class CField : 
-            public ipgdlib::entity::CField<TName,TSize,isPointer>
-        {
-            public:
-                template <bool bPtr = isPointer,typename std::enable_if<bPtr,bool>::type = true>
-                CField(const TName &name) :
-                    ipgdlib::entity::CField<TName,TSize,true>(name)
-                {
-                }
-
-                template <bool bPtr = isPointer,typename std::enable_if<!bPtr,bool>::type = true>
-                CField(const TName &name,const TSize &size) : 
-                    ipgdlib::entity::CField<TName,TSize,false>(name,size)
-                {
-                }
-
-        };
-
-        template <typename T,typename std::enable_if<std::is_pointer<T>::value,bool>::type = true>
-        static CFieldAbs *alloc(const TName &name)
-        {
-            return new CField<true>(name);
-        }
-
-        template <typename T,typename std::enable_if<!std::is_pointer<T>::value,bool>::type = true>
-        static CFieldAbs *alloc(const TName &name)
-        {
-            return new CField<false>(name,sizeof(T));
-        }
-
-        template <TSize size,typename std::enable_if<size == sizeof(void *),bool>::type = true>
-        static CFieldAbs *alloc(const TName &name)
-        {
-            return new CField<true>(name);
-        }
-
-        template <TSize size,typename std::enable_if<size != sizeof(void *),bool>::type = true>
-        static CFieldAbs *alloc(const TName &name)
-        {
-            return new CField<false>(name,size);
-        }
-};
-
-
-template <typename TName,typename TSize>
-class CField<TName,TSize,false> :
-    public CFieldFactory<TName,TSize>::CFieldAbs
-{
 public:
 
-    using iface         = IField<TName,TSize,ewConstReference,ewNoChange>;
-    using parent        = typename CFieldFactory<TName,TSize>::CFieldAbs;
+    using iface = IField<std::string,TSize,ewConstReference,ewConstReference>;
 
-    CField()                                                    = delete;
-    CField(const CField &ref)                                   = delete;
-    CField<TName,TSize,false> &operator = (const CField &ref)   = delete;
-    CField(CField &&ref)                                        = delete;
-    CField<TName,TSize,false> &operator = (CField &&ref)        = delete;
+    CField() = delete;
 
-    CField(const TName &name,const TSize &size) :
-        CFieldFactory<TName,TSize>::CFieldAbs(name),m_Size(size)
+    CField(const CField &ref) 
+        : m_Name(ref.m_Name),m_Size(ref.m_Size)
     {
     }
 
-    TSize size() const noexcept override
+    CField<TSize> &operator = (const CField &ref) = delete;
+
+    CField(CField &&ref) 
+        : m_Name(std::move(ref.m_Name)),m_Size(ref.m_Size)
     {
-        return this->m_Size;
+	    ref.m_Size = 0;
     }
 
-    bool isPointer() const noexcept override
+    CField<TSize> &operator = (CField &&ref) = delete;
+
+    CField(const std::string &name,const TSize &size)
+        : m_Name(name),m_Size(size)
     {
-        return false;
+    }
+
+    CField(std::string &&name,const TSize &size)
+        : m_Name(std::move(name)),m_Size(size)
+    {
+    }
+
+    const std::string &name() const noexcept override
+    {
+	    return this->m_Name;
+    }
+
+    const TSize &size() const noexcept override
+    {
+	    return this->m_Size;
     }
 
 private:
-    TSize   m_Size;
-};
-
-template <typename TName,typename TSize>
-class CField<TName,TSize,true> : 
-    public CFieldFactory<TName,TSize>::CFieldAbs
-{
-public:
-    using iface         = IField<TName,TSize,ewConstReference,ewConstReference>;
-    using parent        = typename CFieldFactory<TName,TSize>::CFieldAbs;
-
-    CField()                                        = delete;
-    CField(const CField &ref)                       = delete;
-    CField<TName,TSize,true> &operator = (const CField &ref)    = delete;
-    CField(CField &&ref)                            = delete;
-    CField<TName,TSize,true> &operator = (CField &&ref)         = delete;
-
-    CField(const TName &name) :
-        CFieldFactory<TName,TSize>::CFieldAbs(name)
-    {
-    }
-
-    TSize size() const noexcept override
-    {
-        return sizeof(void*);
-    }
-
-    bool isPointer() const noexcept override
-    {
-        return true;
-    }
+    const std::string m_Name;
+    const TSize m_Size;
 
 };
+
 
 };
 

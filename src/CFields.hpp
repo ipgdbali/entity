@@ -5,7 +5,7 @@
 
 #include "IFields.hpp"
 #include "CField.hpp"
-#include <initializer_list>
+#include <vector>
 #include <map>
 
 namespace ipgdlib::entity
@@ -17,47 +17,54 @@ template <
 	typename TField
 >
 class CFields :
-    public IFields<TFieldIndex,TSizeTotal,TField,ewConstPointer>
+    public IFields<TFieldIndex,TSizeTotal,TField,ewConstReference>
 {
 public:
-    using iface 		= IFields<TFieldIndex,TSizeTotal,TField,ewConstPointer>;
+    using iface 			= IFields<TFieldIndex,TSizeTotal,TField,ewConstReference>;
 
 	using type_field_index	= TFieldIndex;
 	using type_size_total	= TSizeTotal;
 	using type_field		= TField;
 
-	using TFieldName	= typename TField::type_name;
-	using TFieldSize	= typename TField::type_size;
-	using TWField		= typename ipgdlib::wrap<TField,ewConstPointer>::value;
+	using TFieldName		= typename TField::iface::type_name;
+	using TFieldSize		= typename TField::iface::type_size;
+	using TWField			= typename ipgdlib::wrap<TField,ewConstReference>::value;
 
 
     CFields() = delete;
     CFields(const CFields &ref) = delete;
     CFields &operator = (const CFields &ref) = delete;
-    CFields(CFields && ref) = delete;
+    CFields(CFields && ref)
+      : m_FieldCount(ref.m_FieldCount)
+    {
+      ref.m_FieldCount = 0;
+    }
+
     CFields &operator = (CFields && ref) = delete;
 
-	~CFields()
+	  ~CFields()
     {
-		for(TFieldIndex li = 0;li < this->m_FieldCount;li++)
-			delete this->m_arrFieldInfos[li];
-
-		delete [] this->m_arrFieldInfos;
-		delete [] this->m_RunningSum;
+      if(m_RunningSum)
+		    delete [] this->m_RunningSum;
     }
 
 
-    CFields(std::initializer_list<TWField> ltpFieldInfo)
+    CFields(std::vector<TField> vField)
+		  : m_arrFields(std::move(vField))
     {
-		this->create(ltpFieldInfo);
+        this->m_FieldCount 				= m_arrFields.size();
+        this->m_RunningSum				= new TSizeTotal[this->m_FieldCount];
+        TSizeTotal sum					= 0;
+        TFieldIndex li 					= 0;
+        for(auto field : m_arrFields)
+        {
+          this->m_RunningSum[li] 		= field.size() + sum;
+          sum 						= this->m_RunningSum[li];
+          m_Mapper[field.name()] 	= li;
+          li++;
+        }
     }
 	
-	template <typename T>
-	CFields(T &col)
-	{
-		this->create(col);
-	}
-
     TFieldIndex count() const noexcept override
     {
 		return this->m_FieldCount;
@@ -65,8 +72,13 @@ public:
 
     TWField getField(TFieldIndex index) const override
     {
-		return this->m_arrFieldInfos[index];
+		return this->m_arrFields[index];
     }
+
+	TWField operator[] (TFieldIndex index) const
+	{
+		return this->m_arrFields[index];
+	}
 
     TSizeTotal sum(TFieldIndex index) const override
     {
@@ -97,29 +109,11 @@ public:
     }
 
 private:
-    TFieldIndex						m_FieldCount;
-    TWField*					m_arrFieldInfos;
-    TSizeTotal*					m_RunningSum;
-    std::map<TFieldName,TFieldIndex> m_Mapper;
+    TFieldIndex					              m_FieldCount;
+    std::vector<TField>		            m_arrFields;
+    TSizeTotal*					              m_RunningSum;
+    std::map<TFieldName,TFieldIndex>  m_Mapper;
 
-	template <typename T>
-	void create(T &col)
-	{
-		this->m_FieldCount 				= col.size();
-		this->m_arrFieldInfos			= new TWField[this->m_FieldCount];
-		this->m_RunningSum				= new TSizeTotal[this->m_FieldCount];
-		TSizeTotal sum					= 0;
-		TFieldIndex li 						= 0;
-		for(TWField field : col)
-		{
-			this->m_arrFieldInfos[li] 	= field;
-			this->m_RunningSum[li] 		= field->size() + sum;
-			sum 						= this->m_RunningSum[li];
-			m_Mapper[field->name()] 	= li;
-
-			li++;
-		}
-	}
 };
 
 };

@@ -35,8 +35,16 @@ class IEntity
         virtual bool copyAttrFrom(const TFieldIndex &fieldIndex,const void *pSrc) = 0;
         virtual bool copyAttrFrom(const TFieldName &fieldName,const void *pSrc) = 0;
         
+        /*
+        CCustomTypeBase<8> toCustomType(const TFieldIndex &fieldIndex)
+        {
+            return {this-> getPtr()}
+        }
+        
+
         virtual bool toCustomType(TFieldIndex const &fieldIndex, ICustomType<TFieldSize> &ref) = 0;
         virtual bool toCustomType(TFieldName const &fieldName, ICustomType<TFieldSize> &ref) = 0;
+        */
 
         class IUnique;
         class IShared;

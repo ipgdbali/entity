@@ -14,14 +14,38 @@ class CAbsCTDynamic :
 public:
     typename ICustomType<TSize>::eCustomTypeKind getKind() const noexcept override
     {
-	return ICustomType<TSize>::ectkDynamic;
+	    return ICustomType<TSize>::ectkDynamic;
     }
 
-    virtual bool assignFrom(void *pSrc) = 0;
-    virtual bool assignTo(void *&pDest) = 0;
+    bool assignFrom(void **pSrc) noexcept
+    {
+        this->m_pValue = pSrc;
+    }
 
-    virtual bool clear() = 0; // set to Null
-    virtual bool isNull() const noexcept = 0;
+    bool assignTo(void **pDest) noexcept
+    {
+        *pDest = *this->m_pValue;
+    }
+
+    bool isNull() const noexcept
+    {
+        return *this->m_pValue == nullptr;
+    }
+
+protected:
+    char *getPtr() noexcept
+    {
+        return *this->m_pValue;
+    }
+
+    virtual bool setPtr(void **ptr)
+    {
+        this->m_pValue = ptr;
+        return true;
+    }
+
+private:
+    char **m_pValue;
 
 };
 

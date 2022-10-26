@@ -1,28 +1,24 @@
-#include "CFields.hpp"
-#include "CField.hpp"
-#include "CEntity.hpp"
-#include "CustomType/CCTPrimitive.hpp"
+#include "entity.hpp"
 #include <cassert>
-#include <vector>
+#include <iostream>
 
-using CFieldFactory     = ipgdlib::entity::CFieldFactory<std::string,size_t>;
-using CFields           = ipgdlib::entity::CFields<size_t,size_t,CFieldFactory::CFieldAbs>;
-using CEntity           = ipgdlib::entity::CEntity<CFields>;
-
-template <typename T>
-using CCTPrimitive      = ipgdlib::entity::CCTPrimitive<T,CFieldFactory::type_size>;
+using CField    = ipgdlib::entity::CField<unsigned char>;
+using CFields   = ipgdlib::entity::CFields<unsigned char, unsigned char,CField>;
+using CEntity   = ipgdlib::entity::CEntityFacade<CFields>;
 
 int main(int argc,char * argv[])
 {
 
-    CFields fCustomer({
-        CFieldFactory::alloc<int>("id"),
-        CFieldFactory::alloc<sizeof(char*)>("name"),
-        CFieldFactory::alloc<char>("sex"),
-        CFieldFactory::alloc<sizeof(unsigned char)>("age")
-    });
+    CFields fCustomer(
+        {
+            {"id",sizeof(unsigned int)},
+            {"name",sizeof(char*)},
+            {"sex",sizeof(char)},
+            {"age",sizeof(unsigned char)}
+        });
 
     assert(fCustomer.count() == 4);
+
     // Create Unique Entity
     CEntity::Unique eCustomer(fCustomer);
 
@@ -56,6 +52,8 @@ int main(int argc,char * argv[])
     eCustomer.as<char>("sex") = 'M';
     assert(eCustomer.as<char>(2) == 'M');
 
+    /*
+
     // - Using Custom Type
     CCTPrimitive<unsigned char> ctAge;
 
@@ -68,6 +66,8 @@ int main(int argc,char * argv[])
     ctAge = 30;
     assert((ctAge == 30));
     assert((eCustomer.as<unsigned char>(3) == 30));
+
+    */
 
     return 0;
 }

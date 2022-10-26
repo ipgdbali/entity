@@ -13,16 +13,7 @@ public:
     enum eCustomTypeKind {ectkStatic,ectkDynamic};
 
     virtual ~ICustomType() {};
-    virtual TSize getTypeSize() const = 0;
-
     virtual eCustomTypeKind getKind() const noexcept = 0;
-
-    virtual void setPtr(void *pSrc) = 0;
-
-    /*
-    virtual bool isNull() const noexcept = 0;
-    */
-
 };
 
 };

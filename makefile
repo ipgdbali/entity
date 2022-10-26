@@ -3,7 +3,7 @@
 DIR_DEST = bin
 DIR_INCLUDE = src iface 
 
-FILES =	start feature_01
+FILES =	test #start feature_01
 
 FILES_TARGET = $(foreach FILE,$(FILES),$(addprefix $(DIR_DEST)/debug/,$(FILE)) $(addprefix $(DIR_DEST)/release/,$(FILE)))
 
