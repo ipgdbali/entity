@@ -7,8 +7,8 @@
 namespace ipgdlib::entity
 {
 
-template <typename T,typename TSize = size_t>
-class CCTPrimitive :
+template <typename T,typename TSize>
+class CCTArithmetic :
     public CAbsCTStatic<TSize>
 {
 static_assert(std::is_arithmetic<T>::value);
@@ -19,7 +19,7 @@ public:
 	    return sizeof(T);
     }
 
-    CCTPrimitive<T,TSize> &operator = (const T& ref)
+    CCTArithmetic<T,TSize> &operator = (const T& ref)
     {
         *this->m_pData = ref;
         return *this;

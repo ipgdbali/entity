@@ -1,7 +1,7 @@
 #ifndef CCT_FIXED_CSTRING
 #define CCT_FIXED_CSTRING
 
-#include "CustomType/CAbsCTStatic.hpp"
+#include "CustomType/CAbsCTFixed.hpp""
 #include <cstring>
 
 namespace ipgdlib::entity
@@ -14,7 +14,7 @@ namespace ipgdlib::entity
  **/
 template <typename TSize,TSize len>
 class CCTFixedCString :
-    public CAbsCTStatic<size_t>
+    public CAbsCTFixed<size_t>
 {
 public:
 

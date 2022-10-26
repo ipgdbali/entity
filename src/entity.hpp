@@ -1,6 +1,8 @@
+#include "wrapper.hpp"
 #include "CField.hpp"
 #include "CFields.hpp"
 #include "CEntityFacade.hpp"
 #include "CEntityBase.hpp"
 #include "CEntityUnique.hpp"
 #include "CEntityShared.hpp"
+#include "CEntityArray.hpp"

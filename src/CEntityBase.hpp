@@ -140,6 +140,11 @@ class CEntityFacade<TFields>::Base :
         {
         }
 
+        char *getEntityAttrPtr(TFieldIndex fieldIndex)
+        {
+            return &this->m_pEntityData[this->m_Fields.offset(fieldIndex)];
+        }
+
         char *getEntityPtr() const
         {
             return this->m_pEntityData;

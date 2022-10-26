@@ -1,5 +1,5 @@
-#ifndef CABSCTSTATIC_HPP
-#define CABSCTSTATIC_HPP
+#ifndef CABSCTFIXED_HPP
+#define CABSCTFIXED_HPP
 
 #include "ICustomType.hpp"
 
@@ -7,10 +7,16 @@ namespace ipgdlib::entity
 {
 
 template <typename TSize>
-class CAbsCTStatic :
+class CAbsCTFixed :
     public CAbsCustomType<TSize>
 {
 public:
+    CAbsCTFixed()
+        : m_pValue(nullptr)
+    {
+        
+    }
+
     typename ICustomType<TSize>::eCustomTypeKind getKind() const noexcept override
     {
 	    return ICustomType<TSize>::ectkStatic;
@@ -34,6 +40,11 @@ public:
     virtual constexpr TSize getTypeSize() const noexcept = 0;
 
 protected:
+    CAbsCTFixed(void *ptr) 
+        : m_pValue(ptr)
+    {
+    }
+
     char *getConstPtr() const
     {
         return this->m_pValue;

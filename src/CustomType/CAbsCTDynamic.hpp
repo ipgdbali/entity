@@ -12,6 +12,11 @@ class CAbsCTDynamic :
 {
 
 public:
+    CAbsCTDynamic()
+        : m_pValue(nullptr)
+    {
+    }
+
     typename ICustomType<TSize>::eCustomTypeKind getKind() const noexcept override
     {
 	    return ICustomType<TSize>::ectkDynamic;

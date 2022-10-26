@@ -32,8 +32,6 @@ public:
     virtual bool copyAttrFrom(TRowIndex rowPos,const TFieldIndex &fieldIndex,const void *pSrc) = 0;
     virtual bool copyAttrFrom(TRowIndex rowPos,const TFieldName &fieldName,const void *pSrc) = 0;    
 
-    virtual typename CEntity<TFields>::Shared getEntity(TRowIndex rowPos) = 0;
-
     class ICursor
     {
         public:
@@ -41,8 +39,6 @@ public:
 
             virtual ICursor &setRowPos(TRowIndex rowPos) = 0;
             virtual TRowIndex getRowPos() const noexcept = 0;
-            virtual typename CEntity<TFields>::Shared &getEntity() = 0;
-
     };
 
 };

@@ -17,96 +17,95 @@ template <
 	typename TField
 >
 class CFields :
-    public IFields<TFieldIndex,TSizeTotal,TField,ewConstReference>
+  public IFields<TFieldIndex,TSizeTotal,TField,ewConstReference>
 {
 public:
-    using iface 			= IFields<TFieldIndex,TSizeTotal,TField,ewConstReference>;
+  using iface 			      = IFields<TFieldIndex,TSizeTotal,TField,ewConstReference>;
 
 	using type_field_index	= TFieldIndex;
-	using type_size_total	= TSizeTotal;
-	using type_field		= TField;
+	using type_size_total	  = TSizeTotal;
+	using type_field		    = TField;
 
-	using TFieldName		= typename TField::iface::type_name;
-	using TFieldSize		= typename TField::iface::type_size;
-	using TWField			= typename ipgdlib::wrap<TField,ewConstReference>::value;
+	using TFieldName		    = typename TField::iface::type_name;
+	using TFieldSize		    = typename TField::iface::type_size;
+	using TWField			      = typename ipgdlib::wrap<TField,ewConstReference>::value;
+
+  CFields() = delete;
+  CFields(const CFields &ref) = delete;
+  CFields &operator = (const CFields &ref) = delete;
+  CFields(CFields && ref)
+    : m_FieldCount(ref.m_FieldCount)
+  {
+    ref.m_FieldCount = 0;
+  }
+
+  CFields &operator = (CFields && ref) = delete;
+
+  ~CFields()
+  {
+    if(m_RunningSum)
+      delete [] this->m_RunningSum;
+  }
 
 
-    CFields() = delete;
-    CFields(const CFields &ref) = delete;
-    CFields &operator = (const CFields &ref) = delete;
-    CFields(CFields && ref)
-      : m_FieldCount(ref.m_FieldCount)
+  CFields(std::vector<TField> vField)
+    : m_arrFields(std::move(vField))
+  {
+    this->m_FieldCount 				= m_arrFields.size();
+    this->m_RunningSum				= new TSizeTotal[this->m_FieldCount];
+    TSizeTotal sum					= 0;
+    TFieldIndex li 					= 0;
+    for(auto field : m_arrFields)
     {
-      ref.m_FieldCount = 0;
+      this->m_RunningSum[li] 		= field.size() + sum;
+      sum 						= this->m_RunningSum[li];
+      m_Mapper[field.name()] 	= li;
+      li++;
     }
+  }
 
-    CFields &operator = (CFields && ref) = delete;
+  TFieldIndex count() const noexcept override
+  {
+    return this->m_FieldCount;
+  }
 
-	  ~CFields()
-    {
-      if(m_RunningSum)
-		    delete [] this->m_RunningSum;
-    }
+  TWField getField(TFieldIndex index) const override
+  {
+    return this->m_arrFields[index];
+  }
 
+  TWField operator[] (TFieldIndex index) const
+  {
+    return this->m_arrFields[index];
+  }
 
-    CFields(std::vector<TField> vField)
-		  : m_arrFields(std::move(vField))
-    {
-        this->m_FieldCount 				= m_arrFields.size();
-        this->m_RunningSum				= new TSizeTotal[this->m_FieldCount];
-        TSizeTotal sum					= 0;
-        TFieldIndex li 					= 0;
-        for(auto field : m_arrFields)
-        {
-          this->m_RunningSum[li] 		= field.size() + sum;
-          sum 						= this->m_RunningSum[li];
-          m_Mapper[field.name()] 	= li;
-          li++;
-        }
-    }
-	
-    TFieldIndex count() const noexcept override
-    {
-		return this->m_FieldCount;
-    }
+  TSizeTotal sum(TFieldIndex index) const override
+  {
+    return this->m_RunningSum[index];
+  }
 
-    TWField getField(TFieldIndex index) const override
-    {
-		return this->m_arrFields[index];
-    }
+  TSizeTotal offset(TFieldIndex index) const override
+  {
+    if(index == 0)
+      return 0;
+    else
+      return this->m_RunningSum[index - 1];
+  }
 
-	TWField operator[] (TFieldIndex index) const
-	{
-		return this->m_arrFields[index];
-	}
+  TSizeTotal size() const noexcept override
+  {
+    return this->m_RunningSum[this->m_FieldCount - 1];
+  }
 
-    TSizeTotal sum(TFieldIndex index) const override
-    {
-		return this->m_RunningSum[index];
-    }
+  bool hasName(TFieldName const &fieldName) const noexcept override
+  {
+    return this->m_Mapper.count(fieldName) == 1;
+  }
 
-    TSizeTotal offset(TFieldIndex index) const override
-    {
-		if(index == 0)
-			return 0;
-		else
-			return this->m_RunningSum[index - 1];
-    }
-
-    TSizeTotal size() const noexcept override
-    {
-		return this->m_RunningSum[this->m_FieldCount - 1];
-    }
-
-    bool hasName(TFieldName const &fieldName) const noexcept override
-    {
-		return this->m_Mapper.count(fieldName) == 1;
-    }
-
-    TFieldIndex indexOf(TFieldName const &fieldName) const override
-    {
-		return this->m_Mapper.at(fieldName);
-    }
+  TFieldIndex indexOf(TFieldName const &fieldName) const override
+  {
+    return this->m_Mapper.at(fieldName);
+  }
 
 private:
     TFieldIndex					              m_FieldCount;
