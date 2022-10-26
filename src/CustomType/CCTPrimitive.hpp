@@ -7,31 +7,16 @@
 namespace ipgdlib::entity
 {
 
-template <typename T,typename TSize>
+template <typename T,typename TSize = size_t>
 class CCTPrimitive :
     public CAbsCTStatic<TSize>
 {
 static_assert(std::is_arithmetic<T>::value);
 
 public:
-    TSize getTypeSize() const noexcept override
+    constexpr TSize getTypeSize() const noexcept override
     {
 	    return sizeof(T);
-    }
-
-    void copyTo(void *pDest) const override
-    {
-	    std::memcpy(pDest,this->m_pData,size);
-    }
-
-    void copyFrom(const void *pSrc) override
-    {
-	    std::memcpy(m_pData,pSrc,size);
-    }
-
-    void setPtr(void *pSrc)
-    {
-	    this->m_pData = static_cast<T*>(pSrc);
     }
 
     CCTPrimitive<T,TSize> &operator = (const T& ref)

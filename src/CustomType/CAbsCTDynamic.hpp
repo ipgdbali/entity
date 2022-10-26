@@ -17,9 +17,9 @@ public:
 	    return ICustomType<TSize>::ectkDynamic;
     }
 
-    bool assignFrom(void **pSrc) noexcept
+    bool assignFrom(void *pSrc) noexcept
     {
-        this->m_pValue = pSrc;
+        *this->m_pValue = pSrc;
     }
 
     bool assignTo(void **pDest) noexcept
@@ -27,25 +27,34 @@ public:
         *pDest = *this->m_pValue;
     }
 
-    bool isNull() const noexcept
+    bool isNull() const
     {
         return *this->m_pValue == nullptr;
     }
 
+    bool isSet() const noexcept
+    {
+        return this->m_pValue != nullptr;
+    }
+
 protected:
-    char *getPtr() noexcept
+    void *getConstPtr() const
     {
         return *this->m_pValue;
     }
 
-    virtual bool setPtr(void **ptr)
+    void *getPtr()
     {
-        this->m_pValue = ptr;
-        return true;
+        return *this->m_pValue;
+    }
+
+    void _setPtr(void *ptr) override
+    {
+        this->m_pValue = reinterpret_cast<void**>(ptr);
     }
 
 private:
-    char **m_pValue;
+    void **m_pValue;
 
 };
 
