@@ -31,6 +31,20 @@ class CEntityFacade<TFields>::Array<TRowIndex>::Cursor :
             return this->m_RowPos;
         }
 
+        typename CEntityFacade<TFields>::Shared &operator[](TRowIndex rowPos)
+        {
+            this->m_RowPos = rowPos;
+            this->m_EntityShared.setEntityPtr(this->m_EntityArray.m_arrPEntityData[rowPos]);
+            return this->m_EntityShared;
+        }
+
+        const typename CEntityFacade<TFields>::Shared &operator[](TRowIndex rowPos) const
+        {
+            this->m_RowPos = rowPos;
+            this->m_EntityShared.setEntityPtr(this->m_EntityArray.m_arrPEntityData[rowPos]);
+            return this->m_EntityShared;
+        }
+
         const typename CEntityFacade<TFields>::Shared &getEntity() const override
         {
             return this->m_EntityShared;

@@ -44,5 +44,12 @@ int main(int argc,char *argv[])
 
     CEntity::Array<unsigned char>::Cursor cursor(eArray);
 
+    for(int li = 0;li < 10;li ++)
+        cursor[li].as<int>(0) = (li + 1) * 10;
+    
+    for(int li = 0;li < 10;li ++)
+        assert(cursor[li].as<int>(0) == (li + 1) * 10);
+
+
     return 0;
 }
