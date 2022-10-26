@@ -12,27 +12,69 @@ class CEntityFacade<TFields>::Unique :
     virtual public IEntity<TFields,CEntityFacade<TFields>::Base::enum_wrapper_fields>::IUnique
 {
     public:
-        using parent    = CEntityFacade<TFields>::Base;
-        using TWFields  = typename parent::TWFields;
+        using Base      = CEntityFacade<TFields>::Base;
+        using TWFields  = typename Base::TWFields;
 
         virtual ~Unique()
         {
-            if(this->getEntityPtr() != nullptr)
-                delete []this->getEntityPtr();
+            delete []this->getEntityPtr();
         }
 
         Unique() = delete;
+
         Unique(const Unique &ref) = delete;
         Unique &operator = (const Unique &ref) = delete;
-        Unique(Unique &&ref) = delete;
-        Unique &operator = (Unique &&ref) = delete;
 
 
-        Unique(TWFields fields) 
-            : CEntityFacade<TFields>::Base(fields,new char[fields.size()])
+        Unique(TWFields fields) : 
+            Base::Base(fields)
+        {
+            Base::setEntityPtr(std::malloc(fields.size()));
+            if(Base::getEntityPtr() == nullptr)
+                throw std::bad_alloc();
+        }
+
+        /**
+         * Copy Constructor
+        */
+        Unique(const CEntityFacade<TFields>::Base &ref) :
+            Unique(ref.getFields())
+        {
+            std::memcpy(Base::getEntityPtr(),ref.getEntityPtr());
+        }
+
+        /**
+         * Copy Operator
+        */
+        Unique &operator = (Unique &ref)
+        {
+            delete []this->getEntityPtr();
+            Base::setEntityPtr(std::malloc(ref.getField().size()));
+            if(Base::getEntityPtr() == nullptr)
+                throw std::bad_alloc();
+            else
+                std::memcpy(Base::getEntityPtr(),ref.getEntityPtr());
+            return *this;
+        }
+
+        /**
+         * Move Constructor
+        */
+        Unique(Unique &&ref) :
+            Base::Base(std::move(ref))
         {
         }
 
+        /**
+         * Move Operator
+        */
+        Unique &operator = (Unique &&ref)
+        {
+            Base::operator=(std::move(ref));
+            return *this;
+        }
+
+    protected:
 };
 
 };

@@ -1,7 +1,8 @@
 #ifndef IENTITIES_HPP
 #define IENTITIES_HPP
 
-#include "CEntity.hpp"
+#include "wrapper.hpp"
+#include "CEntityFacade.hpp"
 
 namespace ipgdlib::entity
 {
@@ -27,10 +28,7 @@ public:
     virtual TWFields getFields() const = 0;
     virtual TRowIndex count() const noexcept = 0;
 
-    virtual bool copyAttrTo(TRowIndex rowPos,const TFieldIndex &fieldIndex,void *pDst) const = 0;
-    virtual bool copyAttrTo(TRowIndex rowPos,const TFieldName &fieldName,void *pDst) const = 0;
-    virtual bool copyAttrFrom(TRowIndex rowPos,const TFieldIndex &fieldIndex,const void *pSrc) = 0;
-    virtual bool copyAttrFrom(TRowIndex rowPos,const TFieldName &fieldName,const void *pSrc) = 0;    
+    virtual typename CEntityFacade<TFields>::Shared createEntity(TRowIndex rowPos) = 0;
 
     class ICursor
     {
@@ -39,6 +37,10 @@ public:
 
             virtual ICursor &setRowPos(TRowIndex rowPos) = 0;
             virtual TRowIndex getRowPos() const noexcept = 0;
+
+            virtual const typename CEntityFacade<TFields>::Shared &getEntity() const = 0;
+            virtual typename CEntityFacade<TFields>::Shared &getEntity() = 0;
+
     };
 
 };

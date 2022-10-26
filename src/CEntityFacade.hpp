@@ -15,10 +15,9 @@ class CEntityFacade
         class Unique;
         class Shared;
 
+        template <typename TRowIndex>
         class Array;
 };
-
-
 
 };
 

@@ -60,9 +60,6 @@ template <
 class IEntity<TFields,ewFields>::IShared : 
     public virtual IEntity<TFields,ewFields>
 {
-    virtual void set(void *pSrc) = 0;
-    virtual bool isNull() const noexcept = 0;
-    virtual void clear() noexcept = 0;
 };
 
 
