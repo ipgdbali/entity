@@ -4,7 +4,6 @@
 #include "wrapper.hpp"
 #include "IField.hpp"
 #include "IFields.hpp"
-#include "ICustomType.hpp"
 
 namespace ipgdlib::entity
 {
@@ -35,33 +34,9 @@ class IEntity
         virtual bool copyAttrFrom(const TFieldIndex &fieldIndex,const void *pSrc) = 0;
         virtual bool copyAttrFrom(const TFieldName &fieldName,const void *pSrc) = 0;
         
-        virtual bool toCustomType(TFieldIndex const &fieldIndex,ICustomType<TFieldSize> &ref) = 0;
-        virtual bool toCustomType(TFieldName const &fieldName,ICustomType<TFieldSize> &ref) = 0;
-
-        class IUnique;
-        class IShared;
+        class IUnique {};
+        class IShared {};
 };
-
-
-template <
-    typename TFields,
-    eWrapper ewFields
->
-class IEntity<TFields,ewFields>::IUnique :
-    public virtual IEntity<TFields,ewFields>
-{
-
-};
-
-template <
-    typename TFields,
-    eWrapper ewFields
->
-class IEntity<TFields,ewFields>::IShared : 
-    public virtual IEntity<TFields,ewFields>
-{
-};
-
 
 };
 

@@ -70,7 +70,6 @@ private:
 
 };
 
-
 };
 
 #endif

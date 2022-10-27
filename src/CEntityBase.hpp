@@ -5,7 +5,6 @@
 #include "CField.hpp"
 #include "CFields.hpp"
 #include "CEntityFacade.hpp"
-#include "CustomType\CAbsCustomType.hpp"
 #include <cstring>
 
 
@@ -102,24 +101,6 @@ class CEntityFacade<TFields>::Base :
         T const &as(TFieldName const &fieldName) const
         {
             return as<T>(this->m_Fields->indexOf(fieldName));
-        }
-
-        bool toCustomType(TFieldIndex const &fieldIndex,ICustomType<TFieldSize> &ref) override
-        {
-            if (ref.getTypeSize() == this->m_Fields->getField(fieldIndex).size())
-            {
-                dynamic_cast<CAbsCustomType<TFieldSize>&>(ref).setPtr(&this->m_pEntityPtr[this->m_Fields->offset(fieldIndex)]);
-                return true;
-            }
-            else
-                return false;
-        }
-        
-        bool toCustomType(TFieldName const &fieldName,ICustomType<TFieldSize> &ref) override
-        {
-            return toCustomType(
-                this->m_Fields->indexOf(fieldName),
-                ref);
         }
 
     protected:
