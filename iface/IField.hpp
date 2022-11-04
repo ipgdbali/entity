@@ -8,30 +8,22 @@ namespace ipgdlib::entity
 {
 
 template <
-    typename TName,
-    typename TSize,
-    eWrapper eWName,
-    eWrapper eWSize
+    typename FieldNameT,
+    typename FieldSizeT
 >
 class IField
 {
+    static_assert(std::is_integral<FieldSizeT>::value && !std::is_same<bool,FieldSizeT>::value);
 
-static_assert(std::is_integral<TSize>::value && !std::is_same<bool,TSize>::value);
+    public:
 
-using TWName			    = typename ipgdlib::wrap<TName,eWName>::value;
-using TWSize			    = typename ipgdlib::wrap<TSize,eWSize>::value;
+        using TFieldName = FieldNameT;
+        using TFieldSize = FieldSizeT;
 
-public:
+        virtual ~IField() {};
 
-    virtual ~IField() {};
-
-    using type_name				= TName;
-    using type_size				= TSize;
-    static constexpr eWrapper enum_wrapper_name = eWName;
-    static constexpr eWrapper enum_wrapper_size = eWSize;
-
-    virtual TWName name() const noexcept = 0;
-    virtual TWSize size() const noexcept = 0;
+        virtual TFieldName name() const noexcept = 0;
+        virtual TFieldSize size() const noexcept = 0;
 };
 
 };

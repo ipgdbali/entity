@@ -4,7 +4,7 @@
 #include "IEntity.hpp"
 #include "CField.hpp"
 #include "CFields.hpp"
-#include "CEntityFacade.hpp"
+#include "CEntity.hpp"
 #include <cstring>
 
 
@@ -26,28 +26,23 @@ namespace ipgdlib::entity
  *  - Store CField as Pointer but public interface as const reference. 
  * 
 */
-template <typename TFields>
-class CEntityFacade<TFields>::Base :
-    virtual public IEntity<TFields, ewConstReference>
+template <typename FieldsT>
+class CEntity<FieldsT>::Base :
+    virtual public IEntity<const FieldsT&,typename FieldsT::iface::TFieldName,typename FieldsT::iface::TFieldIndex>
 {
     public:
-        using iface                                     = IEntity<TFields, ewConstReference>;
-        using type_fields                               = TFields;
-        static constexpr eWrapper enum_wrapper_fields   = ewConstReference;
-        
-        using TFieldIndex       = typename TFields::type_field_index;
-        using TFieldName        = typename TFields::TFieldName;
-        using TFieldSize        = typename TFields::TFieldSize;
-        using TWFields          = typename ipgdlib::wrap<TFields, ewConstReference>::value;
+
+        using TFields           = FieldsT;
+        using iface             = IEntity<const FieldsT&,typename FieldsT::iface::TFieldName,typename FieldsT::iface::TFieldIndex>;
         
         Base() = delete;
         
-        TWFields getFields() const noexcept override
+        typename iface::TFields getFields() const noexcept override
         {
             return *this->m_Fields;
         }
 
-        bool copyAttrTo(TFieldIndex const &fieldIndex, void *pDst) const override
+        bool copyAttrTo(typename iface::TFieldIndex fieldIndex, void *pDst) const override
         {
             return 
                 std::memcpy(
@@ -56,14 +51,14 @@ class CEntityFacade<TFields>::Base :
                     this->m_Fields->getField(fieldIndex).size()) != nullptr;
         }
 
-        bool copyAttrTo(TFieldName const &fieldName, void *pDst) const override
+        bool copyAttrTo(typename iface::TFieldName fieldName, void *pDst) const override
         {
             return copyAttrTo(
                 this->m_Fields->indexOf(fieldName),
                 pDst);
         }
 
-        bool copyAttrFrom(TFieldIndex const &fieldIndex, const void *pSrc) override
+        bool copyAttrFrom(typename iface::TFieldIndex fieldIndex, const void *pSrc) override
         {
             std::memcpy(
                 &this->m_pEntityPtr[this->m_Fields->offset(fieldIndex)],
@@ -72,7 +67,7 @@ class CEntityFacade<TFields>::Base :
             return true;
         }
 
-        bool copyAttrFrom(TFieldName const &fieldName, const void *pSrc) override
+        bool copyAttrFrom(typename iface::TFieldName fieldName, const void *pSrc) override
         {
             return copyAttrFrom(
                 this->m_Fields->indexOf(fieldName),
@@ -80,25 +75,25 @@ class CEntityFacade<TFields>::Base :
         }
 
         template <typename T>
-        T &as(TFieldIndex const &fieldIndex)
+        T &as(typename iface::TFieldIndex fieldIndex)
         {
             return *reinterpret_cast<T *>(&this->m_pEntityPtr[this->m_Fields->offset(fieldIndex)]);
         }
 
         template <typename T>
-        T const &as(TFieldIndex const &fieldIndex) const
+        T const &as(typename iface::TFieldIndex fieldIndex) const
         {
             return *reinterpret_cast<T *>(&this->m_pEntityPtr[this->m_Fields->offset(fieldIndex)]);
         }
 
         template <typename T>
-        T &as(TFieldName const &fieldName)
+        T &as(typename iface::TFieldName fieldName)
         {
             return as<T>(this->m_Fields->indexOf(fieldName));
         }
 
         template <typename T>
-        T const &as(TFieldName const &fieldName) const
+        T const &as(typename iface::TFieldName fieldName) const
         {
             return as<T>(this->m_Fields->indexOf(fieldName));
         }
@@ -123,13 +118,13 @@ class CEntityFacade<TFields>::Base :
             ref.m_pEntityPtr    = nullptr;
         }
 
-        Base(TWFields fields) :
+        Base(typename  iface::TFields fields) :
             m_Fields(&fields),m_pEntityPtr(nullptr)
         {
         }
 
         // Unique Entity & CShared Entity
-        Base(TWFields fields,char *pData) : 
+        Base(typename  iface::TFields fields,char *pData) : 
             m_Fields(&fields), m_pEntityPtr(pData)
         {
         }
@@ -149,13 +144,12 @@ class CEntityFacade<TFields>::Base :
             return *this;
         }
 
-        const char *getEntityAttrPtr(TFieldIndex fieldIndex) const
+        const char *getEntityAttrPtr(typename iface::TFieldIndex fieldIndex) const
         {
             return &this->m_pEntityPtr[this->m_Fields->offset(fieldIndex)];
         }
 
-
-        char *getEntityAttrPtr(TFieldIndex fieldIndex)
+        char *getEntityAttrPtr(typename iface::TFieldIndex fieldIndex)
         {
             return &this->m_pEntityPtr[this->m_Fields->offset(fieldIndex)];
         }
@@ -175,7 +169,7 @@ class CEntityFacade<TFields>::Base :
             this->m_pEntityPtr = (char*)pEntityPtr;
         }
 
-        void set(const TFields &fields,char* pEntityPtr)
+        void set(typename iface::TFieldIndex fields,char* pEntityPtr)
         {
             this->m_Fields      = fields;
             this->m_pEntityPtr  = pEntityPtr;

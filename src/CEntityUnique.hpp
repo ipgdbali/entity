@@ -6,14 +6,14 @@
 namespace ipgdlib::entity
 {
 
-template <typename TFields>
-class CEntityFacade<TFields>::Unique :
-    public CEntityFacade<TFields>::Base,
-    virtual public IEntity<TFields,CEntityFacade<TFields>::Base::enum_wrapper_fields>::IUnique
+template <typename FieldsT>
+class CEntity<FieldsT>::Unique :
+    public CEntity<FieldsT>::Base,
+    virtual public IEntity<const FieldsT&,typename FieldsT::iface::TFieldName,typename FieldsT::iface::TFieldIndex>::IUnique
 {
     public:
-        using Base      = CEntityFacade<TFields>::Base;
-        using TWFields  = typename Base::TWFields;
+        using TFields   = FieldsT;
+        using Base      = CEntity<TFields>::Base;
 
         virtual ~Unique()
         {
@@ -22,22 +22,10 @@ class CEntityFacade<TFields>::Unique :
 
         Unique() = delete;
 
-        Unique(const Unique &ref) = delete;
-        Unique &operator = (const Unique &ref) = delete;
-
-
-        Unique(TWFields fields) : 
-            Base::Base(fields)
-        {
-            Base::setEntityPtr(std::malloc(fields.size()));
-            if(Base::getEntityPtr() == nullptr)
-                throw std::bad_alloc();
-        }
-
         /**
          * Copy Constructor
         */
-        Unique(const CEntityFacade<TFields>::Base &ref) :
+        Unique(const CEntity<TFields>::Base &ref) :
             Unique(ref.getFields())
         {
             std::memcpy(Base::getEntityPtr(),ref.getEntityPtr());
@@ -46,7 +34,7 @@ class CEntityFacade<TFields>::Unique :
         /**
          * Copy Operator
         */
-        Unique &operator = (Unique &ref)
+        Unique &operator = (const Unique &ref)
         {
             delete []this->getEntityPtr();
             Base::setEntityPtr(std::malloc(ref.getField().size()));
@@ -70,11 +58,19 @@ class CEntityFacade<TFields>::Unique :
         */
         Unique &operator = (Unique &&ref)
         {
+            delete []this->getEntityPtr();
             Base::operator=(std::move(ref));
             return *this;
         }
 
-    protected:
+        Unique(typename Base::iface::TFields fields) : 
+            Base::Base(fields)
+        {
+            Base::setEntityPtr(std::malloc(fields.size()));
+            if(Base::getEntityPtr() == nullptr)
+                throw std::bad_alloc();
+        }
+
 };
 
 };

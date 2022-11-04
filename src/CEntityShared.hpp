@@ -6,39 +6,36 @@
 namespace ipgdlib::entity
 {
 
-template <typename TFields>
-class CEntityFacade<TFields>::Shared :
-    public CEntityFacade<TFields>::Base,
-    virtual public IEntity<TFields,CEntityFacade<TFields>::Base::enum_wrapper_fields>::IShared
+template <typename FieldsT>
+class CEntity<FieldsT>::Shared :
+    public CEntity<FieldsT>::Base,
+    virtual public IEntity<const FieldsT&,typename FieldsT::iface::TFieldName,typename FieldsT::iface::TFieldIndex>::IShared
 {
-    template <typename TRowIndex>
-    friend class CEntityFacade<TFields>::Array;
 
     public:
-
-        using Base = CEntityFacade<TFields>::Base;
-        using TWFields = typename Base::TWFields;
+        using TFields   = FieldsT;
+        using Base      = CEntity<TFields>::Base;
         
         Shared() = delete;
         Shared(const Shared &ref) = delete;
         Shared &operator = (const Shared &ref) = delete;
-        Shared(CEntityFacade<TFields>::Base &&) = delete;
-        Shared& operator = (CEntityFacade<TFields>::Base &&) = delete;
+        Shared(CEntity<TFields>::Base &&) = delete;
+        Shared& operator = (CEntity<TFields>::Base &&) = delete;
 
         /**
          * Copy Constructor
         */
-        Shared(const CEntityFacade<TFields>::Base &ref) :
-            CEntityFacade<TFields>::Base(ref)
+        Shared(const CEntity<TFields>::Base &ref) :
+            Base::Base(ref)
         {
         }
 
         /**
          * Copy Operator
         */
-        Shared& operator = (const CEntityFacade<TFields>::Base& ref)
+        Shared& operator = (const CEntity<TFields>::Base& ref)
         {
-            CEntityFacade<TFields>::Base::set(ref.m_Fields,ref.m_pEntityPtr);
+            CEntity<TFields>::Base::set(ref.m_Fields,ref.m_pEntityPtr);
             return *this;
         }
 
@@ -59,16 +56,12 @@ class CEntityFacade<TFields>::Shared :
             return *this;
         }
 
-    protected:
-        Shared(TWFields fields,char *pData) : 
-            CEntityFacade<TFields>::Base(fields,pData)
+        Shared(typename TFields::iface::TFields fields,char *pData) : 
+            Base::Base(fields,pData)
         {
         }
 
-        Shared(TWFields fields) :
-            CEntityFacade<TFields>::Base(fields)
-        {
-        }
+    protected:
 
 };
 

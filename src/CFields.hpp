@@ -1,8 +1,6 @@
 #ifndef CFIELDS_HPP
 #define CFIELDS_HPP
 
-#include "wrapper.hpp"
-
 #include "IFields.hpp"
 #include "CField.hpp"
 #include <vector>
@@ -12,108 +10,106 @@ namespace ipgdlib::entity
 {
 
 template <
-	typename TFieldIndex,
-	typename TSizeTotal,
-	typename TField
+	typename CountT,
+	typename TotalSizeT,
+	typename FieldT
 >
 class CFields :
-  public IFields<TFieldIndex,TSizeTotal,TField,ewConstReference>
+    public IFields<CountT,TotalSizeT,const FieldT&,typename FieldT::iface::TFieldName>
 {
-public:
-  using iface 			      = IFields<TFieldIndex,TSizeTotal,TField,ewConstReference>;
 
-	using type_field_index	= TFieldIndex;
-	using type_size_total	  = TSizeTotal;
-	using type_field		    = TField;
+    // TODO
+    //static_assert(std::is_base_of<IField<typename FieldT::TFieldName,typename FieldT::TFieldSize>,FieldT>::value);
 
-	using TFieldName		    = typename TField::iface::type_name;
-	using TFieldSize		    = typename TField::iface::type_size;
-	using TWField			      = typename ipgdlib::wrap<TField,ewConstReference>::value;
+    public:
 
-  CFields() = delete;
-  CFields(const CFields &ref) = delete;
-  CFields &operator = (const CFields &ref) = delete;
-  CFields(CFields && ref)
-    : m_FieldCount(ref.m_FieldCount)
-  {
-    ref.m_FieldCount = 0;
-  }
+        using iface 			            = IFields<CountT,TotalSizeT,const FieldT&,typename FieldT::iface::TFieldName>;
 
-  CFields &operator = (CFields && ref) = delete;
+        using TCount                        = CountT;
+        using TTotalSize                    = TotalSizeT;
+        using TField                        = FieldT;
 
-  ~CFields()
-  {
-    if(m_RunningSum)
-      delete [] this->m_RunningSum;
-  }
+        ~CFields()
+        {
+            if(m_RunningSum)
+                delete [] this->m_RunningSum;
+        }
 
+        CFields() = delete;
 
-  CFields(std::vector<TField> vField)
-    : m_arrFields(std::move(vField))
-  {
-    this->m_FieldCount 				= m_arrFields.size();
-    this->m_RunningSum				= new TSizeTotal[this->m_FieldCount];
-    TSizeTotal sum					= 0;
-    TFieldIndex li 					= 0;
-    for(auto field : m_arrFields)
-    {
-      this->m_RunningSum[li] 		= field.size() + sum;
-      sum 						= this->m_RunningSum[li];
-      m_Mapper[field.name()] 	= li;
-      li++;
-    }
-  }
+        CFields(const CFields<TCount,TTotalSize,TField> &ref) = delete;
+        CFields<TCount,TTotalSize,TField> &operator = (const CFields<TCount,TTotalSize,TField> &ref) = delete;
 
-  TFieldIndex count() const noexcept override
-  {
-    return this->m_FieldCount;
-  }
+        // TODO define
+        CFields(CFields<TCount,TTotalSize,TField> && ref) = delete;    
+        CFields<TCount,TTotalSize,TField> &operator = (CFields<TCount,TTotalSize,TField> && ref) = delete;
 
-  TWField getField(TFieldIndex index) const override
-  {
-    return this->m_arrFields[index];
-  }
+        CFields(std::vector<TField> vField) : 
+            m_vFields(std::move(vField))
+        {
+            TTotalSize sum					= 0;
+            typename iface::TFieldIndex li 	= 0;
+            this->m_FieldCount 				= m_vFields.size();
+            this->m_RunningSum				= new TTotalSize[this->m_FieldCount];
+            for(auto field : m_vFields)
+            {
+                this->m_RunningSum[li] 		= field.size() + sum;
+                sum 						= this->m_RunningSum[li];
+                m_Mapper[field.name()] 	    = li;
+                li++;
+            }
+        }
 
-  TWField operator[] (TFieldIndex index) const
-  {
-    return this->m_arrFields[index];
-  }
+        TCount count() const noexcept override
+        {
+            return this->m_FieldCount;
+        }
 
-  TSizeTotal sum(TFieldIndex index) const override
-  {
-    return this->m_RunningSum[index];
-  }
+        TTotalSize sum(typename iface::TFieldIndex index) const override
+        {
+            return this->m_RunningSum[index];
+        }
 
-  TSizeTotal offset(TFieldIndex index) const override
-  {
-    if(index == 0)
-      return 0;
-    else
-      return this->m_RunningSum[index - 1];
-  }
+        TTotalSize offset(typename iface::TFieldIndex index) const override
+        {
+            if(index == 0)
+                return 0;
+            else
+                return this->m_RunningSum[index - 1];
+        }
 
-  TSizeTotal size() const noexcept override
-  {
-    return this->m_RunningSum[this->m_FieldCount - 1];
-  }
+        TTotalSize size() const noexcept override
+        {
+            return this->m_RunningSum[this->m_FieldCount - 1];
+        }
 
-  bool hasName(TFieldName const &fieldName) const noexcept override
-  {
-    return this->m_Mapper.count(fieldName) == 1;
-  }
+        typename iface::TField getField(typename iface::TFieldIndex index) const override
+        {
+            return this->m_vFields[index];
+        }
 
-  TFieldIndex indexOf(TFieldName const &fieldName) const override
-  {
-    return this->m_Mapper.at(fieldName);
-  }
+        typename iface::TField operator[] (typename iface::TFieldIndex index) const
+        {
+            return this->m_vFields[index];
+        }
 
-private:
-    TFieldIndex					              m_FieldCount;
-    std::vector<TField>		            m_arrFields;
-    TSizeTotal*					              m_RunningSum;
-    std::map<TFieldName,TFieldIndex>  m_Mapper;
+        bool hasName(typename iface::TFieldName fieldName) const noexcept override
+        {
+            return this->m_Mapper.count(fieldName) == 1;
+        }
 
-};
+        typename iface::TFieldIndex indexOf(typename iface::TFieldName fieldName) const override
+        {
+            return this->m_Mapper.at(fieldName);
+        }
+
+    private:
+        TCount					                                            m_FieldCount;
+        std::vector<TField>                                                 m_vFields;
+        TTotalSize*					                                        m_RunningSum;
+        std::map<typename TField::TFieldName,typename iface::TFieldIndex>   m_Mapper;
+
+    };
 
 };
 #endif

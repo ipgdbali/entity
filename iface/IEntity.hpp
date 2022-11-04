@@ -9,30 +9,28 @@ namespace ipgdlib::entity
 {
 
 template <
-    typename TFields,
-    eWrapper ewFields
+    typename FieldsT,
+    typename FieldNameT,
+    typename FieldIndexT
 >
 class IEntity
 {
     
     public:
-        using type_fields = TFields;
-        constexpr static eWrapper enum_wrapper_fields = ewFields;
 
-        using TFieldIndex				= typename TFields::iface::type_count;
-        using TFieldName				= typename TFields::iface::type_field::type_name;
-        using TFieldSize				= typename TFields::iface::type_field::type_size;
-        using TWFields				    = typename ipgdlib::wrap<TFields,ewFields>::value;
-
+        using TFields       = FieldsT;
+        using TFieldName    = FieldNameT;
+        using TFieldIndex   = FieldIndexT;
+        
         virtual ~IEntity() {};
 
-        virtual TWFields getFields() const noexcept = 0;
+        virtual TFields getFields() const noexcept = 0;
 
-        virtual bool copyAttrTo(const TFieldIndex &fieldIndex,void *pDst) const = 0;
-        virtual bool copyAttrTo(const TFieldName &fieldName,void *pDst) const = 0;
+        virtual bool copyAttrTo(TFieldIndex fieldIndex,void *pDst) const = 0;
+        virtual bool copyAttrTo(TFieldName fieldName,void *pDst) const = 0;
 
-        virtual bool copyAttrFrom(const TFieldIndex &fieldIndex,const void *pSrc) = 0;
-        virtual bool copyAttrFrom(const TFieldName &fieldName,const void *pSrc) = 0;
+        virtual bool copyAttrFrom(TFieldIndex fieldIndex,const void *pSrc) = 0;
+        virtual bool copyAttrFrom(TFieldName fieldName,const void *pSrc) = 0;
         
         class IUnique {};
         class IShared {};

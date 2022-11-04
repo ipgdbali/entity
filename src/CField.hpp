@@ -2,72 +2,98 @@
 #define CFIELD_HPP
 
 #include "IField.hpp"
-#include <utility>
 #include <string>
+#include <utility>
+
 
 namespace ipgdlib::entity
 {
 
 template <
-    typename TSize
+    typename FieldSizeT
 >
 class CField :
-    public IField<std::string,TSize,ewConstReference,ewConstReference>
+    public IField<const std::string&,FieldSizeT>
 {
 
 public:
 
-    using iface = IField<std::string,TSize,ewConstReference,ewConstReference>;
+    using iface         = IField<const std::string&,FieldSizeT>;
 
+    using TFieldSize    = FieldSizeT;
+    using TFieldName    = std::string;
+    
     CField() = delete;
 
-    CField(const CField &ref) 
+    /**
+     * Copy Constructor
+    */
+    CField(const CField<TFieldSize> &ref) 
         : m_Name(ref.m_Name),m_Size(ref.m_Size)
     {
     }
 
-    CField<TSize> &operator = (const CField &ref)
+    /**
+     * Copy Operator
+    */
+    CField<TFieldSize> &operator = (const CField<TFieldSize> &ref)
     {
         this->m_Name = ref.m_Name;
         this->m_Size = ref.m_Size;
+
+        return *this;
     }
 
-    CField(CField &&ref) 
-        : m_Name(std::move(ref.m_Name)),m_Size(ref.m_Size)
-    {
-	    ref.m_Size = 0;
-    }
-
-    CField<TSize> &operator = (CField &&ref)
+    /**
+     * Move Constructor
+    */
+    CField(CField<TFieldSize> &&ref) 
     {
         std::swap(this->m_Name,ref.m_Name);
         std::swap(this->m_Size,ref.m_Size);
     }
 
-    CField(const std::string &name,const TSize &size)
+    /**
+     * Move Operator
+    */
+    CField<TFieldSize> &operator = (CField<TFieldSize> &&ref)
+    {
+        std::swap(this->m_Name,ref.m_Name);
+        std::swap(this->m_Size,ref.m_Size);
+
+        return *this;
+    }
+
+    /**
+     * Raw Copy Constructor
+    */
+    CField(typename iface::TFieldName name,typename iface::TFieldSize size)
         : m_Name(name),m_Size(size)
     {
     }
 
-    CField(std::string &&name,const TSize &size)
+    /**
+     * Raw Move Constructor
+    */
+    CField(std::string &&name,TFieldSize &&size)
         : m_Name(std::move(name)),m_Size(size)
     {
+        size = 0;
     }
 
-    const std::string &name() const noexcept override
+    typename iface::TFieldName name() const noexcept override
     {
 	    return this->m_Name;
     }
 
-    const TSize &size() const noexcept override
+    typename iface::TFieldSize size() const noexcept override
     {
 	    return this->m_Size;
     }
 
 private:
-    std::string m_Name;
-    TSize m_Size;
-
+    TFieldName      m_Name;
+    TFieldSize      m_Size;
 };
 
 };

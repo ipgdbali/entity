@@ -2,9 +2,9 @@
 #include <cassert>
 #include <iostream>
 
-using CField    = ipgdlib::entity::CField<size_t>;
-using CFields   = ipgdlib::entity::CFields<unsigned char, size_t,CField>;
-using CEntity   = ipgdlib::entity::CEntityFacade<CFields>;
+using CField        = ipgdlib::entity::CField<size_t>;
+using CFields       = ipgdlib::entity::CFields<unsigned char, size_t,CField>;
+using CEntity       = ipgdlib::entity::CEntity<CFields>;
 
 int main(int argc,char *argv[])
 {
@@ -42,14 +42,13 @@ int main(int argc,char *argv[])
     CEntity::Array<unsigned char> eArray(fCustomer,10);
     assert(eArray.count() == 10);
 
-    CEntity::Array<unsigned char>::Cursor cursor(eArray);
+    auto cursor = eArray.createCursor();
 
     for(int li = 0;li < 10;li ++)
         cursor[li].as<int>(0) = (li + 1) * 10;
     
     for(int li = 0;li < 10;li ++)
         assert(cursor[li].as<int>(0) == (li + 1) * 10);
-
-
+        
     return 0;
 }
