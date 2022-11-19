@@ -4,7 +4,7 @@
 
 using CField    = ipgdlib::entity::CField<unsigned char>;
 using CFields   = ipgdlib::entity::CFields<unsigned char, unsigned char,CField>;
-using CEntity   = ipgdlib::entity::CEntityFacade<CFields>;
+using CEntity   = ipgdlib::entity::CEntity<CFields>;
 
 int main(int argc,char * argv[])
 {

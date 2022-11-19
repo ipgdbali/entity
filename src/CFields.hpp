@@ -28,6 +28,8 @@ class CFields :
         using TCount                        = CountT;
         using TTotalSize                    = TotalSizeT;
         using TField                        = FieldT;
+        using TFieldIndex                   = TCount;
+        using TFieldName                    = typename TField::TFieldName;
 
         ~CFields()
         {

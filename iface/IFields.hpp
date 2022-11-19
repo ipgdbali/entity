@@ -35,7 +35,7 @@ public:
     virtual TTotalSize sum(TFieldIndex index) const = 0; // field running sum
     virtual TTotalSize offset(TFieldIndex index) const = 0; // offset(0) = 0
 
-    virtual TTotalSize size() const noexcept = 0; // = sum(size() - 1)
+    virtual TTotalSize size() const noexcept = 0; // = sum(count() - 1)
 
     virtual TField getField(TFieldIndex index) const = 0;
 

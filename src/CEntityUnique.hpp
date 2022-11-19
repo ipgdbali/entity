@@ -7,71 +7,66 @@ namespace ipgdlib::entity
 {
 
 template <typename FieldsT>
-class CEntity<FieldsT>::Unique :
-    public CEntity<FieldsT>::Base,
-    virtual public IEntity<const FieldsT&,typename FieldsT::iface::TFieldName,typename FieldsT::iface::TFieldIndex>::IUnique
+CEntity<FieldsT>::Unique::~Unique()
 {
-    public:
-        using TFields   = FieldsT;
-        using Base      = CEntity<TFields>::Base;
+    delete []this->getEntityPtr();
+}
 
-        virtual ~Unique()
-        {
-            delete []this->getEntityPtr();
-        }
+template <typename FieldsT>
+CEntity<FieldsT>::Unique::Unique(const CEntity<FieldsT>::Base& ref) :
+    CEntity<FieldsT>::Base(ref.getFields(),std::malloc(ref.getFields().size()))
+{
+    if(this->getEntityPtr() == nullptr)
+        throw std::bad_alloc();
+    else
+        std::memcpy(this->getEntityPtr(),ref.getEntityPtr(),ref.getFields().size());
+}
 
-        Unique() = delete;
+/**
+ * Move Constructor
+*/
+template <typename FieldsT>
+CEntity<FieldsT>::Unique::Unique(CEntity<FieldsT>::Unique&& ref) :
+    CEntity<FieldsT>::Base(std::move(ref))
+{
+}
 
-        /**
-         * Copy Constructor
-        */
-        Unique(const CEntity<TFields>::Base &ref) :
-            Unique(ref.getFields())
-        {
-            std::memcpy(Base::getEntityPtr(),ref.getEntityPtr());
-        }
+template <typename FieldsT>
+CEntity<FieldsT>::Unique::Unique(const TFields& fields) : 
+    Base::Base(fields,std::malloc(fields.size()))
+{
+    if(Base::getEntityPtr() == nullptr)
+        throw std::bad_alloc();
+}
 
-        /**
-         * Copy Operator
-        */
-        Unique &operator = (const Unique &ref)
-        {
-            delete []this->getEntityPtr();
-            Base::setEntityPtr(std::malloc(ref.getField().size()));
-            if(Base::getEntityPtr() == nullptr)
-                throw std::bad_alloc();
-            else
-                std::memcpy(Base::getEntityPtr(),ref.getEntityPtr());
-            return *this;
-        }
 
-        /**
-         * Move Constructor
-        */
-        Unique(Unique &&ref) :
-            Base::Base(std::move(ref))
-        {
-        }
+/**
+ * Copy Operator
+*/
+template <typename FieldsT>
+typename CEntity<FieldsT>::Unique& CEntity<FieldsT>::Unique::operator = (const CEntity<FieldsT>::Base& ref)
+{
+    delete []this->getEntityPtr();
+    Base::setEntityPtr(std::malloc(ref.getField().size()));
+    if(Base::getEntityPtr() == nullptr)
+        throw std::bad_alloc();
+    else
+        std::memcpy(Base::getEntityPtr(),ref.getEntityPtr());
+    return *this;
+}
 
-        /**
-         * Move Operator
-        */
-        Unique &operator = (Unique &&ref)
-        {
-            delete []this->getEntityPtr();
-            Base::operator=(std::move(ref));
-            return *this;
-        }
+/**
+ * Move Operator
+*/
+template <typename FieldsT>
+typename CEntity<FieldsT>::Unique& CEntity<FieldsT>::Unique::operator = (CEntity<FieldsT>::Unique &&ref)
+{
+    delete []this->getEntityPtr();
+    
+    Base::operator=(std::move(ref));
+    return *this;
+}
 
-        Unique(typename Base::iface::TFields fields) : 
-            Base::Base(fields)
-        {
-            Base::setEntityPtr(std::malloc(fields.size()));
-            if(Base::getEntityPtr() == nullptr)
-                throw std::bad_alloc();
-        }
-
-};
 
 };
 

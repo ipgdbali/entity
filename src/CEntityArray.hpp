@@ -7,8 +7,8 @@ namespace ipgdlib::entity
 {
 
     template <typename FieldsT>
-    template <typename CountT,typename EntitySharedT>    
-    CEntity<FieldsT>::Array<CountT,EntitySharedT>::~Array()
+    template <typename RowCountT>    
+    CEntity<FieldsT>::Array<RowCountT>::~Array()
     {
         if (this->m_arrPEntityData != nullptr)
         {
@@ -19,8 +19,8 @@ namespace ipgdlib::entity
     }
 
     template <typename FieldsT>
-    template <typename CountT,typename EntitySharedT>    
-    CEntity<FieldsT>::Array<CountT,EntitySharedT>::Array(const CEntity<FieldsT>::TFields &fields,TRowIndex entityCount) :
+    template <typename RowCountT>    
+    CEntity<FieldsT>::Array<RowCountT>::Array(const CEntity<FieldsT>::TFields &fields,TRowIndex entityCount) :
         m_Fields(&fields),m_EntityCount(entityCount)
     {
         this->m_arrPEntityData = new char *[m_EntityCount];
@@ -29,75 +29,76 @@ namespace ipgdlib::entity
     }
 
     template <typename FieldsT>
-    template <typename CountT,typename EntitySharedT>    
-    const FieldsT &CEntity<FieldsT>::Array<CountT,EntitySharedT>::getFields() const
+    template <typename RowCountT>    
+    const FieldsT &CEntity<FieldsT>::Array<RowCountT>::getFields() const
     {
         return *this->m_Fields;
     }
 
     template <typename FieldsT>
-    template <typename CountT,typename EntitySharedT>    
-    CountT CEntity<FieldsT>::Array<CountT,EntitySharedT>::count() const noexcept
+    template <typename RowCountT>    
+    RowCountT CEntity<FieldsT>::Array<RowCountT>::count() const noexcept
     {
         return this->m_EntityCount;
     }
 
     template <typename FieldsT>
-    template <typename CountT,typename EntitySharedT>    
-    typename CEntity<FieldsT>::Array<CountT,EntitySharedT>::Cursor CEntity<FieldsT>::Array<CountT,EntitySharedT>::createCursor(TRowIndex iStart) const
+    template <typename RowCountT>    
+    typename CEntity<FieldsT>::Array<RowCountT>::Cursor CEntity<FieldsT>::Array<RowCountT>::createCursor(TRowIndex iStart) const
     {
         return {*this,iStart};
     }
 
     template <typename FieldsT>
-    template <typename CountT,typename EntitySharedT>    
-    CEntity<FieldsT>::Array<CountT,EntitySharedT>::Cursor::Cursor(const CEntity<FieldsT>::Array<CountT,EntitySharedT>& array,CountT iStart) :
+    template <typename RowCountT>    
+    CEntity<FieldsT>::Array<RowCountT>::Cursor::Cursor(const CEntity<FieldsT>::Array<RowCountT>& array,RowCountT iStart) :
         m_EntityArray(&array),m_RowPos(iStart),m_EntityShared(array.getFields(),array.m_arrPEntityData[iStart])
     {
 
     }
 
     template <typename FieldsT>
-    template <typename CountT,typename EntitySharedT>
-    typename CEntity<FieldsT>::Array<CountT,EntitySharedT>::TRowIndex CEntity<FieldsT>::Array<CountT,EntitySharedT>::Cursor::getRowPos() const noexcept
+    template <typename RowCountT>
+    typename CEntity<FieldsT>::Array<RowCountT>::TRowIndex CEntity<FieldsT>::Array<RowCountT>::Cursor::getRowPos() const noexcept
     {
         return this->m_RowPos;
     }
 
     template <typename FieldsT>
-    template <typename CountT,typename EntitySharedT>
-    typename CEntity<FieldsT>::Array<CountT,EntitySharedT>::Cursor& CEntity<FieldsT>::Array<CountT,EntitySharedT>::Cursor::setRowPos(CEntity<FieldsT>::Array<CountT,EntitySharedT>::TRowIndex rowPos)
+    template <typename RowCountT>
+    typename CEntity<FieldsT>::Array<RowCountT>::Cursor& CEntity<FieldsT>::Array<RowCountT>::Cursor::setRowPos(CEntity<FieldsT>::Array<RowCountT>::TRowIndex rowPos)
     {
         this->m_RowPos = rowPos;
-        this->m_EntityShared.setEntityPtr(this->m_EntityArray.m_arrPEntityData[rowPos]);
+        
+        this->m_EntityShared.setEntityPtr(this->m_EntityArray->m_arrPEntityData[rowPos]);
         return *this;
     }
 
     template <typename FieldsT>
-    template <typename CountT,typename EntitySharedT>
-    const typename CEntity<FieldsT>::Array<CountT,EntitySharedT>::TShared& CEntity<FieldsT>::Array<CountT,EntitySharedT>::Cursor::getEntity() const
+    template <typename RowCountT>
+    const typename CEntity<FieldsT>::Shared& CEntity<FieldsT>::Array<RowCountT>::Cursor::getEntity() const
     {
         return this->m_EntityShared;
     }
 
     template <typename FieldsT>
-    template <typename CountT,typename EntitySharedT>
-    typename CEntity<FieldsT>::Array<CountT,EntitySharedT>::TShared& CEntity<FieldsT>::Array<CountT,EntitySharedT>::Cursor::getEntity()
+    template <typename RowCountT>
+    typename CEntity<FieldsT>::Shared& CEntity<FieldsT>::Array<RowCountT>::Cursor::getEntity()
     {
         return this->m_EntityShared;
     }
 
     template <typename FieldsT>
-    template <typename CountT,typename EntitySharedT>
-    const EntitySharedT& CEntity<FieldsT>::Array<CountT,EntitySharedT>::Cursor::operator[](CountT rowPos) const
+    template <typename RowCountT>
+    const typename CEntity<FieldsT>::Shared& CEntity<FieldsT>::Array<RowCountT>::Cursor::operator[](RowCountT rowPos) const
     {
         this->setRowPos(rowPos);
         return this->m_EntityShared;
     }
 
     template <typename FieldsT>
-    template <typename CountT,typename EntitySharedT>
-    EntitySharedT& CEntity<FieldsT>::Array<CountT,EntitySharedT>::Cursor::operator[](CountT rowPos)
+    template <typename RowCountT>
+    typename CEntity<FieldsT>::Shared& CEntity<FieldsT>::Array<RowCountT>::Cursor::operator[](RowCountT rowPos)
     {
         this->setRowPos(rowPos);
         return this->m_EntityShared;

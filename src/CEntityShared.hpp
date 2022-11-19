@@ -7,62 +7,36 @@ namespace ipgdlib::entity
 {
 
 template <typename FieldsT>
-class CEntity<FieldsT>::Shared :
-    public CEntity<FieldsT>::Base,
-    virtual public IEntity<const FieldsT&,typename FieldsT::iface::TFieldName,typename FieldsT::iface::TFieldIndex>::IShared
+CEntity<FieldsT>::Shared::Shared(const Base& ref) :
+    CEntity<FieldsT>::Base(ref)
 {
+}
 
-    public:
-        using TFields   = FieldsT;
-        using Base      = CEntity<TFields>::Base;
-        
-        Shared() = delete;
-        Shared(const Shared &ref) = delete;
-        Shared &operator = (const Shared &ref) = delete;
-        Shared(CEntity<TFields>::Base &&) = delete;
-        Shared& operator = (CEntity<TFields>::Base &&) = delete;
+// Move Constructor 
+template <typename FieldsT>
+CEntity<FieldsT>::Shared::Shared(Shared&& ref) :
+    CEntity<FieldsT>::Shared(ref.m_Fields,ref.m_pEntityPtr)
+{
+}
 
-        /**
-         * Copy Constructor
-        */
-        Shared(const CEntity<TFields>::Base &ref) :
-            Base::Base(ref)
-        {
-        }
+template <typename FieldsT>
+CEntity<FieldsT>::Shared::Shared(const TFields& fields,void* pData) :
+    CEntity<FieldsT>::Base(fields,pData)
+{
+}
 
-        /**
-         * Copy Operator
-        */
-        Shared& operator = (const CEntity<TFields>::Base& ref)
-        {
-            CEntity<TFields>::Base::set(ref.m_Fields,ref.m_pEntityPtr);
-            return *this;
-        }
+template <typename FieldsT>
+typename CEntity<FieldsT>::Shared& CEntity<FieldsT>::Shared::operator = (const CEntity<TFields>::Base& ref)
+{
+    CEntity<TFields>::Base::set(ref.m_Fields,ref.m_pEntityPtr);
+    return *this;
+}
 
-        /**
-         * Move Constructor
-        */
-        Shared(Shared &&ref) :
-            Base::Base(std::move(ref))
-        {
-        }
-        
-        /**
-         * Move Operator
-        */
-        Shared& operator = (Shared&& ref)
-        {
-            Base::operator=(std::move(ref));
-            return *this;
-        }
-
-        Shared(typename TFields::iface::TFields fields,char *pData) : 
-            Base::Base(fields,pData)
-        {
-        }
-
-    protected:
-
+template <typename FieldsT>
+typename CEntity<FieldsT>::Shared& CEntity<FieldsT>::Shared::operator = (CEntity<TFields>::Shared&& ref)
+{
+    CEntity<TFields>::Base::set(ref.m_Fields,ref.m_pEntityPtr);
+    return *this;
 };
 
 };
