@@ -135,13 +135,13 @@ class CEntity
 
                 ~Array();
 
-                Array(const Array& ref) = delete;
-                Array(Array&& ref) = delete;
+                Array(const Array& ref)                 = delete;
+                Array(Array&& ref)                      = delete;
 
                 Array(const TFields &fields,TRowIndex entityCount);
 
-                Array& operator = (const Array& ref) = delete;
-                Array& operator = (Array& ref) = delete;
+                Array& operator = (const Array& ref)    = delete;
+                Array& operator = (Array& ref)          = delete;
 
                 const TFields &getFields() const;
                 TRowCount count() const noexcept;

@@ -2,7 +2,7 @@
 #include <cassert>
 #include <iostream>
 
-using CField        = ipgdlib::entity::CField<size_t>;
+using CField        = ipgdlib::entity::CField<unsigned char>;
 using CFields       = ipgdlib::entity::CFields<unsigned char, size_t,CField>;
 using CEntity       = ipgdlib::entity::CEntity<CFields>;
 
@@ -48,7 +48,7 @@ int main(int argc,char *argv[])
         cursor[li].as<int>(0) = (li + 1) * 10;
     
     for(int li = 0;li < 10;li ++)
-        assert(cursor[li].as<int>(0) == (li + 1) * 10);
+        assert(cursor[li].as<int>("id") == (li + 1) * 10);
         
     return 0;
 }
