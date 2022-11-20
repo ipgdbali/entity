@@ -1,7 +1,7 @@
-#ifndef CENTITY_UNIQUE_HPP
-#define CENTITY_UNIQUE_HPP
+#ifndef UNIQUE_HPP
+#define UNIQUE_HPP
 
-#include "CEntityBase.hpp"
+#include "BaseEntity.hpp"
 
 namespace ipgdlib::entity
 {
@@ -9,12 +9,12 @@ namespace ipgdlib::entity
 template <typename FieldsT>
 CEntity<FieldsT>::Unique::~Unique()
 {
-    delete []this->getEntityPtr();
+    free(this->getEntityPtr());
 }
 
 template <typename FieldsT>
-CEntity<FieldsT>::Unique::Unique(const CEntity<FieldsT>::Base& ref) :
-    CEntity<FieldsT>::Base(ref.getFields(),std::malloc(ref.getFields().size()))
+CEntity<FieldsT>::Unique::Unique(const CEntity<FieldsT>::BaseEntity& ref) :
+    CEntity<FieldsT>::BaseEntity(ref.getFields(),std::malloc(ref.getFields().size()))
 {
     if(this->getEntityPtr() == nullptr)
         throw std::bad_alloc();
@@ -27,15 +27,15 @@ CEntity<FieldsT>::Unique::Unique(const CEntity<FieldsT>::Base& ref) :
 */
 template <typename FieldsT>
 CEntity<FieldsT>::Unique::Unique(CEntity<FieldsT>::Unique&& ref) :
-    CEntity<FieldsT>::Base(std::move(ref))
+    CEntity<FieldsT>::BaseEntity(std::move(ref))
 {
 }
 
 template <typename FieldsT>
 CEntity<FieldsT>::Unique::Unique(const TFields& fields) : 
-    Base::Base(fields,std::malloc(fields.size()))
+    BaseEntity::BaseEntity(fields,std::malloc(fields.size()))
 {
-    if(Base::getEntityPtr() == nullptr)
+    if(BaseEntity::getEntityPtr() == nullptr)
         throw std::bad_alloc();
 }
 
@@ -44,14 +44,14 @@ CEntity<FieldsT>::Unique::Unique(const TFields& fields) :
  * Copy Operator
 */
 template <typename FieldsT>
-typename CEntity<FieldsT>::Unique& CEntity<FieldsT>::Unique::operator = (const CEntity<FieldsT>::Base& ref)
+typename CEntity<FieldsT>::Unique& CEntity<FieldsT>::Unique::operator = (const CEntity<FieldsT>::BaseEntity& ref)
 {
     delete []this->getEntityPtr();
-    Base::setEntityPtr(std::malloc(ref.getField().size()));
-    if(Base::getEntityPtr() == nullptr)
+    BaseEntity::setEntityPtr(std::malloc(ref.getField().size()));
+    if(BaseEntity::getEntityPtr() == nullptr)
         throw std::bad_alloc();
     else
-        std::memcpy(Base::getEntityPtr(),ref.getEntityPtr());
+        std::memcpy(BaseEntity::getEntityPtr(),ref.getEntityPtr());
     return *this;
 }
 
@@ -63,7 +63,7 @@ typename CEntity<FieldsT>::Unique& CEntity<FieldsT>::Unique::operator = (CEntity
 {
     delete []this->getEntityPtr();
     
-    Base::operator=(std::move(ref));
+    BaseEntity::operator=(std::move(ref));
     return *this;
 }
 

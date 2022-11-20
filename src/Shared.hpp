@@ -1,14 +1,14 @@
-#ifndef CENTITY_SHARED_HPP
-#define CENTITY_SHARED_HPP
+#ifndef SHARED_HPP
+#define SHARED_HPP
 
-#include "CEntityBase.hpp"
+#include "BaseEntity.hpp"
 
 namespace ipgdlib::entity
 {
 
 template <typename FieldsT>
-CEntity<FieldsT>::Shared::Shared(const Base& ref) :
-    CEntity<FieldsT>::Base(ref)
+CEntity<FieldsT>::Shared::Shared(const BaseEntity& ref) :
+    CEntity<FieldsT>::BaseEntity(ref)
 {
 }
 
@@ -21,21 +21,21 @@ CEntity<FieldsT>::Shared::Shared(Shared&& ref) :
 
 template <typename FieldsT>
 CEntity<FieldsT>::Shared::Shared(const TFields& fields,void* pData) :
-    CEntity<FieldsT>::Base(fields,pData)
+    CEntity<FieldsT>::BaseEntity(fields,pData)
 {
 }
 
 template <typename FieldsT>
-typename CEntity<FieldsT>::Shared& CEntity<FieldsT>::Shared::operator = (const CEntity<TFields>::Base& ref)
+typename CEntity<FieldsT>::Shared& CEntity<FieldsT>::Shared::operator = (const CEntity<TFields>::BaseEntity& ref)
 {
-    CEntity<TFields>::Base::set(ref.m_Fields,ref.m_pEntityPtr);
+    CEntity<TFields>::BaseEntity::set(ref.m_Fields,ref.m_pEntityPtr);
     return *this;
 }
 
 template <typename FieldsT>
 typename CEntity<FieldsT>::Shared& CEntity<FieldsT>::Shared::operator = (CEntity<TFields>::Shared&& ref)
 {
-    CEntity<TFields>::Base::set(ref.m_Fields,ref.m_pEntityPtr);
+    CEntity<TFields>::BaseEntity::set(ref.m_Fields,ref.m_pEntityPtr);
     return *this;
 };
 

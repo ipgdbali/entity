@@ -1,7 +1,6 @@
 #ifndef IFIELDS_HPP
 #define IFIELDS_HPP
 
-#include "wrapper.hpp"
 #include <type_traits>
 #include "IField.hpp"
 

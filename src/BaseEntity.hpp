@@ -1,5 +1,5 @@
-#ifndef CENTITY_BASE_HPP
-#define CENTITY_BASE_HPP
+#ifndef BASE_ENTITY_HPP
+#define BASE_ENTITY_HPP
 
 #include "CEntity.hpp"
 #include <cstring>
@@ -8,13 +8,13 @@ namespace ipgdlib::entity
 {
 
 template <typename FieldsT>
-const FieldsT& CEntity<FieldsT>::Base::getFields() const noexcept
+const FieldsT& CEntity<FieldsT>::BaseEntity::getFields() const noexcept
 {
     return *this->m_Fields;
 }
 
 template <typename FieldsT>
-bool CEntity<FieldsT>::Base::copyAttrTo(TFieldIndex fieldIndex, void *pDst) const
+bool CEntity<FieldsT>::BaseEntity::copyAttrTo(TFieldIndex fieldIndex, void *pDst) const
 {
     return 
         std::memcpy(
@@ -24,7 +24,7 @@ bool CEntity<FieldsT>::Base::copyAttrTo(TFieldIndex fieldIndex, void *pDst) cons
 }
 
 template <typename FieldsT>
-bool CEntity<FieldsT>::Base::copyAttrTo(TFieldName fieldName, void *pDst) const
+bool CEntity<FieldsT>::BaseEntity::copyAttrTo(TFieldName fieldName, void *pDst) const
 {
     return copyAttrTo(
         this->m_Fields->indexOf(fieldName),
@@ -32,17 +32,16 @@ bool CEntity<FieldsT>::Base::copyAttrTo(TFieldName fieldName, void *pDst) const
 }
 
 template <typename FieldsT>
-bool CEntity<FieldsT>::Base::copyAttrFrom(TFieldIndex fieldIndex, const void *pSrc)
+bool CEntity<FieldsT>::BaseEntity::copyAttrFrom(TFieldIndex fieldIndex, const void *pSrc)
 {
-    std::memcpy(
+    return std::memcpy(
         &this->m_pEntityPtr[this->m_Fields->offset(fieldIndex)],
         pSrc,
-        this->m_Fields->getField(fieldIndex).size());
-    return true;
+        this->m_Fields->getField(fieldIndex).size()) != nullptr;
 }
 
 template <typename FieldsT>
-bool CEntity<FieldsT>::Base::copyAttrFrom(TFieldName fieldName, const void *pSrc)
+bool CEntity<FieldsT>::BaseEntity::copyAttrFrom(TFieldName fieldName, const void *pSrc)
 {
     return copyAttrFrom(
         this->m_Fields->indexOf(fieldName),
@@ -51,35 +50,35 @@ bool CEntity<FieldsT>::Base::copyAttrFrom(TFieldName fieldName, const void *pSrc
 
 template <typename FieldsT>
 template <typename T>
-const T& CEntity<FieldsT>::Base::as(TFieldIndex fieldIndex) const
+const T& CEntity<FieldsT>::BaseEntity::attrAs(TFieldIndex fieldIndex) const
+{
+    return *reinterpret_cast<T*>(&this->m_pEntityPtr[this->m_Fields->offset(fieldIndex)]);
+}
+
+template <typename FieldsT>
+template <typename T>
+T& CEntity<FieldsT>::BaseEntity::attrAs(TFieldIndex fieldIndex)
 {
     return *reinterpret_cast<T *>(&this->m_pEntityPtr[this->m_Fields->offset(fieldIndex)]);
 }
 
 template <typename FieldsT>
 template <typename T>
-T& CEntity<FieldsT>::Base::as(TFieldIndex fieldIndex)
+const T& CEntity<FieldsT>::BaseEntity::attrAs(TFieldName fieldName) const
 {
-    return *reinterpret_cast<T *>(&this->m_pEntityPtr[this->m_Fields->offset(fieldIndex)]);
+    return attrAs<T>(this->m_Fields->indexOf(fieldName));
 }
 
 template <typename FieldsT>
 template <typename T>
-T& CEntity<FieldsT>::Base::as(TFieldName fieldName)
+T& CEntity<FieldsT>::BaseEntity::attrAs(TFieldName fieldName)
 {
-    return as<T>(this->m_Fields->indexOf(fieldName));
-}
-
-template <typename FieldsT>
-template <typename T>
-const T& CEntity<FieldsT>::Base::as(TFieldName fieldName) const
-{
-    return as<T>(this->m_Fields->indexOf(fieldName));
+    return attrAs<T>(this->m_Fields->indexOf(fieldName));
 }
 
 /* Copy Constructor */
 template <typename FieldsT>
-CEntity<FieldsT>::Base::Base(const Base& ref) :
+CEntity<FieldsT>::BaseEntity::BaseEntity(const BaseEntity& ref) :
     m_Fields(ref.m_Fields),m_pEntityPtr(ref.m_pEntityPtr)
 {
 }
@@ -88,7 +87,7 @@ CEntity<FieldsT>::Base::Base(const Base& ref) :
  * Move Construction
 */
 template <typename FieldsT>
-CEntity<FieldsT>::Base::Base(Base &&ref) :
+CEntity<FieldsT>::BaseEntity::BaseEntity(BaseEntity &&ref) :
     m_Fields(ref.m_Fields),m_pEntityPtr(ref.m_pEntityPtr)
 {
     ref.m_Fields        = nullptr;
@@ -97,7 +96,7 @@ CEntity<FieldsT>::Base::Base(Base &&ref) :
 
 
 template <typename FieldsT>
-CEntity<FieldsT>::Base::Base(const TFields& fields,void* pData) : 
+CEntity<FieldsT>::BaseEntity::BaseEntity(const TFields& fields,void* pData) : 
     m_Fields(&fields), m_pEntityPtr((char*)pData)
 {
 }
@@ -106,7 +105,7 @@ CEntity<FieldsT>::Base::Base(const TFields& fields,void* pData) :
  * Copy Operator, only for shared ptr
 */
 template <typename FieldsT>
-typename CEntity<FieldsT>::Base& CEntity<FieldsT>::Base::operator = (const Base &ref)
+typename CEntity<FieldsT>::BaseEntity& CEntity<FieldsT>::BaseEntity::operator = (const BaseEntity &ref)
 {
     this->m_Fields = ref.m_Fields;
     this->m_pEntityPtr = ref.m_pEntityPtr;
@@ -117,7 +116,7 @@ typename CEntity<FieldsT>::Base& CEntity<FieldsT>::Base::operator = (const Base 
  * Move Operator
 */
 template <typename FieldsT>
-typename CEntity<FieldsT>::Base& CEntity<FieldsT>::Base::operator = (Base &&ref)
+typename CEntity<FieldsT>::BaseEntity& CEntity<FieldsT>::BaseEntity::operator = (BaseEntity &&ref)
 {
     std::swap(this->m_Fields,ref.m_Fields);
     std::swap(this->m_pEntityPtr,ref.m_pEntityPtr);
@@ -125,37 +124,37 @@ typename CEntity<FieldsT>::Base& CEntity<FieldsT>::Base::operator = (Base &&ref)
 }
 
 template <typename FieldsT>
-const char* CEntity<FieldsT>::Base::getEntityAttrPtr(TFieldIndex fieldIndex) const
+const char* CEntity<FieldsT>::BaseEntity::getEntityAttrPtr(TFieldIndex fieldIndex) const
 {
     return &this->m_pEntityPtr[this->m_Fields->offset(fieldIndex)];
 }
 
 template <typename FieldsT>
-char* CEntity<FieldsT>::Base::getEntityAttrPtr(TFieldIndex fieldIndex)
+char* CEntity<FieldsT>::BaseEntity::getEntityAttrPtr(TFieldIndex fieldIndex)
 {
     return &this->m_pEntityPtr[this->m_Fields->offset(fieldIndex)];
 }
 
 template <typename FieldsT>
-const char* CEntity<FieldsT>::Base::getEntityPtr() const
+const char* CEntity<FieldsT>::BaseEntity::getEntityPtr() const
 {
     return this->m_pEntityPtr;
 }
 
 template <typename FieldsT>
-char* CEntity<FieldsT>::Base::getEntityPtr()
+char* CEntity<FieldsT>::BaseEntity::getEntityPtr()
 {
     return this->m_pEntityPtr;
 }
 
 template <typename FieldsT>
-void CEntity<FieldsT>::Base::setEntityPtr(void *pEntityPtr)
+void CEntity<FieldsT>::BaseEntity::setEntityPtr(void *pEntityPtr)
 {
     this->m_pEntityPtr = (char*)pEntityPtr;
 }
 
 template <typename FieldsT>
-void CEntity<FieldsT>::Base::set(const TFields& fields,char* pEntityPtr)
+void CEntity<FieldsT>::BaseEntity::set(const TFields& fields,void* pEntityPtr)
 {
     this->m_Fields      = fields;
     this->m_pEntityPtr  = pEntityPtr;

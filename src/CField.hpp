@@ -65,9 +65,9 @@ public:
     }
 
     /**
-     * Raw Copy Constructor
+     * Raw Constructor
     */
-    CField(typename iface::TFieldName name,typename iface::TFieldSize size)
+    CField(typename iface::TFieldName name,typename iface::TFieldSize size = sizeof(void*))
         : m_Name(name),m_Size(size)
     {
     }

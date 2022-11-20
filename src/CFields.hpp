@@ -41,9 +41,7 @@ class CFields :
 
         CFields(const CFields<TCount,TTotalSize,TField> &ref) = delete;
         CFields<TCount,TTotalSize,TField> &operator = (const CFields<TCount,TTotalSize,TField> &ref) = delete;
-
-        // TODO define
-        CFields(CFields<TCount,TTotalSize,TField> && ref) = delete;    
+        CFields(CFields<TCount,TTotalSize,TField> && ref) = delete;
         CFields<TCount,TTotalSize,TField> &operator = (CFields<TCount,TTotalSize,TField> && ref) = delete;
 
         CFields(std::vector<TField> vField) : 

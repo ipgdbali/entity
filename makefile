@@ -16,7 +16,7 @@ bin/debug/% : test/%.cpp | bin/debug
 	$@
 
 bin/release/% : test/%.cpp | bin/release
-	g++ $(CPPFLAGS) -o $@ $<
+	g++ $(CPPFLAGS) -O3 -o $@ $<
 	$@
 	
 bin/debug :

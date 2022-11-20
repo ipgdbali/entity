@@ -2,7 +2,6 @@
 #define IFIELD_HPP
 
 #include <type_traits>
-#include "wrapper.hpp"
 
 namespace ipgdlib::entity
 {

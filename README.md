@@ -6,12 +6,10 @@
 A C++ header only Entity library.
 
 ## Description
-It creates a data structure at runtime.\
-This structure contains one to many attributes that can be accessed by index or name.
-Name of an Attribute, is a Field. Attribute is a value of a field.
-For examples :
-red and color, red is and attribute and color is field. 
-
+A library to creates a data structure at runtime.\
+Every structure, called entity, may contains attribute/s that can be accessed by index or name.
+Attributes are defined through CField class, early before all other class is created.
+Collection of attributes are stored inside CFields class (note the 's' suffix)
 Each attribute of an entity may have its value to be be copied from or to another memory using methods.
 To be able to store a value into an attribute, an attribute size must be defined along its name.
 Attribute definition (CFields class) is made before an entity can be made.

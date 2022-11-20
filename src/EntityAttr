@@ -1,0 +1,6 @@
+class EntityAttr
+{
+    public:
+        index();
+        attr_
+}

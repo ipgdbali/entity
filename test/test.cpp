@@ -11,8 +11,8 @@ int main(int argc,char *argv[])
     CFields fCustomer(
         {
             {"id",sizeof(int)},
-            {"name",sizeof(char*)},
-            {"addr",sizeof(char*)},
+            {"name"},
+            {"addr"},
             {"sex",sizeof(char)}
         }
     );
@@ -21,34 +21,38 @@ int main(int argc,char *argv[])
 
     assert(fCustomer[0].name() == "id");
     assert(fCustomer[0].size() == sizeof(int));
-
     assert(fCustomer[1].name() == "name");
     assert(fCustomer[1].size() == sizeof(char*));
-
     assert(fCustomer[2].name() == "addr");
     assert(fCustomer[2].size() == sizeof(char*));
 
+    // Creating Unique Entity
     CEntity::Unique eCustomer(fCustomer);
 
-    eCustomer.as<unsigned int>("id") = 10;
-    assert(eCustomer.as<unsigned int>("id") == 10);
+    eCustomer.attrAs<unsigned int>(0) = 10;
+    assert(eCustomer.attrAs<unsigned int>("id") == 10);
+    eCustomer.attrAs<unsigned int>("sex") = 'M';
+    assert(eCustomer.attrAs<unsigned int>(3) == 'M');
 
-    CEntity::Shared eShared(eCustomer);
+    //Creating Shared Entity from Unique Entity
+    CEntity::Shared eSharedCustomer(eCustomer);
 
-    eShared.as<unsigned int>("id") = 30;
-    assert(eShared.as<unsigned int>("id") == 30);
-    assert(eCustomer.as<unsigned int>("id") == 30);
+    eSharedCustomer.attrAs<unsigned int>("id") = 30;
+    assert(eSharedCustomer.attrAs<unsigned int>(0) == 30);
+    assert(eCustomer.attrAs<unsigned int>("id") == 30);
 
+    // Create Array of 10 Entities
     CEntity::Array<unsigned char> eArray(fCustomer,10);
     assert(eArray.count() == 10);
 
     auto cursor = eArray.createCursor();
 
-    for(int li = 0;li < 10;li ++)
-        cursor[li].as<int>(0) = (li + 1) * 10;
+    for(unsigned int li = 0;li < 10;li ++)
+        cursor.setRowPos(li).getEntity().attrAs<unsigned int>(0) = (li + 1) * 10;
+        
     
-    for(int li = 0;li < 10;li ++)
-        assert(cursor[li].as<int>("id") == (li + 1) * 10);
+    for(unsigned int li = 0;li < 10;li ++)
+        assert(cursor.setRowPos(li).getEntity().attrAs<unsigned int>("id") == (li + 1) * 10);
         
     return 0;
 }
