@@ -6,12 +6,13 @@
 A C++ header only Entity library.
 
 ## Description
-A library to creates a structure (C\C++ struct) on runtime.\
+A library to creates C\C++ struct runtime.
 
-This structure (called entity) has data member which is called by attribute (attr for short) and defined by class CField. Every CField has name and size which gives attributes its corresponding value. CFields class takes one or more CField as argument for its construction. 
-This CFields is a template argument to construct Entity. Entity constructed by specific CFields
-has attributes defined in CFields.
-An entity may have its attribute value to be copied from or to another variable or memory.
+This structure (called entity) has data member which is called by attribute and is defined earlier before a corresponding entity is created. 
+Each attribute has a name and a size. A name may be used to access its attribute value from an entitiy. While its size is size of an allocated space in memory to store its value. CField is a class to represent definition of an attribute.
+Attributes is collected in a specific class named CFields (note the 's' suffix). The order they are supplied to CFields class is also the order of their index. The first supplied CField class become attribute of index 0 when accessed from corresponding entity class. CFields class also contains other information derived from supplied attributes from constructor. Please see IFields interface for list of method that CFields class needs to have.
+After CFields class is instanced, supply it instance into an entity class like CEntitiy::Unique or CEntitiy::Array to create instance of an entity class. An entity class will then make attributes (C\C++ struct data member) based information on CFields class.
+Every attributes in an entitiy may have its value to be copied from or into another variable/memory.
 
 ## Get started
 ### 1. Create a Fields from Field
@@ -60,7 +61,7 @@ CEntities entities(fCustomer,num);          // create 10 entity from fCustomer
     for(int li = 0; li < num;li++)
     {
         id = 0;
-        eCustomer.copyAttrTo(li,0,&id);
+        eCustomer.copyAttrTo(li,"id",&id);
         assert(id == (li + 1) * 10)
     }
 
@@ -72,58 +73,7 @@ CEntities entities(fCustomer,num);          // create 10 entity from fCustomer
         assert(eCustomer.attrAs(li,0) == (li + 1) * 10);
 ```
 
-##### Create cursor to access entities individually
-```
-CEntities::Cursor cursor(entities);
-CEntity::Shared &eSharedCustomer = cursor.setRowPos(rowNum).getEntity(); // return reference to internal object
-```
-
-### 3. Access attribute
-Array of Entities (CEntities) must be transfered to CEntity::Shared to access entities individually.
-
-- #### Using copy memory
-```
-unsigned int id;
-
-id = 20;
-eCustomer.copyAttrFrom(0,&id);
-
-id = 0;
-eCustomer.copyAttrTo("id",&id);
-assert(id == 20);
-
-id = 30;
-eCustomer.copyAttrFrom("id",&id);
-
-id = 0;
-eCustomer.copyAttrTo(0,&id);
-assert(id == 30);
-```
-- #### Using as method 
-```
-eCustomer.as<char>(2) = 'F';
-assert(eCustomer.as<char>("sex") == 'F');
-
-eCustomer.as<char>("sex") = 'M';
-assert(eCustomer.as<char>(2) == 'M');
-```
-- #### Using Custom Type
-```
-CCTPrimitive<unsigned char> ctAge;
-
-eCustomer.toCustomType(3,ctAge);
-ctAge = 20;
-assert((ctAge == 20));
-assert((eCustomer.as<unsigned char>("age") == 20));
-
-eCustomer.toCustomType("age",ctAge);
-ctAge = 30;
-assert((ctAge == 30));
-assert((eCustomer.as<unsigned char>(3) == 30));
-```
-
-
-You can see source code above [here](https://github.com/ipgdbali/entity/blob/master/test/start.cpp)
+You can see example source code [here](https://github.com/ipgdbali/entity/blob/master/test/start.cpp)
 
 ## Feature
 ### Create CFields from collection

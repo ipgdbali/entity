@@ -240,31 +240,6 @@ class CEntity
                 char**              m_arrPEntityData;
         };
 
-        /*
-        class Vector :
-            public BaseEntities<size_t>
-        {
-                inline ~Vector() override;
-                Vector()                                    = delete;
-                Vector(const Vector& ref)                   = delete;
-                Vector(Vector&& ref)                        = delete;
-                Vector& operator = (const Vector& ref)      = delete;
-                Vector& operator = (Vector&& ref)           = delete;
-
-                inline Vector(const TFields& fields);
-                inline size_t count() const noexcept override;
-
-            protected:
-                inline const char* getEntityPtr(size_t index) const override;
-                inline char* getEntityPtr(size_t index) override;
-                inline void setEntityPtr(size_t index,char* entityPtr) override;
-
-            private:
-                std::vector<char*>       m_vEntityData;
-
-        };
-        */
-
 };
 
 };
