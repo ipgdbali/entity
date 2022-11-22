@@ -8,6 +8,12 @@ namespace ipgdlib::entity
 
 template <typename FieldsT>
 template <typename RowCountT>
+CEntity<FieldsT>::BaseEntities<RowCountT>::~BaseEntities()
+{
+}
+
+template <typename FieldsT>
+template <typename RowCountT>
 const typename CEntity<FieldsT>::TFields& CEntity<FieldsT>::BaseEntities<RowCountT>::getFields() const
 {
     return *this->m_Fields;
@@ -85,6 +91,32 @@ T& CEntity<FieldsT>::BaseEntities<RowCountT>::attrAs(TRowIndex idxRow,TFieldName
     return attrAs<T>(idxRow,this->m_Fields->indexOf(fieldName));
 }
 
+template <typename FieldsT>
+template <typename RowCountT>    
+void CEntity<FieldsT>::BaseEntities<RowCountT>::swap(TRowIndex idxRowA,TRowIndex idxRowB)
+{
+    char* tmp = this->getEntityPtr(idxRowA);
+    this->setEntityPtr(idxRowA,this->getEntityPtr(idxRowB));
+    this->setEntityPtr(idxRowB,tmp);
+}
+
+template <typename FieldsT>
+template <typename RowCountT>    
+void CEntity<FieldsT>::BaseEntities<RowCountT>::rotate(TRowIndex idxFrom,TRowIndex idxTo)
+{
+    char* tmp = this->getEntityPtr(idxFrom);
+    
+    if(idxFrom < idxTo)
+        for(TRowIndex li = idxFrom;li < idxTo;li++)
+            this->setEntityPtr(li,this->getEntityPtr(li+1));
+    else
+    if(idxFrom > idxTo)
+        for(TRowIndex li = idxFrom;li > idxTo;li--)
+            this->setEntityPtr(li,this->getEntityPtr(li - 1));
+
+    this->setEntityPtr(idxTo,tmp);
+
+}
 
 template <typename FieldsT>
 template <typename RowCountT>    

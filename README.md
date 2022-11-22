@@ -6,41 +6,72 @@
 A C++ header only Entity library.
 
 ## Description
-A library to creates a data structure at runtime.\
-Every structure, called entity, may contains attribute/s that can be accessed by index or name.
-Attributes are defined through CField class, early before all other class is created.
-Collection of attributes are stored inside CFields class (note the 's' suffix)
-Each attribute of an entity may have its value to be be copied from or to another memory using methods.
-To be able to store a value into an attribute, an attribute size must be defined along its name.
-Attribute definition (CFields class) is made before an entity can be made.
+A library to creates a structure (C\C++ struct) on runtime.\
+
+This structure (called entity) has data member which is called by attribute (attr for short) and defined by class CField. Every CField has name and size which gives attributes its corresponding value. CFields class takes one or more CField as argument for its construction. 
+This CFields is a template argument to construct Entity. Entity constructed by specific CFields
+has attributes defined in CFields.
+An entity may have its attribute value to be copied from or to another variable or memory.
 
 ## Get started
 ### 1. Create a Fields from Field
 ```
 CFields fCustomer({
-    CFieldFactory::alloc<int>("id"),
-    CFieldFactory::alloc<sizeof(char*)>("name"),
-    CFieldFactory::alloc<char>("sex"),
-    CFieldFactory::alloc<sizeof(unsigned char)>("age")
+    {"id",sizeof(int)},     // index - 0, size = sizeof(int)
+    {"name"},               // index - 1, size = sizeof(void*)
+    {"addr"},               // index - 2, size = sizeof(void*)
+    {"sex",sizeof(char)}    // index - 3, size = sizeof(char)
 });
 ```
 ### 2. Create Entity
 #### a. Single Entity
-##### Create Unique Entity
 ```
-CEntity::Unique eCustomer(fCustomer);
-```
-##### Create Shared Entity from other Entity
-```
-CEntity::Shared eSharedCustomer(eCustomer);
-CEntity::Shared eSharedSharedCustomer(eSharedCustomer);
+CEntity::Unique eCustomer(fCustomer);       // create 1 entity from fCustomer
 ```
 #### b. Array of Entity
-##### Create Entities
 ```
-CEntities entities(fCustomer,num);
-CEntity::Shared eSharedCustomer = entities.getEntity(rowNum); // return new object
+constexpr num = 10;                     
+CEntities entities(fCustomer,num);          // create 10 entity from fCustomer
 ```
+
+### 3. Use Entity
+#### a. Single Entity
+```
+    // Using copyAttrXXX method
+    int id = 10;
+
+    eCustomer.copyAttrFrom(0,&id);          // copy eCustomer attr index - 0 from variable id
+    id = 30;                                // change id
+    eCustomer.copyAttrTo("id",&id);         // copy eCustomer attr "id" to variable id
+    assert(id == 10);                       // assert value
+
+    // Using attrAs method
+    eCustomer.attrAs<int>("sex") = 'M';     
+    assert(eCustomer.attrAs<int>(3) == 'M');
+```
+#### b. Array of Entity
+```
+    // Using copyAttrXXX method
+    for(int li = 0; li < num;li++)
+    {
+        id = (li + 1) * 10;
+        eCustomer.copyAttrFrom(li,0,&id);
+    }
+    for(int li = 0; li < num;li++)
+    {
+        id = 0;
+        eCustomer.copyAttrTo(li,0,&id);
+        assert(id == (li + 1) * 10)
+    }
+
+    // Using attrAs method
+    for(int li = 0; li < num;li++)
+        eCustomer.attrAs(li,"id") = (li + 1) * 10;
+
+    for(int li = 0; li < num;li++)
+        assert(eCustomer.attrAs(li,0) == (li + 1) * 10);
+```
+
 ##### Create cursor to access entities individually
 ```
 CEntities::Cursor cursor(entities);

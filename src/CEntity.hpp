@@ -128,8 +128,16 @@ class CEntity
                 using TRowCount         = RowCountT;
                 using TRowIndex         = RowCountT;
 
+                virtual ~BaseEntities();
+
                 inline const TFields &getFields() const;
-                virtual TRowCount count() const noexcept = 0;
+
+                virtual TRowCount count() const noexcept = 0;           // Count Entity that usable
+
+                virtual TRowCount alloc(TRowCount count = 1) = 0;
+                virtual TRowCount deAlloc(TRowCount count = 1) = 0;
+
+                virtual bool remRow(TRowIndex idxRow) = 0;                    // Dealloc Specific Row and shift
 
                 inline bool copyAttrTo(TRowIndex idxRow,TFieldIndex fieldIndex, void *pDst) const;
                 inline bool copyAttrTo(TRowIndex idxRow,TFieldName fieldName, void *pDst) const;
@@ -146,6 +154,9 @@ class CEntity
                 inline const T& attrAs(TRowIndex idxRow,TFieldName fieldName) const;
                 template <typename T>
                 inline T& attrAs(TRowIndex idxRow,TFieldName fieldName);
+
+                inline void swap(TRowIndex idxRowA,TRowIndex idxRowB);
+                inline void rotate(TRowIndex idxFrom,TRowIndex idxTo);
 
                 /**
                  * 
@@ -179,6 +190,8 @@ class CEntity
                 inline BaseEntities(const TFields& fields);
                 virtual const char* getEntityPtr(TRowIndex index) const = 0;
                 virtual char* getEntityPtr(TRowIndex index) = 0;
+                
+                virtual void setEntityPtr(TRowIndex index,char* entityPtr) = 0;
 
             private:
                 const TFields*      m_Fields;
@@ -199,47 +212,58 @@ class CEntity
                 using TRowCount         = RowCountT;
                 using TRowIndex         = RowCountT;
 
-                inline ~Array();
+                inline ~Array() override;
                 Array()                                 = delete;
                 Array(const Array& ref)                 = delete;
                 Array(Array&& ref)                      = delete;
                 Array& operator = (const Array& ref)    = delete;
                 Array& operator = (Array& ref)          = delete;
 
-                inline Array(const TFields& fields,TRowIndex entityCount);
+                inline Array(const TFields& fields,TRowIndex reserved);
+
                 inline TRowCount count() const noexcept override;
+                inline TRowCount reserved() const noexcept;
+                
+                inline TRowCount alloc(TRowCount count) override;
+                inline TRowCount deAlloc(TRowCount count) override;
+
+                inline bool remRow(TRowIndex idxRow) override;                    // Dealloc Specific Row and rotate
 
             protected:
                 inline const char* getEntityPtr(TRowIndex index) const override;
                 inline char* getEntityPtr(TRowIndex index) override;
+                inline void setEntityPtr(TRowIndex index,char* entityPtr) override;
                 
             private:
-                TRowCount           m_EntityCount;
+                TRowCount           m_CountReserved;
+                TRowCount           m_CountAlloc;
                 char**              m_arrPEntityData;
         };
 
+        /*
         class Vector :
             public BaseEntities<size_t>
         {
-            inline ~Vector();
-            Vector()                                    = delete;
-            Vector(const Vector& ref)                   = delete;
-            Vector(Vector&& ref)                        = delete;
-            Vector& operator = (const Vector& ref)      = delete;
-            Vector& operator = (Vector&& ref)           = delete;
+                inline ~Vector() override;
+                Vector()                                    = delete;
+                Vector(const Vector& ref)                   = delete;
+                Vector(Vector&& ref)                        = delete;
+                Vector& operator = (const Vector& ref)      = delete;
+                Vector& operator = (Vector&& ref)           = delete;
 
-            inline Vector(const TFields& fields);
-            inline size_t count() const noexcept override;
-            inline void append();
+                inline Vector(const TFields& fields);
+                inline size_t count() const noexcept override;
 
             protected:
                 inline const char* getEntityPtr(size_t index) const override;
                 inline char* getEntityPtr(size_t index) override;
+                inline void setEntityPtr(size_t index,char* entityPtr) override;
 
             private:
                 std::vector<char*>       m_vEntityData;
 
         };
+        */
 
 };
 

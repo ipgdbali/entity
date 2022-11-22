@@ -34,7 +34,7 @@ class CFields :
         ~CFields()
         {
             if(m_RunningSum)
-                delete [] this->m_RunningSum;
+                free(this->m_RunningSum);
         }
 
         CFields() = delete;
@@ -50,7 +50,7 @@ class CFields :
             TTotalSize sum					= 0;
             typename iface::TFieldIndex li 	= 0;
             this->m_FieldCount 				= m_vFields.size();
-            this->m_RunningSum				= new TTotalSize[this->m_FieldCount];
+            this->m_RunningSum				= static_cast<TTotalSize*>(std::calloc(this->m_FieldCount,sizeof(TTotalSize)));
             for(auto field : m_vFields)
             {
                 this->m_RunningSum[li] 		= field.size() + sum;
