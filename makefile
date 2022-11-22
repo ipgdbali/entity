@@ -5,17 +5,17 @@ DIR_INCLUDE = src iface
 
 FILES =	test #start feature_01
 
-FILES_TARGET = $(foreach FILE,$(FILES),$(addprefix $(DIR_DEST)/debug/,$(FILE).exe) $(addprefix $(DIR_DEST)/release/,$(FILE).exe))
+FILES_TARGET = $(foreach FILE,$(FILES),$(addprefix $(DIR_DEST)/debug/,$(FILE)) $(addprefix $(DIR_DEST)/release/,$(FILE)))
 
 CPPFLAGS = $(patsubst %,-I%,$(DIR_INCLUDE)) -Wall
 
 all : $(FILES_TARGET)
 	@for f in $^; do echo -n Executing ./$$f && ./$$f && echo " : Done"; done;
 
-bin/debug/%.exe : test/%.cpp | bin/debug
+bin/debug/% : test/%.cpp | bin/debug
 	g++ $(CPPFLAGS) -g -o $@ $<
 
-bin/release/%.exe : test/%.cpp | bin/release
+bin/release/% : test/%.cpp | bin/release
 	g++ $(CPPFLAGS) -O3 -o $@ $<
 	
 bin/debug :
