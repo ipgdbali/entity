@@ -20,7 +20,7 @@ CEntity<FieldsT>::Array<RowCountT>::~Array()
 template <typename FieldsT>
 template <typename RowCountT>    
 CEntity<FieldsT>::Array<RowCountT>::Array(const CEntity<FieldsT>::TFields& fields,TRowIndex reserved) :
-    CEntity<FieldsT>::BaseEntities<RowCountT>(fields),m_CountReserved(reserved),m_CountAlloc(0)
+    CEntity<FieldsT>::BaseEntities<RowCountT>::BaseEntities(fields),m_CountReserved(reserved),m_CountAlloc(0)
 {
     this->m_arrPEntityData = static_cast<char**>(calloc(reserved,sizeof(char*)));
     for(RowCountT li = 0;li < reserved;li++)
