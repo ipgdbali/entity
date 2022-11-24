@@ -63,14 +63,13 @@ int main(int argc,char *argv[])
         assert(cursor.isRowPosValid());
 
         for(unsigned int li = 0;li < 10;li ++)
-            cursor.setRowPos(li).getEntity().attrAs<unsigned int>(0) = (li + 1) * 10;
+            cursor.setRowPos(li).getEntity().attrAs<unsigned int>(0) = (li + 1) * 20;
         for(unsigned int li = 0;li < 10;li ++)
-            assert(cursor.setRowPos(li).getEntity().attrAs<unsigned int>("id") == (li + 1) * 10);
+            assert(cursor.setRowPos(li).getEntity().attrAs<unsigned int>("id") == (li + 1) * 20);
         eArray.deAlloc(10);
 
         assert(!cursor.isRowPosValid());
     }
-
 
     return 0;
 }

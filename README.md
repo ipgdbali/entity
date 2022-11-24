@@ -67,10 +67,10 @@ CEntity::Array entities(fCustomer,num);     // reserve 10 fCustomer entity
 
     // Using attrAs method
     for(int li = 0; li < num;li++)
-        eCustomer.attrAs<int>(li,"id") = (li + 1) * 10;
+        eCustomer.attrAs<int>(li,"id") = (li + 1) * 20;
 
     for(int li = 0; li < num;li++)
-        assert(eCustomer.attrAs<int>(li,0) == (li + 1) * 10);
+        assert(eCustomer.attrAs<int>(li,0) == (li + 1) * 20);
 ```
 
 You can see example source code [here](https://github.com/ipgdbali/entity/blob/master/test/start.cpp)
