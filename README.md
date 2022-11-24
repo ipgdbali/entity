@@ -27,18 +27,18 @@ CFields fCustomer({
 ### 2. Create Entity
 #### a. Single Entity
 ```
-CEntity::Unique eCustomer(fCustomer);       // create 1 entity from fCustomer
+CEntity::Unique eCustomer(fCustomer);       // create 1 fCustomer entity 
 ```
 #### b. Array of Entity
 ```
-constexpr num = 10;                     
-CEntities entities(fCustomer,num);          // create 10 entity from fCustomer
+constexpr size_t num = 10;
+CEntity::Array entities(fCustomer,num);     // reserve 10 fCustomer entity 
 ```
 
-### 3. Use Entity
+### 3. Entity Access
 #### a. Single Entity
 ```
-    // Using copyAttrXXX method
+    // Use copyAttrXXX method
     int id = 10;
 
     eCustomer.copyAttrFrom(0,&id);          // copy eCustomer attr index - 0 from variable id
@@ -46,9 +46,9 @@ CEntities entities(fCustomer,num);          // create 10 entity from fCustomer
     eCustomer.copyAttrTo("id",&id);         // copy eCustomer attr "id" to variable id
     assert(id == 10);                       // assert value
 
-    // Using attrAs method
-    eCustomer.attrAs<int>("sex") = 'M';     
-    assert(eCustomer.attrAs<int>(3) == 'M');
+    // Use attrAs method
+    eCustomer.attrAs<char>("sex") = 'M';     
+    assert(eCustomer.attrAs<char>(3) == 'M');
 ```
 #### b. Array of Entity
 ```
@@ -67,10 +67,10 @@ CEntities entities(fCustomer,num);          // create 10 entity from fCustomer
 
     // Using attrAs method
     for(int li = 0; li < num;li++)
-        eCustomer.attrAs(li,"id") = (li + 1) * 10;
+        eCustomer.attrAs<int>(li,"id") = (li + 1) * 10;
 
     for(int li = 0; li < num;li++)
-        assert(eCustomer.attrAs(li,0) == (li + 1) * 10);
+        assert(eCustomer.attrAs<int>(li,0) == (li + 1) * 10);
 ```
 
 You can see example source code [here](https://github.com/ipgdbali/entity/blob/master/test/start.cpp)
